@@ -1,9 +1,9 @@
-const NotesList = () => {
+const UploadNotes = () => {
     return (
         <div className="p-5 bg-slate-600 w-full h-screen text-white">
-            NotesList
+            UploadNotes
         </div>
     );
 };
 
-export default NotesList;
+export default UploadNotes;

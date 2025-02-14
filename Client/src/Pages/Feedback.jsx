@@ -1,9 +1,9 @@
-function Home() {
+const Feedback = () => {
     return (
         <div className="p-5 bg-slate-600 w-full h-screen text-white flex justify-center items-center">
-            Home
+            Feedback
         </div>
     );
-}
+};
 
-export default Home;
+export default Feedback;

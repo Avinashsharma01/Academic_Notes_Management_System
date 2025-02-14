@@ -1,18 +1,22 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../Context/AuthContext";
+import AuthContext from "../../Context/AuthContext";
 
-const Login = () => {
-    const [form, setForm] = useState({ email: "", password: "" });
-    const [message, setMessage] = useState("");
+const AdminLogin = () => {
     const navigate = useNavigate();
-    const { user, login } = useContext(AuthContext);
+    const [form, setForm] = useState({
+        email: "",
+        password: "",
+    });
+    const [message, setMessage] = useState("");
+
+    const { admin, Adminlogin } = useContext(AuthContext);
 
     useEffect(() => {
-        if (user) {
+        if (admin) {
             navigate("/dashboard"); // Redirect if already logged in
         }
-    }, [user, navigate]);
+    }, [admin, navigate]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,7 +25,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            login(form);
+            await Adminlogin(form);
             setForm({ email: "", password: "" });
             navigate("/dashboard"); // Redirect to dashboard
         } catch (error) {
@@ -30,8 +34,8 @@ const Login = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 w-full h-screen">
-            <h2 className="text-2xl font-bold mb-4">Login</h2>
+        <div className="max-w-md mx-auto w-full h-screen mt-10 flex items-center flex-col">
+            <h2 className="text-2xl font-bold mb-4">Admin Please Login here</h2>
             {message && <p>{String(message)}</p>}
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
@@ -52,6 +56,7 @@ const Login = () => {
                     required
                     className="p-2 w-full border rounded"
                 />
+
                 <button
                     type="submit"
                     className="bg-blue-600 text-white p-2 w-full rounded"
@@ -63,4 +68,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default AdminLogin;

@@ -1,14 +1,11 @@
 import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
-import API from "../Api/axiosInstance.js";
+import API from "../../Api/axiosInstance";
 
-const Register = () => {
+const AdminSignUp = () => {
     // const navigate = useNavigate();
     const [form, setForm] = useState({
         name: "",
-        course: "",
-        branch: "",
-        enrollment: "",
         email: "",
         password: "",
     });
@@ -20,13 +17,10 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await API.post("/auth/signup", form);
+            const { data } = await API.post("/auth/signupAdmin", form);
             setMessage(data.message);
             setForm({
                 name: "",
-                course: "",
-                branch: "",
-                enrollment: "",
                 email: "",
                 password: "",
             }); // Reset on success
@@ -38,8 +32,10 @@ const Register = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10">
-            <h2 className="text-2xl font-bold mb-4">Register</h2>
+        <div className="max-w-md mx-auto w-full h-screen mt-10 flex  items-center flex-col">
+            <h2 className="text-2xl font-bold mb-4">
+                Admin Please Register here
+            </h2>
             {message && <p>{String(message)}</p>}
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
@@ -47,33 +43,6 @@ const Register = () => {
                     name="name"
                     placeholder="Name"
                     value={form.name}
-                    onChange={handleChange}
-                    required
-                    className="p-2 w-full border rounded"
-                />
-                <input
-                    type="text"
-                    name="course"
-                    placeholder="Course"
-                    value={form.course}
-                    onChange={handleChange}
-                    required
-                    className="p-2 w-full border rounded"
-                />
-                <input
-                    type="text"
-                    name="branch"
-                    placeholder="Branch"
-                    value={form.branch}
-                    onChange={handleChange}
-                    required
-                    className="p-2 w-full border rounded"
-                />
-                <input
-                    type="text"
-                    name="enrollment"
-                    placeholder="Enrollment"
-                    value={form.enrollment}
                     onChange={handleChange}
                     required
                     className="p-2 w-full border rounded"
@@ -109,4 +78,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default AdminSignUp;
