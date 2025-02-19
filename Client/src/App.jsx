@@ -3,10 +3,9 @@ import Navbar from "./Components/Navbar";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
 import Login from "./Pages/Login";
-import Dashboard from "./Pages/Dashboard";
-import UploadNotes from "./Pages/AdminPages/UploadNotes";
-import NotesList from "./pages/NotesList";
-import ProtectedRoute from "./Components/ProtectedRoute";
+import Dashboard from "./Sessions/Dashboard";
+import Courses from "./Courses/Courses";
+import ProtectedUserRoute from "./Config/ProtectedUserRoute";
 import About from "./Pages/About";
 import Feedback from "./Pages/Feedback";
 import Services from "./Pages/Services";
@@ -14,11 +13,17 @@ import Contact from "./Pages/Contact";
 import AdminSignUp from "./Pages/AdminPages/AdminSignUp";
 import AdminLogin from "./Pages/AdminPages/AdminLogin";
 import Footer from "./Components/Footer";
-
+import Branches from "./Branches/Branches";
+import Semester from "./Semesters/Semester";
+import Subjects from "./Subject/Subjects";
+import UploadNote from "./Pages/AdminPages/NoteUpload/UploadNote";
+import ProtectedAdminRoute from "./Config/ProtectedAdminRoute";
+// import Breadcrumb from "./Components/Breadcrumb";
 function App() {
     return (
         <Router>
             <Navbar />
+            {/* <Breadcrumb /> */}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
@@ -30,14 +35,24 @@ function App() {
                 <Route path="/service" element={<Services />} />
                 <Route path="/feedback" element={<Feedback />} />
                 {/* Protected Routes */}
-                <Route element={<ProtectedRoute />}>
+                <Route element={<ProtectedUserRoute />}>
                     <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
-                <Route element={<ProtectedRoute />}>
-                    <Route path="/upload" element={<UploadNotes />} />
+
+                <Route element={<ProtectedUserRoute />}>
+                    <Route path="/courses" element={<Courses />} />
                 </Route>
-                <Route element={<ProtectedRoute />}>
-                    <Route path="/notes" element={<NotesList />} />
+                <Route element={<ProtectedUserRoute />}>
+                    <Route path="/branch" element={<Branches />} />
+                </Route>
+                <Route element={<ProtectedUserRoute />}>
+                    <Route path="/semester" element={<Semester />} />
+                </Route>
+                <Route element={<ProtectedUserRoute />}>
+                    <Route path="/subjects" element={<Subjects />} />
+                </Route>
+                <Route element={<ProtectedAdminRoute />}>
+                    <Route path="/uploadnotes" element={<UploadNote />} />
                 </Route>
             </Routes>
             <Footer />

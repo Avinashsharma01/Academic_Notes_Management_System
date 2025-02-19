@@ -8,13 +8,15 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [admin, setAdmin] = useState(null);
 
+    const UserToken = localStorage.getItem("authToken");
+    const AdminToken = localStorage.getItem("authTokenAdmin");
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        const adminToken = localStorage.getItem("authTokenAdmin");
+        const UserToken = localStorage.getItem("authToken");
+        const AdminToken = localStorage.getItem("authTokenAdmin");
         const storedUser = localStorage.getItem("user");
         const storedAdmin = localStorage.getItem("admin");
 
-        if ((token && storedUser) || (adminToken && storedAdmin)) {
+        if ((UserToken && storedUser) || (AdminToken && storedAdmin)) {
             setUser(JSON.parse(storedUser)); // Restore user from storage
             setAdmin(JSON.parse(storedAdmin)); // Restore admin from storage
         } else {
@@ -41,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     const Adminlogin = async (credentials) => {
         try {
             const { data } = await API.post("/auth/loginAdmin", credentials);
-            console.log(data);
+            // console.log(data);
 
             setAdmin(data.admin);
 
@@ -84,7 +86,16 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ user, login, logout, admin, Adminlogin, Adminlogout }}
+            value={{
+                user,
+                login,
+                logout,
+                admin,
+                Adminlogin,
+                Adminlogout,
+                UserToken,
+                AdminToken,
+            }}
         >
             {children}
         </AuthContext.Provider>

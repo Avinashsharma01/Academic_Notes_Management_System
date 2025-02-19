@@ -1,0 +1,50 @@
+.Phase5-carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.carousel-boxes {
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+  width: 80%;
+
+}
+.box{
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  background-color: #55aec4;
+}
+
+.Button-box {
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+}
+.Button-box:hover{
+  box-shadow: 1px 1px 3px rgba(55, 55, 54, 0.568),
+  0px 0px 1px 2px rgba(61, 61, 61, 0.209),
+  inset 1px 2px 3px rgba(178, 178, 176, 0.179),
+  inset 0px 0px 2px 3px rgba(215, 215, 212, 0.153);
+  transition: all .5s ease-in-out;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+

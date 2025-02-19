@@ -21,10 +21,11 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            login(form);
+            await login(form);
             setForm({ email: "", password: "" });
             navigate("/dashboard"); // Redirect to dashboard
         } catch (error) {
+            console.error("Login error:", error);
             setMessage(error.response?.data?.message || "Error logging in.");
         }
     };
@@ -32,7 +33,7 @@ const Login = () => {
     return (
         <div className="max-w-md mx-auto mt-10 w-full h-screen">
             <h2 className="text-2xl font-bold mb-4">Login</h2>
-            {message && <p>{String(message)}</p>}
+            {message && <p className="text-green-600">{String(message)}</p>}
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
                     type="email"

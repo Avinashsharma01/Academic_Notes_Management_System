@@ -1,0 +1,10 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+.main-container{
+  width: 100%;
+  height: auto;
+  background: linear-gradient(rgb(181, 222, 251), rgb(123, 245, 247));
+  margin-top: -100px;
+}

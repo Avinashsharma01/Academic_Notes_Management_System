@@ -36,7 +36,7 @@ const AdminSignUp = () => {
             <h2 className="text-2xl font-bold mb-4">
                 Admin Please Register here
             </h2>
-            {message && <p>{String(message)}</p>}
+            {message && <p className="text-green-600">{String(message)}</p>}
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
                     type="text"
