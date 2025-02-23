@@ -77,90 +77,96 @@ const SignUp = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto w-full h-screen mt-10 flex items-center flex-col">
-            <h2 className="text-2xl font-bold mb-4">Please Register Here</h2>
-            {message && <p className="text-green-600">{String(message)}</p>}
+        <div className="w-full h-screen bg-[#1E2A38]">
+            <div className="max-w-md mx-auto w-full h-screen pt-40 text-white flex items-center flex-col">
+                <h2 className="text-2xl font-bold mb-4">
+                    Please Register Here
+                </h2>
+                {message && <p className="text-green-600">{String(message)}</p>}
 
-            <form onSubmit={handleSubmit} className="space-y-3 w-full">
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={form.name}
-                    onChange={handleChange}
-                    className="p-2 w-full border rounded"
-                />
-                {errors.name && <p className="text-red-500">{errors.name}</p>}
-
-                <input
-                    type="text"
-                    name="course"
-                    placeholder="Course"
-                    value={form.course}
-                    onChange={handleChange}
-                    className="p-2 w-full border rounded"
-                />
-                {errors.course && (
-                    <p className="text-red-500">{errors.course}</p>
-                )}
-
-                <input
-                    type="text"
-                    name="branch"
-                    placeholder="Branch"
-                    value={form.branch}
-                    onChange={handleChange}
-                    className="p-2 w-full border rounded"
-                />
-                {errors.branch && (
-                    <p className="text-red-500">{errors.branch}</p>
-                )}
-
-                <input
-                    type="text"
-                    name="enrollment"
-                    placeholder="Enrollment"
-                    value={form.enrollment}
-                    onChange={handleChange}
-                    className="p-2 w-full border rounded"
-                />
-                {errors.enrollment && (
-                    <p className="text-red-500">{errors.enrollment}</p>
-                )}
-
-                <div className="relative w-full flex justify-center items-center flex-col">
+                <form onSubmit={handleSubmit} className="space-y-3 w-full">
                     <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={form.email}
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        value={form.name}
                         onChange={handleChange}
-                        className="p-2 w-full border rounded"
+                        className="p-2 w-full border rounded text-white"
                     />
-                    {errors.email && (
-                        <p className="text-red-500">{errors.email}</p>
+                    {errors.name && (
+                        <p className="text-red-500">{errors.name}</p>
                     )}
-                </div>
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={form.password}
-                    onChange={handleChange}
-                    className="p-2 w-full border rounded"
-                />
-                {errors.password && (
-                    <p className="text-red-500">{errors.password}</p>
-                )}
+                    <input
+                        type="text"
+                        name="course"
+                        placeholder="Course"
+                        value={form.course}
+                        onChange={handleChange}
+                        className="p-2 w-full border rounded text-white"
+                    />
+                    {errors.course && (
+                        <p className="text-red-500">{errors.course}</p>
+                    )}
 
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white p-2 w-full rounded"
-                >
-                    Register
-                </button>
-            </form>
+                    <input
+                        type="text"
+                        name="branch"
+                        placeholder="Branch"
+                        value={form.branch}
+                        onChange={handleChange}
+                        className="p-2 w-full border rounded text-white"
+                    />
+                    {errors.branch && (
+                        <p className="text-red-500">{errors.branch}</p>
+                    )}
+
+                    <input
+                        type="text"
+                        name="enrollment"
+                        placeholder="Enrollment"
+                        value={form.enrollment}
+                        onChange={handleChange}
+                        className="p-2 w-full border rounded text-white"
+                    />
+                    {errors.enrollment && (
+                        <p className="text-red-500">{errors.enrollment}</p>
+                    )}
+
+                    <div className="relative w-full flex justify-center items-center flex-col">
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            value={form.email}
+                            onChange={handleChange}
+                            className="p-2 w-full border rounded text-white"
+                        />
+                        {errors.email && (
+                            <p className="text-red-500">{errors.email}</p>
+                        )}
+                    </div>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={form.password}
+                        onChange={handleChange}
+                        className="p-2 w-full border rounded text-white"
+                    />
+                    {errors.password && (
+                        <p className="text-red-500">{errors.password}</p>
+                    )}
+
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 w-full rounded "
+                    >
+                        Register
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

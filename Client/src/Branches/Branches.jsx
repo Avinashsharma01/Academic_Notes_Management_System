@@ -13,6 +13,7 @@ const Branches = () => {
     // Extract course name from query parameters
     const queryParams = new URLSearchParams(location.search);
     const course = queryParams.get("course") || "Course"; // Default value
+    const session = queryParams.get("session") || "Session";
 
     // List of Branches (can be fetched from an API)
     const [branches, setBranches] = useState([]);
@@ -80,7 +81,7 @@ const Branches = () => {
                             key={branch.route}
                             onClick={() =>
                                 navigate(
-                                    `/semester?branch=${branch.route}&course=${course}`
+                                    `/semester?branch=${branch.route}&course=${course}&session=${session}`
                                 )
                             }
                             className="bg-gray-700 p-6 rounded-lg cursor-pointer transition-all hover:bg-gray-600 hover:scale-105 transform ease-in-out duration-300"

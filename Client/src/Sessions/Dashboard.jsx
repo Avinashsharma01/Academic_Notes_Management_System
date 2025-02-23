@@ -9,10 +9,10 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Simulate fetching session data from an API
     useEffect(() => {
         const fetchSessions = async () => {
             try {
+                // we will fetch the api here for the real data
                 // Simulate API call delay
                 // await new Promise((resolve) => setTimeout(resolve, 500));
                 const data = [
@@ -126,9 +126,9 @@ const Dashboard = () => {
                         <div
                             key={session.year}
                             onClick={() =>
-                                navigate(`/courses?year=${session.year}`)
+                                navigate(`/courses?session=${session.year}`)
                             }
-                            className="bg-gray-700 p-6 rounded-lg cursor-pointer transition-all hover:bg-gray-600 hover:scale-105 transform ease-in-out duration-300"
+                            className="bg-gray-700 p-6 rounded-lg cursor-pointer transition-all hover:bg-gray-600 hover:scale-105 transform ease-in-out duration-300 flex justify-center items-center flex-col"
                         >
                             <h2 className="text-xl font-semibold mb-2">
                                 Session: {session.year}

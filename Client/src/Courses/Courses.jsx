@@ -11,7 +11,7 @@ const Courses = () => {
     const [error, setError] = useState(null);
 
     const queryParams = new URLSearchParams(location.search);
-    const session = queryParams.get("year") || "Year";
+    const session = queryParams.get("session") || "Session";
 
     // Simulate fetching course data from an API
     useEffect(() => {
@@ -20,7 +20,7 @@ const Courses = () => {
                 // Simulate API call delay
                 // await new Promise((resolve) => setTimeout(resolve, 500));
                 const data = [
-                    { name: "B-TECH", route: "btech" },
+                    { name: "B-TECH", route: "b.tech" },
                     { name: "BCA", route: "bca" },
                     { name: "MCA", route: "mca" },
                     { name: "DIPLOMA", route: "diploma" },
@@ -77,7 +77,9 @@ const Courses = () => {
                         <div
                             key={course.route}
                             onClick={() =>
-                                navigate(`/branch?course=${course.route}`)
+                                navigate(
+                                    `/branch?course=${course.route}&session=${session}`
+                                )
                             }
                             className="bg-gray-700 p-6 rounded-lg cursor-pointer transition-all hover:bg-gray-600 hover:scale-105 transform ease-in-out duration-300"
                         >

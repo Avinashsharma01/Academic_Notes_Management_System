@@ -28,8 +28,14 @@ app.use("/api/auth", authRoutes);
 // Notes Routes
 app.use("/api/notes", noteRoutes);
 
+// fetch logged user
+app.use("/api/auth", authRoutes)
+
 // Feedback routes
 app.use("/api/feedback", feedbackRoutes);
+
+
+
 
 app.get('/user', (req, res) => {
     res.render('UserEmailVerify')

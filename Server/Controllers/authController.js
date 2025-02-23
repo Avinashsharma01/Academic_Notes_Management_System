@@ -59,7 +59,48 @@ export const loginUser = async (req, res) => {
     }
 };
 
+// fetch the logged user
+export const authUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password"); // Exclude password
+        if (!user) return res.status(404).json({ message: "User not found" });
 
+        res.status(200).json({ user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+
+
+// ✅ Update User Profile (Name & Profile Picture)
+export const updateUserProfile = async (req, res) => {
+    try {
+        const { name } = req.body;
+        let profilePic = req.user.profilePic; // Keep the existing pic if not updated
+
+        // If a new image is uploaded, update profilePic URL
+        if (req.file) {
+            profilePic = req.file.path; // Cloudinary URL from multer
+        }
+
+        // Update user info
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            { name, profilePic },
+            { new: true, select: "-password" }
+        );
+
+        res.status(200).json({ user: updatedUser });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to update profile" });
+    }
+}
+
+
+// this is used to verify the email address
 export const verifyUserEmail = async (req, res) => {
     try {
         const { token } = req.params;

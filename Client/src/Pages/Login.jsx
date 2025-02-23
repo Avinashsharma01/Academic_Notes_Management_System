@@ -31,35 +31,39 @@ const Login = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 w-full h-screen">
-            <h2 className="text-2xl font-bold mb-4">Login</h2>
-            {message && <p className="text-green-600">{String(message)}</p>}
-            <form onSubmit={handleSubmit} className="space-y-3">
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                    className="p-2 w-full border rounded"
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                    className="p-2 w-full border rounded"
-                />
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white p-2 w-full rounded"
-                >
-                    Login
-                </button>
-            </form>
+        <div className=" w-full h-screen bg-[#1E2A38]">
+            <div className="max-w-md mx-auto pt-60 text-white w-full h-screen ">
+                <h2 className="text-2xl font-bold mb-4 text-center">
+                    Please Login here
+                </h2>
+                {message && <p className="text-green-600">{String(message)}</p>}
+                <form onSubmit={handleSubmit} className="space-y-3">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                        className="p-2 w-full border rounded text-white"
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={form.password}
+                        onChange={handleChange}
+                        required
+                        className="p-2 w-full border rounded  text-white"
+                    />
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 w-full rounded"
+                    >
+                        Login
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

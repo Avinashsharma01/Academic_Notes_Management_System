@@ -66,7 +66,7 @@ const Breadcrumb = () => {
     const breadcrumbSegments = getBreadcrumbSegments();
 
     return (
-        <nav className="flex items-center  text-sm text-gray-400 mb-6">
+        <nav className="flex items-center text-sm text-gray-400 mb-6 justify-center max-sm:overflow-x-scroll  ">
             {breadcrumbSegments.map((segment, index) => (
                 <span key={index}>
                     {index > 0 && <span className="mx-2">/</span>}

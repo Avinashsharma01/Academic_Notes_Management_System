@@ -18,6 +18,19 @@ import Semester from "./Semesters/Semester";
 import Subjects from "./Subject/Subjects";
 import UploadNote from "./Pages/AdminPages/NoteUpload/UploadNote";
 import ProtectedAdminRoute from "./Config/ProtectedAdminRoute";
+import CSE from "./HomePage/pages/BranchPage/CSE";
+import IT from "./HomePage/pages/BranchPage/IT";
+import Machenical from "./HomePage/pages/BranchPage/Machenical";
+import EEE from "./HomePage/pages/BranchPage/EEE";
+import ECE from "./HomePage/pages/BranchPage/ECE";
+import CIVIL from "./HomePage/pages/BranchPage/Civil";
+import NotesList from "./Notes/NotesList";
+import AdminDashboard from "./Pages/AdminPages/AdminDashboard";
+import ManageNotes from "./Pages/AdminPages/ManageNotes";
+import AllFeedbacks from "./Pages/AdminPages/AllFeedbacks";
+import UserProfile from "./Pages/UserProfile";
+import AdminProfile from "./Pages/AdminPages/AdminProfile";
+import Events from "./Pages/Events";
 // import Breadcrumb from "./Components/Breadcrumb";
 function App() {
     return (
@@ -34,11 +47,12 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/service" element={<Services />} />
                 <Route path="/feedback" element={<Feedback />} />
-                {/* Protected Routes */}
+                <Route path="/events" element={<Events />} />
+
+                {/* Protected User Routes */}
                 <Route element={<ProtectedUserRoute />}>
                     <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
-
                 <Route element={<ProtectedUserRoute />}>
                     <Route path="/courses" element={<Courses />} />
                 </Route>
@@ -51,9 +65,41 @@ function App() {
                 <Route element={<ProtectedUserRoute />}>
                     <Route path="/subjects" element={<Subjects />} />
                 </Route>
-                <Route element={<ProtectedAdminRoute />}>
-                    <Route path="/uploadnotes" element={<UploadNote />} />
+                <Route element={<ProtectedUserRoute />}>
+                    <Route path="/notes" element={<NotesList />} />
                 </Route>
+
+                {/* Protected Admin Routes */}
+                <Route element={<ProtectedAdminRoute />}>
+                    <Route
+                        path="/admin/admindashboard"
+                        element={<AdminDashboard />}
+                    />
+                </Route>
+                <Route element={<ProtectedAdminRoute />}>
+                    <Route path="/admin/uploadnotes" element={<UploadNote />} />
+                </Route>
+                <Route element={<ProtectedAdminRoute />}>
+                    <Route
+                        path="/admin/managenotes"
+                        element={<ManageNotes />}
+                    />
+                </Route>
+                <Route element={<ProtectedAdminRoute />}>
+                    <Route path="/admin/feedback" element={<AllFeedbacks />} />
+                </Route>
+
+                {/* Home Branch Page  || this is public page available for anyone */}
+                <Route path="/CSE" element={<CSE />} />
+                <Route path="/IT" element={<IT />} />
+                <Route path="/MACHENICAL" element={<Machenical />} />
+                <Route path="/ECE" element={<ECE />} />
+                <Route path="/EEE" element={<EEE />} />
+                <Route path="/CIVIL" element={<CIVIL />} />
+
+                {/* User and Admin Profile */}
+                <Route path="userprofile" element={<UserProfile />} />
+                <Route path="adminprofile" element={<AdminProfile />} />
             </Routes>
             <Footer />
         </Router>
@@ -62,8 +108,7 @@ function App() {
 
 export default App;
 
-{
-    /* <Route
+/* <Route
     path="/dashboard"
     element={
         <ProtectedRoute>
@@ -71,4 +116,3 @@ export default App;
         </ProtectedRoute>
     }
 /> */
-}

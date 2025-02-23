@@ -14,6 +14,7 @@ const Semester = () => {
     const queryParams = new URLSearchParams(location.search);
     const branch = queryParams.get("branch") || "Branch";
     const course = queryParams.get("course") || "Course";
+    const session = queryParams.get("session") || "Session";
 
     // List of semesters (can be fetched from an API)
     const [semesters, setSemesters] = useState([]);
@@ -25,14 +26,14 @@ const Semester = () => {
                 // Simulate API call delay
                 // await new Promise((resolve) => setTimeout(resolve, 1000));
                 const data = [
-                    "Semester 1",
-                    "Semester 2",
-                    "Semester 3",
-                    "Semester 4",
-                    "Semester 5",
-                    "Semester 6",
-                    "Semester 7",
-                    "Semester 8",
+                    { name: "Semester 1", route: "1st" },
+                    { name: "Semester 2", route: "2nd" },
+                    { name: "Semester 3", route: "3rd" },
+                    { name: "Semester 4", route: "4th" },
+                    { name: "Semester 5", route: "5th" },
+                    { name: "Semester 6", route: "6th" },
+                    { name: "Semester 7", route: "7th" },
+                    { name: "Semester 8", route: "8th" },
                 ];
                 setSemesters(data);
             } catch (err) {
@@ -89,15 +90,13 @@ const Semester = () => {
                             key={index}
                             onClick={() =>
                                 navigate(
-                                    `/subjects?semester=${
-                                        index + 1
-                                    }&branch=${branch}&course=${course}`
+                                    `/subjects?semester=${semester.route}&branch=${branch}&course=${course}&session=${session}`
                                 )
                             }
                             className="bg-gray-700 p-6 rounded-lg cursor-pointer transition-all hover:bg-gray-600 hover:scale-105 transform ease-in-out duration-300 text-center"
                         >
                             <h2 className="text-xl font-semibold">
-                                {semester}
+                                {semester.name}
                             </h2>
                         </div>
                     ))}

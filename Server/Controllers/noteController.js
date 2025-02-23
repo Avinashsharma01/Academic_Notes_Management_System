@@ -16,6 +16,10 @@ export const uploadNote = async (req, res) => {
             return res.status(400).json({ message: "File is required" });
         }
 
+
+        console.log("Uploaded File:", req.file);
+
+
         // Create a new note with Cloudinary file URL
         const newNote = new Note({
             title,
@@ -117,33 +121,109 @@ export const updateNote = async (req, res) => {
 };
 
 
-
-// // Search & Filter Notes
 export const searchNotes = async (req, res) => {
     try {
-        const { query, subject } = req.query;
+        const { query, subject, course, semester, branch, session, page, limit } = req.query;
 
         let filter = {};
 
-        // Case-insensitive title/description search
+        // Full-text search for title/description
         if (query) {
             filter.$or = [
                 { title: { $regex: query, $options: "i" } },
-                { description: { $regex: query, $options: "i" } }
+                { description: { $regex: query, $options: "i" } },
+                { session: { $regex: query, $options: "i" } },
+                { course: { $regex: query, $options: "i" } },
+                { branch: { $regex: query, $options: "i" } },
+                { semester: { $regex: query, $options: "i" } },
+                { subject: { $regex: query, $options: "i" } }
             ];
         }
 
-        // Case-insensitive subject search
-        if (subject) {
-            filter.subject = { $regex: `^${subject}$`, $options: "i" };
-        }
+        // Case-insensitive filtering for other fields
+        if (subject) filter.subject = { $regex: `^${subject}$`, $options: "i" };
+        if (course) filter.course = { $regex: `^${course}$`, $options: "i" };
+        if (semester) filter.semester = { $regex: `^${semester}$`, $options: "i" };
+        if (branch) filter.branch = { $regex: `^${branch}$`, $options: "i" };
+        if (session) filter.session = { $regex: `^${session}$`, $options: "i" };
 
-        const notes = await Note.find(filter);
+        // Pagination settings
+        const pageNum = parseInt(page) || 1;
+        const limitNum = parseInt(limit) || 10;
+        const skip = (pageNum - 1) * limitNum;
+
+        const notes = await Note.find(filter).skip(skip).limit(limitNum);
         res.status(200).json(notes);
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
 };
+
+
+
+// export const searchNotes = async (req, res) => {
+//     try {
+//         const { query, subject, course, semester, branch, session, page, limit } = req.query;
+
+//         let filter = {};
+
+//         // Full-text search for title/description
+//         if (query) {
+//             filter.$or = [
+//                 { title: { $regex: query, $options: "i" } },
+//                 { description: { $regex: query, $options: "i" } }
+//             ];
+//         }
+
+//         // Case-insensitive filtering for other fields
+//         if (subject) filter.subject = { $regex: `^${subject}$`, $options: "i" };
+//         if (course) filter.course = { $regex: `^${course}$`, $options: "i" };
+//         if (semester) filter.semester = { $regex: `^${semester}$`, $options: "i" };
+//         if (branch) filter.branch = { $regex: `^${branch}$`, $options: "i" };
+//         if (session) filter.session = { $regex: `^${session}$`, $options: "i" };
+
+//         // Pagination settings
+//         const pageNum = parseInt(page) || 1;
+//         const limitNum = parseInt(limit) || 10;
+//         const skip = (pageNum - 1) * limitNum;
+
+//         const notes = await Note.find(filter).skip(skip).limit(limitNum);
+//         res.status(200).json(notes);
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error });
+//     }
+// };
+
+
+
+
+
+// // // Search & Filter Notes
+// export const searchNotes = async (req, res) => {
+//     try {
+//         const { query, subject } = req.query;
+
+//         let filter = {};
+
+//         // Case-insensitive title/description search
+//         if (query) {
+//             filter.$or = [
+//                 { title: { $regex: query, $options: "i" } },
+//                 { description: { $regex: query, $options: "i" } }
+//             ];
+//         }
+
+//         // Case-insensitive subject search
+//         if (subject) {
+//             filter.subject = { $regex: `^${subject}$`, $options: "i" };
+//         }
+
+//         const notes = await Note.find(filter);
+//         res.status(200).json(notes);
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error });
+//     }
+// };
 
 
 // // Search & Filter Notes

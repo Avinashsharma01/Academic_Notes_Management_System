@@ -15,7 +15,10 @@ const Subjects = () => {
     const semester = queryParams.get("semester") || "Semester";
     const branch = queryParams.get("branch") || "Branch";
     const course = queryParams.get("course") || "Course";
+    const session = queryParams.get("session") || "Session";
 
+    console.log("Course:", course);
+    console.log("Session:", session);
     // List of subjects (can be fetched from an API)
     const [subjects, setSubjects] = useState([]);
 
@@ -89,9 +92,14 @@ const Subjects = () => {
                     {subjects.map((subject, index) => (
                         <div
                             key={index}
+                            // onClick={() =>
+                            //     navigate(
+                            //         `/notes?subject=${subject}&semester=${semester}&branch=${branch}&course=${course}`
+                            //     )
+                            // }
                             onClick={() =>
                                 navigate(
-                                    `/notes?subject=${subject}&semester=${semester}&branch=${branch}&course=${course}`
+                                    `/notes?subject=${subject}&semester=${semester}&branch=${branch}&course=${course}&session=${session}`
                                 )
                             }
                             className="bg-gray-700 p-6 rounded-lg cursor-pointer transition-all hover:bg-gray-600 hover:scale-105 transform ease-in-out duration-300 text-center"
