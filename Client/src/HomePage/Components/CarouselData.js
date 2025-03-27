@@ -49,12 +49,18 @@ export const phase3Info = [
 
 export const phase4Info = [
   {
-    heading1: 'Effortless Access to Study Materials:',
-    heading2: 'No more searching endlessly for notes. Everything is structured based on your semester, course, and branch.',
-    heading3: 'Download with One Click:',
-    heading4: 'Save notes for offline use anytime, anywhere.',
-    heading5: ' Always Up-to-Date:',
-    heading6: ' Admins can easily upload, update, and organize content, ensuring that students always have the latest study materials.',
+    heading1: '1. Effortless Access to Study Materials:',
+    text1: 'No more searching endlessly for notes. Everything is structured based on your semester, course, and branch.',
+    heading2: '2. Download with One Click:',
+    text2: 'Save notes for offline use anytime, anywhere.',
+    heading3: '3. Always Up-to-Date:',
+    text3: ' Admins can easily upload, update, and organize content, ensuring that students always have the latest study materials.',
+    heading4: '4. User-Friendly Interface:',
+    text4: '📌 Designed for students and educators, the platform is easy to navigate, ensuring a smooth and hassle-free experience.',
+    heading5: '5. Secure & Reliable:',
+    text5: '📌 Your notes and data are protected with robust security measures, ensuring a safe learning environment.',
+    heading6: '6. Multi-Device Access:',
+    text6: '📌 Access your notes anytime, anywhere, from your laptop, tablet, or smartphone!',
 
 
 
@@ -81,7 +87,7 @@ export const phase7Info = [
     heading4: 'We recognize that every student learns at their own pace. Our personalized learning approach ensures tailored instruction, helping students grasp concepts effectively and build confidence in their abilities.',
     heading5: 'Education Service 2',
     heading6: 'Modern education is more than just memorizing facts; it’s about acquiring skills. Our curriculum emphasizes problem-solving, communication, and digital literacy to prepare students for real-world challenges.',
-    heading7: '📘 Why Choose Our Education System? "\n" 1. Interactive Learning: Engaging activities and hands-on experiences "\n"2. Innovative Curriculum: Focused on critical thinking and creativity. "\n" 3. Supportive Environment: Teachers and mentors dedicated to student success. "\n" 4.Future-Ready Skills: Equipping students for careers in a fast-changing world. ',
+    heading7: '📘 Why Choose Our Education System? "\n" 1. Interactive Learning: Engaging activities and hands-on experiences "\n"2. Innovative Curriculum: Focused on critical thinking and creativity. "\n" 3. Supportive Environment: Teachers and mentors dedicated to student success.',
 
 
 
@@ -105,7 +111,7 @@ export const phase8Info = [
   {
     heading1: 'Meet Our Amazing',
     heading2: 'Mentors With Super Skills',
-    heading3: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo quis ut ducimus impedit voluptas consectetur dolorum accusantium asperiores minima repellat?',
+    heading3: 'Meet our amazing mentors with super skills! 🚀 Experts in their fields, they provide guidance, real-world insights, and hands-on expertise to empower, inspire, and help you achieve success. 🌟',
 
   }
 ]

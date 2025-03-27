@@ -1,0 +1,119 @@
+.Phase4_main_container{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-top: 50px;
+  /* border: 1px solid black; */
+}
+.info_container1{
+  /* height: 400px; */
+  width: 40%;
+  /* border: 1px solid black; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.image_box1{
+  height: 200px;
+  width: 40%;
+  background-color: rgb(90, 178, 178);
+  border-radius: 20px;
+}
+.image_box2{
+  height: 200px;
+  width: 40%;
+  background-color: rgb(87, 126, 126);
+  border-radius: 20px;
+}
+.image_box3{
+  height: 200px;
+  width: 40%;
+  background-color: rgb(87, 126, 126);
+  border-radius: 20px;
+}
+.image_box4{
+  height: 200px;
+  width: 40%;
+  background-color: rgb(87, 126, 126);
+  border-radius: 20px;
+  margin-top: -50px;
+  border: 10px solid rgb(67, 216, 232);
+}
+.image{
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+  object-position: center;
+}
+.info_container2{
+  /* height: 400px; */
+  width: 50%;
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cheat_sheet1{
+  font-size: 30px;
+  font-weight: 600;
+}
+.cheat_sheet2{
+  font-size: 13px;
+  width: 80%;
+}
+.cheat_sheet3{
+  font-size: 30px;
+  font-weight: 500;
+}
+
+@media(max-width:1050px){
+  .image_box1,
+  .image_box4{
+    height: 150px;
+    width: 40%;
+  }
+  .image_box2{
+    height: 150px;
+    width: 40%;
+  }
+  .image_box3{
+    height: 150px;
+    width: 40%;
+  }
+  .cheat_sheet1{
+    font-size: 20px;
+  }
+  .cheat_sheet2{
+    font-size: 10px;
+  }
+  .cheat_sheet3{
+    font-size: 20px;
+  }
+}
+@media(max-width:800px){
+  .Phase4_main_container{
+    flex-direction: column;
+    align-items: center;
+  }
+  .info_container1{
+    width: 100%;
+    justify-content: center;
+  }
+  .info_container2{
+    width: 90%;
+    margin-top: 50px;
+  }
+  .image_box1,
+  .image_box4{
+    height: 100px;
+    width: 30%;
+  }
+  .cheat_sheet2{
+    width: 100%;
+  }
+}

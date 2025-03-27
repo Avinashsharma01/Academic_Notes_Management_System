@@ -1,12 +1,17 @@
+import { useEffect } from "react";
+
 const IT = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <div className="bg-[#1E2A38] text-white w-full min-h-screen flex flex-col items-center p-8">
             {/* Header Section */}
-            <div className="text-center mb-12">
+            <div className="flex justify-center items-center flex-col mb-12">
                 <h1 className="text-5xl font-bold mb-6 text-blue-400">
                     Information Technology (IT)
                 </h1>
-                <p className="text-lg text-gray-300 max-w-2xl leading-relaxed">
+                <p className="text-lg text-center text-gray-300 max-w-2xl leading-relaxed">
                     The **Information Technology (IT)** branch of B.Tech focuses
                     on the application of technology to solve real-world
                     problems, including software development, networking,

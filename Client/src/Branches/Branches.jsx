@@ -27,8 +27,12 @@ const Branches = () => {
                 const data = [
                     { name: "IT", route: "it" },
                     { name: "CSE", route: "cse" },
+                    { name: "AI/ML", route: "alml" },
                     { name: "CIVIL", route: "civil" },
-                    { name: "ME", route: "me" },
+                    { name: "EEE", route: "eee" },
+                    { name: "ECE", route: "ece" },
+                    { name: "EE", route: "ee" },
+                    { name: "F.TECH", route: "ft" },
                 ];
                 setBranches(data);
             } catch (err) {
@@ -58,7 +62,7 @@ const Branches = () => {
     }
 
     return (
-        <div className="p-5 bg-slate-800 min-h-screen text-white">
+        <div className="p-5 bg-slate-300 min-h-screen text-white">
             <div className="max-w-7xl mx-auto">
                 <div className="breadcrum max-w-7xl mx-auto w-full flex justify-between items-center">
                     <Breadcrumb />
@@ -67,7 +71,7 @@ const Branches = () => {
                 <h1 className="text-3xl font-bold text-center mb-4">
                     Select Your Branch
                 </h1>
-                <p className="text-center text-gray-300 mb-8">
+                <p className="text-center text-black mb-8">
                     Choose a branch under{" "}
                     <span className="font-semibold text-blue-400">
                         {course.toUpperCase()}

@@ -1,0 +1,51 @@
+.Phase1_main_container{
+  height: 400px;
+  width: 100%;
+  /* background-color: rgb(48, 131, 131); */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.Phase1_main_container img{
+  height: 100%;
+  width: 100%;
+}
+.cheat_sheet_item1{
+  font-size: 50px;
+  font-weight: 600;
+  position: absolute;
+  color: rgb(249, 249, 249);
+}
+.cheat_sheet_item2{
+  width: 80%;
+  text-align: center;
+  font-size: 13px;
+  position: absolute;
+  bottom: 70px;
+  font-weight: 300;
+  color: rgb(249, 249, 249);
+}
+@media(max-width:800px){
+  .Phase1_main_container{
+    height: 350px;
+  }
+  .cheat_sheet_item1{
+    font-size: 40px;
+    margin-top: -80px;
+
+  }
+  .cheat_sheet_item2{
+    font-size: 12px;
+  }
+}
+@media(max-width:500px){
+  .cheat_sheet_item1{
+    font-size: 30px;
+  }
+  .cheat_sheet_item2{
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,56 @@
+.Phase1_main_container{
+  height: 400px;
+  width: 100%;background-color: aqua;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.Phase1_main_container img{
+  height: 100%;
+  width: 100%;
+}
+.cheat_sheet1{
+  font-size: 50px;
+  font-weight: 600;
+  position: absolute;
+}
+.cheat_sheet2{
+  width: 80%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 300;
+  position: absolute;
+  bottom: 80px;
+}
+
+@media(max-width:1050px){
+  .Phase1_main_container{
+    height: 350px;
+  }
+  .cheat_sheet1{
+    font-size: 40px;
+    margin-top: 25px;
+  }
+  .cheat_sheet2{
+    font-size: 13px;
+  }
+}
+@media(max-width:800px){
+  .Phase1_main_container{
+    height: 320px;
+  }
+  .cheat_sheet1{
+    font-size: 35px;
+    margin-top: -25px;
+  }
+  .cheat_sheet2{
+    font-size: 11px;
+  }
+}
+@media(max-width:500px){
+  .cheat_sheet1{
+    margin-top: -70px;
+  }
+}

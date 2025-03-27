@@ -6,6 +6,7 @@ import ConnectTODB from './Database/db.js'
 import authRoutes from "./Routes/authRoutes.js"
 import noteRoutes from "./Routes/noteRoutes.js";
 import feedbackRoutes from "./Routes/feedbackRoutes.js"
+import ContactRoutes from "./Routes/ContactRoute.js"
 dotenv.config()
 
 const app = express()
@@ -33,6 +34,10 @@ app.use("/api/auth", authRoutes)
 
 // Feedback routes
 app.use("/api/feedback", feedbackRoutes);
+
+// Contact routes
+app.use("/api/contact", ContactRoutes);
+
 
 
 

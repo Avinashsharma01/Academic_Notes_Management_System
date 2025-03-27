@@ -1,12 +1,17 @@
+import { useEffect } from "react";
+
 const ECE = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <div className="bg-[#1E2A38] text-white w-full min-h-screen flex flex-col items-center p-8">
             {/* Header Section */}
-            <div className="text-center mb-12">
+            <div className="flex justify-center items-center flex-col mb-12">
                 <h1 className="text-5xl font-bold mb-6 text-blue-400">
                     Electronics & Communication Engineering (ECE)
                 </h1>
-                <p className="text-lg text-gray-300 max-w-2xl leading-relaxed">
+                <p className="text-lg text-center text-gray-300 max-w-2xl leading-relaxed">
                     The **Electronics and Communication Engineering (ECE)**
                     branch focuses on designing, developing, and maintaining
                     electronic circuits, communication systems, and embedded

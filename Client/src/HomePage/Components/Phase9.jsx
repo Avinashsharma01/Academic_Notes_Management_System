@@ -1,12 +1,9 @@
-import React from 'react'
-import styles from './Phase9.module.css'
+import styles from "./Phase9.module.css";
 
 function Phase9() {
-  return (
-    <div className={styles.Phase9_main_container}></div>
-  )
+    return <div className={styles.Phase9_main_container}></div>;
 }
-export default Phase9
+export default Phase9;
 
 // import { useEffect, useRef } from "react";
 // import { gsap } from "gsap";
@@ -33,7 +30,7 @@ export default Phase9
 //           scrub: 1, // Smooth effect on scroll
 //           // markers:true,
 //           markers:true
-        
+
 //         },
 //       }
 //     );

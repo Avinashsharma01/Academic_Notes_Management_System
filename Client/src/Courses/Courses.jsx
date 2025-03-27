@@ -24,6 +24,10 @@ const Courses = () => {
                     { name: "BCA", route: "bca" },
                     { name: "MCA", route: "mca" },
                     { name: "DIPLOMA", route: "diploma" },
+                    // { name: "BSC AGR", route: "bscagr" },
+                    // { name: "BIOTECH", route: "biotech" },
+                    // { name: "BJMC", route: "bjmc" },
+                    // { name: "BHMCT", route: "bhmct" },
                 ];
                 setCourses(data);
             } catch (err) {
@@ -53,7 +57,7 @@ const Courses = () => {
     }
 
     return (
-        <div className="p-5 bg-slate-800 min-h-screen text-white">
+        <div className="p-5 bg-slate-300 min-h-screen text-white">
             <div className="max-w-7xl mx-auto">
                 <div className="breadcrum max-w-7xl mx-auto w-full flex justify-between items-center">
                     <Breadcrumb />

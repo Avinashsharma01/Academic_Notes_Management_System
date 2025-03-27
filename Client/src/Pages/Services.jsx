@@ -1,7 +1,14 @@
+import Phase1 from "../Service_Page/Phase1";
+import Phase2 from "../Service_Page/Phase2";
+import Phase3 from "../Service_Page/Phase3";
+import Phase4 from "../Service_Page/Phase4";
 const Services = () => {
     return (
-        <div className="w-full h-screen flex justify-center bg-[#1E2A38] items-center text-white">
-            <h1 className="text-5xl">Services</h1>
+        <div className="w-full min-h-screen h-auto flex flex-col justify-center bg-white items-center text-black">
+            <Phase1 />
+            <Phase2 />
+            <Phase3 />
+            <Phase4 />
         </div>
     );
 };

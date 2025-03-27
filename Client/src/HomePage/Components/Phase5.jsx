@@ -23,7 +23,7 @@ const Phase5 = () => {
             img: "../../../src/HomePage/pages/BranchPage/assests/CIVILIIMG.jpg",
         },
         {
-            name: "MECHANICAL",
+            name: "MACHENICAL",
             desc: "Mechanical Engineering involves machines, robotics, and thermodynamics.",
             img: "../../../src/HomePage/pages/BranchPage/assests/MACHENICALIMG.jpg",
         },

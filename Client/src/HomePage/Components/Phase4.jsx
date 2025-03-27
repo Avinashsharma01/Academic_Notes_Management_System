@@ -1,7 +1,12 @@
 import { Phase4_Gsap } from "./Gsap";
 import styles from "./Phase4.module.css";
 import { phase4Info } from "../Components/CarouselData";
-
+import { AiOutlineBook } from "react-icons/ai";
+import { AiOutlineDownload } from "react-icons/ai";
+import { MdUpdate } from "react-icons/md";
+import { MdTouchApp } from "react-icons/md";
+import { AiOutlineLock } from "react-icons/ai";
+import { MdDevices } from "react-icons/md";
 function Phase4() {
     Phase4_Gsap();
 
@@ -21,15 +26,17 @@ function Phase4() {
                                     {items.heading1}
                                 </h1>
                                 <p className={styles.info_cheat_sheet2}>
-                                    {items.heading2}
+                                    {items.text1}
                                 </p>
                             </div>
                             <div
                                 className={[
                                     styles.info_icon_box,
-                                    "phase4-info-icon-box1",
+                                    "phase4-info-icon-box1 flex justify-center items-center text-3xl text-black",
                                 ].join(" ")}
-                            ></div>
+                            >
+                                <AiOutlineBook />
+                            </div>
                         </div>
                         <div
                             className={[
@@ -39,13 +46,20 @@ function Phase4() {
                         >
                             <div className={styles.info_box}>
                                 <h1 className={styles.info_cheat_sheet1}>
-                                    {items.heading3}
+                                    {items.heading2}
                                 </h1>
                                 <p className={styles.info_cheat_sheet2}>
-                                    {items.heading4}
+                                    {items.text2}
                                 </p>
                             </div>
-                            <div className={styles.info_icon_box}></div>
+                            <div
+                                className={[
+                                    styles.info_icon_box,
+                                    "flex justify-center items-center text-3xl text-black",
+                                ].join(" ")}
+                            >
+                                <AiOutlineDownload />
+                            </div>
                         </div>
                         <div
                             className={[
@@ -55,13 +69,20 @@ function Phase4() {
                         >
                             <div className={styles.info_box}>
                                 <h1 className={styles.info_cheat_sheet1}>
-                                    {items.heading5}
+                                    {items.heading3}
                                 </h1>
                                 <p className={styles.info_cheat_sheet2}>
-                                    {items.heading6}
+                                    {items.text3}
                                 </p>
                             </div>
-                            <div className={styles.info_icon_box}></div>
+                            <div
+                                className={[
+                                    styles.info_icon_box,
+                                    "flex justify-center items-center text-3xl text-black",
+                                ].join(" ")}
+                            >
+                                <MdUpdate />
+                            </div>
                         </div>
                         <div
                             className={[
@@ -69,8 +90,22 @@ function Phase4() {
                                 "phase4-info-container4",
                             ].join(" ")}
                         >
-                            <div className={styles.info_box}></div>
-                            <div className={styles.info_icon_box}></div>
+                            <div className={styles.info_box}>
+                                <h1 className={styles.info_cheat_sheet1}>
+                                    {items.heading4}
+                                </h1>
+                                <p className={styles.info_cheat_sheet2}>
+                                    {items.text4}
+                                </p>
+                            </div>
+                            <div
+                                className={[
+                                    styles.info_icon_box,
+                                    "flex justify-center items-center text-3xl text-black",
+                                ].join(" ")}
+                            >
+                                <MdTouchApp />
+                            </div>
                         </div>
                         <div
                             className={[
@@ -78,8 +113,22 @@ function Phase4() {
                                 "phase4-info-container5",
                             ].join(" ")}
                         >
-                            <div className={styles.info_box}></div>
-                            <div className={styles.info_icon_box}></div>
+                            <div className={styles.info_box}>
+                                <h1 className={styles.info_cheat_sheet1}>
+                                    {items.heading5}
+                                </h1>
+                                <p className={styles.info_cheat_sheet2}>
+                                    {items.text5}
+                                </p>
+                            </div>
+                            <div
+                                className={[
+                                    styles.info_icon_box,
+                                    "flex justify-center items-center text-3xl text-black",
+                                ].join(" ")}
+                            >
+                                <AiOutlineLock />
+                            </div>
                         </div>
                         <div
                             className={[
@@ -87,8 +136,22 @@ function Phase4() {
                                 "phase4-info-container6",
                             ].join(" ")}
                         >
-                            <div className={styles.info_box}></div>
-                            <div className={styles.info_icon_box}></div>
+                            <div className={styles.info_box}>
+                                <h1 className={styles.info_cheat_sheet1}>
+                                    {items.heading6}
+                                </h1>
+                                <p className={styles.info_cheat_sheet2}>
+                                    {items.text6}
+                                </p>
+                            </div>
+                            <div
+                                className={[
+                                    styles.info_icon_box,
+                                    "flex justify-center items-center text-3xl text-black",
+                                ].join(" ")}
+                            >
+                                <MdDevices />
+                            </div>
                         </div>
                     </div>
                     <div className={styles.main_info_container2}>

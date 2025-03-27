@@ -29,13 +29,13 @@ const Subjects = () => {
                 // Simulate API call delay
                 // await new Promise((resolve) => setTimeout(resolve, 1000));
                 const data = [
-                    "Mathematics",
-                    "Physics",
-                    "Chemistry",
+                    "Compiler Design",
+                    "Computer Network",
+                    "Cloud Computer",
                     "Programming Fundamentals",
                     "Data Structures",
                     "Algorithms",
-                    "Database Management",
+                    "Database Systems",
                     "Operating Systems",
                 ];
                 setSubjects(data);
@@ -66,7 +66,7 @@ const Subjects = () => {
     }
 
     return (
-        <div className="p-5 bg-slate-800 min-h-screen text-white">
+        <div className="p-5 bg-slate-300 min-h-screen text-white">
             <div className="max-w-7xl mx-auto">
                 <div className="breadcrum max-w-7xl mx-auto w-full flex justify-between items-center">
                     <Breadcrumb />
@@ -75,7 +75,7 @@ const Subjects = () => {
                 <h1 className="text-3xl font-bold text-center mb-4">
                     Select Your Subject
                 </h1>
-                <p className="text-center text-gray-300 mb-8">
+                <p className="text-center text-black mb-8">
                     Choose a subject for{" "}
                     <span className="font-semibold text-blue-400">
                         {branch.toUpperCase()}

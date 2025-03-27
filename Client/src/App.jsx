@@ -20,7 +20,7 @@ import UploadNote from "./Pages/AdminPages/NoteUpload/UploadNote";
 import ProtectedAdminRoute from "./Config/ProtectedAdminRoute";
 import CSE from "./HomePage/pages/BranchPage/CSE";
 import IT from "./HomePage/pages/BranchPage/IT";
-import Machenical from "./HomePage/pages/BranchPage/Machenical";
+import Machenical from "./HomePage/pages/BranchPage/MACHENICAL";
 import EEE from "./HomePage/pages/BranchPage/EEE";
 import ECE from "./HomePage/pages/BranchPage/ECE";
 import CIVIL from "./HomePage/pages/BranchPage/Civil";
@@ -33,6 +33,15 @@ import AdminProfile from "./Pages/AdminPages/AdminProfile";
 import Events from "./Pages/Events";
 // import Breadcrumb from "./Components/Breadcrumb";
 function App() {
+    // Example usage:
+    const sampleEvent = {
+        title: "React Conference 2025",
+        date: "March 10, 2025",
+        time: "10:00 AM - 4:00 PM",
+        location: "San Francisco, CA",
+        description:
+            "Join us for an exciting day of React talks and networking!",
+    };
     return (
         <Router>
             <Navbar />
@@ -47,7 +56,10 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/service" element={<Services />} />
                 <Route path="/feedback" element={<Feedback />} />
-                <Route path="/events" element={<Events />} />
+                <Route
+                    path="/events"
+                    element={<Events event={sampleEvent} />}
+                />
 
                 {/* Protected User Routes */}
                 <Route element={<ProtectedUserRoute />}>

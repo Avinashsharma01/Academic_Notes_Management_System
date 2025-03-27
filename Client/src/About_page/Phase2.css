@@ -1,0 +1,96 @@
+.Phase2-main-container{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-bottom: 50px;
+  margin-top: 20px;
+  flex-direction: row;
+  gap: 10px;
+  /* border: 1px solid black; */
+  margin-top: -50px;
+}
+.carousel-container1{
+  height: 200px;
+  width: 250px;
+  position: relative;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+}
+
+.carousel-container2{
+  height: 200px;
+  width: 250px;
+  position: relative;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+}
+.carousel-container3{
+  height: 200px;
+  width: 250px;
+  position: relative;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+}
+.carousel-container4{
+  height: 200px;
+  width: 250px;
+  position: relative;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+}
+
+.carousel-card{
+  display: flex;
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  opacity: 0;
+  transform: scale(1);
+  transition: all 0.5s ease-in-out;
+  pointer-events: none;
+  overflow: hidden;
+}
+.carousel-card-active{
+ opacity: 1;
+ transform: scaleX(1);
+ pointer-events: visible;
+}
+.card-image{
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media(max-width:800px){
+  .carousel-container1,
+  .carousel-container2,
+  .carousel-container3,
+  .carousel-container4{
+    height: 160px;
+    width: 250px;
+  }
+}
+
+@media(max-width:500px){
+  .carousel-container1,
+  .carousel-container2,
+  .carousel-container3,
+  .carousel-container4{
+    height: 110px;
+    width: 160px;
+  }
+}
+@media(max-width:350px){
+  .carousel-container1,
+  .carousel-container2,
+  .carousel-container3,
+  .carousel-container4{
+    height: 100px;
+    width: 150px;
+  }
+}
+
+
