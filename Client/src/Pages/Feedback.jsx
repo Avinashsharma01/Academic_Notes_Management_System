@@ -4,6 +4,7 @@ import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaPaperPlane, FaComment, FaStar } from "react-icons/fa";
 
 const Feedback = () => {
     useEffect(() => {
@@ -36,6 +37,7 @@ const Feedback = () => {
 
         if (!message || rating < 1 || rating > 5) {
             setError("Please enter a message and select a valid rating.");
+            toast.error("Please enter a message and select a valid rating.");
             return;
         }
 
@@ -59,107 +61,155 @@ const Feedback = () => {
             setMessage("");
             setRating(1);
         } catch (err) {
-            setError(
-                err.response?.data?.message || "Failed to submit feedback."
-            );
+            const errorMsg =
+                err.response?.data?.message || "Failed to submit feedback.";
+            setError(errorMsg);
+            toast.error(errorMsg);
         }
     };
 
     return (
-        // bg-gradient-to-br from-blue-50 to-purple-50 // bg-[#1E2A38]
-        <div className=" feedbackPage min-h-screen flex justify-center items-center p-6">
-            {/* max-w-2xl */}
-            <div className="bg-white opacity-90  rounded-xl shadow-2xl overflow-hidden w-full ">
-                {/* Header Section */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6">
-                    <h2 className="text-3xl font-bold text-white text-center">
-                        Feedback Form
-                    </h2>
-                    <p className="text-sm text-white/80 text-center mt-2">
-                        We value your feedback! Please share your thoughts with
-                        us.
+        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 text-white overflow-hidden relative">
+            {/* Decorative elements */}
+            <div className="absolute top-20 left-20 bg-blue-500/10 h-64 w-64 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-20 bg-indigo-500/10 h-64 w-64 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/3 right-1/4 bg-purple-500/10 h-32 w-32 rounded-full blur-2xl"></div>
+
+            <ToastContainer
+                position="top-left"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+
+            <div className="relative z-10 pt-16 md:pt-20 pb-10 px-4 md:px-6 max-w-4xl mx-auto flex flex-col items-center justify-center">
+                {/* Header */}
+                <div className="text-center mb-8 md:mb-10">
+                    <div className="mx-auto h-16 w-16 md:h-20 md:w-20 rounded-full bg-blue-500 flex items-center justify-center mb-4 md:mb-6 shadow-lg shadow-blue-500/30">
+                        <FaComment className="h-8 w-8 md:h-10 md:w-10 text-white" />
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-bold text-blue-400 mb-2">
+                        Share Your Feedback
+                    </h1>
+                    <p className="text-lg md:text-xl text-gray-300">
+                        Your opinion matters to us! Help us improve our
+                        services.
                     </p>
                 </div>
 
-                {/* Form Section */}
-                <div className="p-8">
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={2000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="light"
-                    />
-
+                {/* Feedback Form */}
+                <div className="w-full bg-slate-700/50 backdrop-blur-sm p-4 md:p-8 rounded-lg shadow-2xl border border-slate-600">
                     {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+                        <div className="bg-red-900/40 border-l-4 border-red-500 text-red-100 p-3 md:p-4 rounded-md mb-4 md:mb-6 text-sm md:text-base">
                             {String(error)}
                         </div>
                     )}
 
                     {success && (
-                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
+                        <div className="bg-green-900/40 border-l-4 border-green-500 text-green-100 p-3 md:p-4 rounded-md mb-4 md:mb-6 text-sm md:text-base">
                             {String(success)}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Message Input */}
+                    <form
+                        onSubmit={handleSubmit}
+                        className="space-y-6 md:space-y-8"
+                    >
                         <div>
-                            <label className="block text-gray-700 font-medium mb-2">
-                                Your Message:
+                            <label className="block text-blue-300 font-medium mb-2 text-base md:text-lg">
+                                Your Feedback:
                             </label>
                             <textarea
-                                className="w-full p-3 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                rows={6}
+                                className="w-full p-3 md:p-4 bg-slate-600 text-white border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 text-sm md:text-base"
+                                rows={5}
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
-                                placeholder="Write your feedback here..."
+                                placeholder="Tell us what you think about our service..."
+                                required
                             />
                         </div>
 
-                        {/* Rating Input */}
                         <div>
-                            <label className="block text-gray-700 font-medium mb-2">
-                                Your Rating:
+                            <label className="block text-blue-300 font-medium mb-2 text-base md:text-lg">
+                                Rate Your Experience:
                             </label>
-                            <div className="flex justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                {emojiRatings.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex flex-col items-center cursor-pointer"
-                                        onClick={() => setRating(index + 1)}
-                                    >
-                                        <span
-                                            className={`text-4xl transition-transform ${
+                            <div className="bg-slate-600/70 p-3 md:p-6 rounded-lg border border-slate-500">
+                                <div className="flex flex-wrap md:flex-nowrap justify-center md:justify-between items-center gap-2 md:gap-0">
+                                    {emojiRatings.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className={`flex flex-col items-center cursor-pointer transition-all duration-300 transform hover:scale-110 p-2 ${
                                                 rating === index + 1
-                                                    ? "scale-125"
-                                                    : "opacity-50 hover:opacity-100"
+                                                    ? "scale-110"
+                                                    : ""
                                             }`}
+                                            onClick={() => setRating(index + 1)}
                                         >
-                                            {item.emoji}
-                                        </span>
-                                        <span className="text-xs text-gray-600 mt-1">
-                                            {item.name}
-                                        </span>
-                                    </div>
-                                ))}
+                                            <span
+                                                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-1 md:mb-2 ${
+                                                    rating === index + 1
+                                                        ? "opacity-100"
+                                                        : "opacity-60 hover:opacity-90"
+                                                }`}
+                                            >
+                                                {item.emoji}
+                                            </span>
+                                            <span
+                                                className={`text-xs md:text-sm text-center ${
+                                                    rating === index + 1
+                                                        ? "text-blue-300 font-medium"
+                                                        : "text-gray-400"
+                                                }`}
+                                            >
+                                                {item.name}
+                                            </span>
+                                            <div className="mt-1 md:mt-2 flex">
+                                                {[...Array(index + 1)].map(
+                                                    (_, i) => (
+                                                        <FaStar
+                                                            key={i}
+                                                            className={`h-2 w-2 md:h-3 md:w-3 ${
+                                                                rating ===
+                                                                index + 1
+                                                                    ? "text-yellow-400"
+                                                                    : "text-gray-500"
+                                                            }`}
+                                                        />
+                                                    )
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 md:py-4 px-4 md:px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-blue-500/50 text-sm md:text-base"
                         >
-                            Submit Feedback
+                            <FaPaperPlane className="h-4 w-4 md:h-5 md:w-5" />
+                            <span>Submit Feedback</span>
                         </button>
                     </form>
+                </div>
+
+                {/* Testimonial or thank you message */}
+                <div className="mt-8 md:mt-12 text-center px-2">
+                    <h3 className="text-lg md:text-xl font-semibold text-blue-300 mb-2 md:mb-3">
+                        Thank You for Your Valuable Input
+                    </h3>
+                    <p className="text-sm md:text-base text-gray-300 max-w-2xl mx-auto">
+                        Your feedback helps us improve our educational resources
+                        and deliver a better experience for all students and
+                        educators using The College Notes Hub.
+                    </p>
                 </div>
             </div>
         </div>
@@ -167,162 +217,3 @@ const Feedback = () => {
 };
 
 export default Feedback;
-
-// import { useContext, useState } from "react";
-// import API from "../Api/axiosInstance";
-// import AuthContext from "../Context/AuthContext";
-// import { useNavigate } from "react-router-dom";
-// import { ToastContainer, toast } from "react-toastify";
-// const Feedback = () => {
-//     const navigate = useNavigate();
-//     const [message, setMessage] = useState("");
-//     const [rating, setRating] = useState(1);
-//     const [error, setError] = useState(null);
-//     const [success, setSuccess] = useState(null);
-//     const { user, admin, AdminToken, UserToken } = useContext(AuthContext);
-
-//     // const emojiRatings = ["😡", "😕", "😐", "😊", "😍"];
-//     const emojiRatings = [
-//         { name: "Angry", emoji: "😡" },
-//         { name: "Disappointed", emoji: "😕" },
-//         { name: "Neutral", emoji: "😐" },
-//         { name: "Happy", emoji: "😊" },
-//         { name: "Loving", emoji: "😍" },
-//     ];
-
-//     // Example of how to access the data
-//     emojiRatings.forEach((rating) => {
-//         console.log(`${rating.name}: ${rating.emoji}`);
-//     });
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         setError(null);
-//         setSuccess(null);
-
-//         if (!user && !admin) {
-//             navigate("/login");
-//             return;
-//         }
-
-//         if (!message || rating < 1 || rating > 5) {
-//             setError("Please enter a message and select a valid rating.");
-//             return;
-//         }
-
-//         try {
-//             // const Usertoken = localStorage.getItem("authToken");
-//             // const Admintoken = localStorage.getItem("authTokenAdmin");
-//             const { data } = await API.post(
-//                 "/feedback",
-//                 {
-//                     message,
-//                     rating,
-//                 },
-//                 {
-//                     headers: {
-//                         Authorization: UserToken || AdminToken,
-//                         "Content-Type": "application/json",
-//                     },
-//                 }
-//             );
-//             setMessage(data.message);
-//             setSuccess("Feedback submitted successfully!");
-//             toast.success("Feedback submitted successfully!");
-//             setMessage("");
-//             setRating(1);
-//         } catch (err) {
-//             setError(
-//                 err.response?.data?.message || "Failed to submit feedback."
-//             );
-//         }
-//     };
-
-//     return (
-//         <div className="p-5 bg-slate-600  w-full h-screen text-white flex justify-center items-center">
-//             <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-[90%]">
-//                 <h2 className="text-2xl font-bold text-center mb-4">
-//                     Feedback Form
-//                 </h2>
-
-//                 <ToastContainer
-//                     position="top-left"
-//                     autoClose={2000}
-//                     hideProgressBar={false}
-//                     newestOnTop={false}
-//                     closeOnClick={false}
-//                     rtl={false}
-//                     pauseOnFocusLoss
-//                     draggable
-//                     pauseOnHover
-//                     theme="light"
-//                 />
-
-//                 {error && (
-//                     <p className="text-red-400 text-sm text-center">
-//                         {String(error)}
-//                     </p>
-//                 )}
-//                 {success && (
-//                     <p className="text-green-400 text-sm text-center">
-//                         {String(success)}
-//                     </p>
-//                 )}
-
-//                 <form onSubmit={handleSubmit} className="flex flex-col">
-//                     <label className="mb-2">Message:</label>
-//                     <textarea
-//                         className="p-2 bg-gray-700 rounded"
-//                         rows={8}
-//                         value={message}
-//                         onChange={(e) => setMessage(e.target.value)}
-//                         // required
-//                     />
-
-//                     <label className="mt-4 mb-2">Rating:</label>
-//                     <div className="flex justify-evenly p-2 bg-gray-700 rounded ">
-//                         {emojiRatings.map((item, index) => (
-//                             <span
-//                                 key={index}
-//                                 className={`cursor-pointer text-2xl ${
-//                                     rating === index + 1 ? "scale-200" : ""
-//                                 }`}
-//                                 onClick={() => setRating(index + 1)}
-//                             >
-//                                 {item.emoji}
-//                             </span>
-//                         ))}
-//                     </div>
-
-//                     {/* <div className="flex justify-evenly p-2 bg-gray-700 rounded">
-//                         {emojiRatings.map((item, index) => (
-//                             <div key={index} className="relative group">
-//                                 <span
-//                                     className={`cursor-pointer text-2xl ${
-//                                         rating === index + 1 ? "scale-200" : ""
-//                                     }`}
-//                                     onClick={() => setRating(index + 1)}
-//                                 >
-//                                     {item.emoji}
-//                                 </span>
-
-//                                 <span className="absolute -left-2 -top-5 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-//                                     {item.name}
-//                                 </span>
-//                             </div>
-//                         ))}
-//                     </div> */}
-
-//                     <button
-//                         type="submit"
-//                         className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-//                     >
-//                         Submit
-//                     </button>
-//                 </form>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Feedback;

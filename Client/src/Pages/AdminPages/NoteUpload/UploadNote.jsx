@@ -4,6 +4,7 @@ import API from "../../../Api/axiosInstance";
 import AuthContext from "../../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { FaCloudUploadAlt, FaBook, FaFile, FaSpinner } from "react-icons/fa";
 
 const UploadNote = () => {
     const { admin, AdminToken } = useContext(AuthContext);
@@ -106,9 +107,9 @@ const UploadNote = () => {
         "7th",
         "8th",
     ];
-     // Course mapping based on session
+    // Course mapping based on session
     const DynamicCourse = ["B.Tech", "M.Tech", "BCA", "MCA", "B.Sc", "M.Sc"];
-     // Branch mapping based on Course
+    // Branch mapping based on Course
     const DynamicBranch = [
         "CSE",
         "IT",
@@ -129,61 +130,61 @@ const UploadNote = () => {
             "Engineering Chemistry",
             "Basic Electrical Engineering",
             "Engineering Mechanics",
-            "Engineering Drawing"
+            "Engineering Drawing",
         ],
         "2nd": [
             "Advanced Mathematics",
             "Data Structures",
             "Digital Electronics",
             "Computer Organization",
-            "Programming Fundamentals"
+            "Programming Fundamentals",
         ],
         "3rd": [
             "Object Oriented Programming",
             "Database Management Systems",
             "Computer Networks",
             "Operating Systems",
-            "Theory of Computation"
+            "Theory of Computation",
         ],
         "4th": [
             "Software Engineering",
             "Compiler Design",
             "Computer Architecture",
             "Microprocessors",
-            "System Programming"
+            "System Programming",
         ],
         "5th": [
             "Machine Learning",
             "Cloud Computing",
             "Blockchain Technology",
             "Web Development",
-            "Mobile Computing"
+            "Mobile Computing",
         ],
         "6th": [
             "Deep Learning",
             "Big Data Analytics",
             "Cyber Security",
             "Internet of Things",
-            "Distributed Systems"
+            "Distributed Systems",
         ],
         "7th": [
             "Artificial Intelligence",
             "Natural Language Processing",
             "Computer Vision",
             "Robotics",
-            "Advanced Database Systems"
+            "Advanced Database Systems",
         ],
         "8th": [
             "Project Management",
             "Advanced Topics in AI",
             "Advanced Topics in ML",
             "Advanced Topics in Security",
-            "Advanced Topics in Networks"
-        ]
+            "Advanced Topics in Networks",
+        ],
     };
 
     return (
-        <div className="p-5 bg-gradient-to-r from-slate-800 to-slate-900 w-full min-h-[90%] text-white flex justify-center items-center flex-col">
+        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 p-6 w-full text-white flex justify-center items-center relative overflow-hidden">
             <ToastContainer
                 position="top-left"
                 autoClose={2000}
@@ -196,147 +197,246 @@ const UploadNote = () => {
                 pauseOnHover
                 theme="light"
             />
-            <h1 className="text-3xl font-bold mb-8 text-blue-400">
-                Upload Your Notes Here
-            </h1>
 
-            {message && (
-                <p className="text-green-500 bg-green-100 p-2 rounded-lg mb-4">
-                    {message}
-                </p>
-            )}
-            {errors && (
-                <p className="text-red-500 bg-red-100 p-2 rounded-lg mb-4">
-                    {errors}
-                </p>
-            )}
+            {/* Decorative elements */}
+            <div className="absolute top-20 left-20 bg-blue-500/10 h-64 w-64 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-20 bg-indigo-500/10 h-64 w-64 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/3 right-1/4 bg-purple-500/10 h-32 w-32 rounded-full blur-2xl"></div>
 
-            <form
-                onSubmit={handleSubmit}
-                className="bg-slate-700 p-8 w-full max-w-lg rounded-lg shadow-2xl"
-            >
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        name="title"
-                        placeholder="Title"
-                        className="p-3 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder:text-gray-300"
-                        onChange={handleChange}
-                        value={formData.title}
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="description"
-                        placeholder="Description"
-                        className="p-3 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder:text-gray-300"
-                        onChange={handleChange}
-                        value={formData.description}
-                    />
+            <div className="w-full max-w-2xl z-10">
+                <div className="text-center mb-8">
+                    <div className="mx-auto h-20 w-20 rounded-full bg-blue-500 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                        <FaCloudUploadAlt className="h-10 w-10 text-white" />
+                    </div>
+                    <h1 className="text-4xl font-bold text-blue-400 tracking-tight">
+                        Upload Notes
+                    </h1>
+                    <p className="mt-2 text-gray-300">
+                        Share educational resources with students
+                    </p>
+                </div>
 
-                    <select
-                        name="session"
-                        className="p-3 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                        onChange={handleChange}
-                        value={formData.session}
-                        required
-                    >
-                        <option value="">Select Session</option>
-                        {DynamicSession.map((session, index) => (
-                            <option key={index} value={session}>
-                                {session}
-                            </option>
-                        ))}
-                    </select>
+                {message && (
+                    <div className="bg-green-900/40 border-l-4 border-green-500 text-green-100 p-4 rounded-md mb-6">
+                        <p>{message}</p>
+                    </div>
+                )}
 
-                    <select
-                        name="course"
-                        className="p-3 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                        onChange={handleChange}
-                        value={formData.course}
-                        required
-                    >
-                        <option value="">Select Course</option>
-                        {DynamicCourse.map((course, index) => (
-                            <option key={index} value={course}>
-                                {course}
-                            </option>
-                        ))}
-                    </select>
+                {errors && (
+                    <div className="bg-red-900/40 border-l-4 border-red-500 text-red-100 p-4 rounded-md mb-6">
+                        <p>{errors}</p>
+                    </div>
+                )}
 
-                    <select
-                        name="branch"
-                        className="p-3 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                        onChange={handleChange}
-                        value={formData.branch}
-                        required
-                    >
-                        <option value="">Select Branch</option>
-                        {DynamicBranch.map((branch, index) => (
-                            <option key={index} value={branch}>
-                                {branch}
-                            </option>
-                        ))}
-                    </select>
+                <form
+                    onSubmit={handleSubmit}
+                    className="bg-slate-700 p-8 rounded-lg shadow-2xl border border-slate-600 space-y-6"
+                >
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <div className="col-span-1 lg:col-span-2">
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Title
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaBook className="h-5 w-5 text-blue-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    placeholder="Enter note title"
+                                    className="appearance-none block w-full pl-10 pr-3 py-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder:text-gray-300"
+                                    onChange={handleChange}
+                                    value={formData.title}
+                                    required
+                                />
+                            </div>
+                        </div>
 
-                    <select
-                        name="semester"
-                        className="p-3 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                        onChange={handleChange}
-                        value={formData.semester}
-                        required
-                    >
-                        <option value="">Select Semester</option>
-                        {DynamicSemester.map((semester, index) => (
-                            <option key={index} value={semester}>
-                                {semester}
-                            </option>
-                        ))}
-                    </select>
+                        <div className="col-span-1 lg:col-span-2">
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Description
+                            </label>
+                            <textarea
+                                name="description"
+                                placeholder="Brief description about the note"
+                                rows="3"
+                                className="appearance-none block w-full p-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder:text-gray-300"
+                                onChange={handleChange}
+                                value={formData.description}
+                            ></textarea>
+                        </div>
 
-                    <select
-                        name="subject"
-                        className="p-3 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                        onChange={handleChange}
-                        value={formData.subject}
-                        required
-                        disabled={!formData.semester}
-                    >
-                        <option value="">Select Subject</option>
-                        {formData.semester && subjectsBySemester[formData.semester]?.map((subject, index) => (
-                            <option key={index} value={subject}>
-                                {subject}
-                            </option>
-                        ))}
-                    </select>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Session
+                            </label>
+                            <select
+                                name="session"
+                                className="appearance-none block w-full p-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                                onChange={handleChange}
+                                value={formData.session}
+                                required
+                            >
+                                <option value="">Select Session</option>
+                                {DynamicSession.map((session, index) => (
+                                    <option key={index} value={session}>
+                                        {session}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                    <div className="flex flex-col space-y-2">
-                        <label className="text-gray-300 font-medium">
-                            Upload File
-                        </label>
-                        <input
-                            type="file"
-                            name="file"
-                            className="p-2 w-full bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                            onChange={handleFileChange}
-                            ref={fileInputRef}
-                            required
-                        />
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Course
+                            </label>
+                            <select
+                                name="course"
+                                className="appearance-none block w-full p-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                                onChange={handleChange}
+                                value={formData.course}
+                                required
+                            >
+                                <option value="">Select Course</option>
+                                {DynamicCourse.map((course, index) => (
+                                    <option key={index} value={course}>
+                                        {course}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Branch
+                            </label>
+                            <select
+                                name="branch"
+                                className="appearance-none block w-full p-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                                onChange={handleChange}
+                                value={formData.branch}
+                                required
+                            >
+                                <option value="">Select Branch</option>
+                                {DynamicBranch.map((branch, index) => (
+                                    <option key={index} value={branch}>
+                                        {branch}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Semester
+                            </label>
+                            <select
+                                name="semester"
+                                className="appearance-none block w-full p-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                                onChange={handleChange}
+                                value={formData.semester}
+                                required
+                            >
+                                <option value="">Select Semester</option>
+                                {DynamicSemester.map((semester, index) => (
+                                    <option key={index} value={semester}>
+                                        {semester}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="col-span-1 lg:col-span-2">
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Subject
+                            </label>
+                            <select
+                                name="subject"
+                                className="appearance-none block w-full p-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                                onChange={handleChange}
+                                value={formData.subject}
+                                required
+                                disabled={!formData.semester}
+                            >
+                                <option value="">Select Subject</option>
+                                {formData.semester &&
+                                    subjectsBySemester[formData.semester]?.map(
+                                        (subject, index) => (
+                                            <option key={index} value={subject}>
+                                                {subject}
+                                            </option>
+                                        )
+                                    )}
+                            </select>
+                            {!formData.semester && (
+                                <p className="text-xs text-blue-300 mt-1">
+                                    Select a semester first to view subjects
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="col-span-1 lg:col-span-2">
+                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                Upload File
+                            </label>
+                            <div className="flex items-center justify-center w-full">
+                                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer border-slate-500 bg-slate-600/50 hover:bg-slate-600 transition-colors">
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <FaFile className="w-8 h-8 mb-3 text-blue-400" />
+                                        <p className="mb-2 text-sm text-gray-300">
+                                            <span className="font-semibold">
+                                                Click to upload
+                                            </span>{" "}
+                                            or drag and drop
+                                        </p>
+                                        <p className="text-xs text-gray-400">
+                                            PDF, DOCX, PPTX (MAX. 10MB)
+                                        </p>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        name="file"
+                                        className="hidden"
+                                        onChange={handleFileChange}
+                                        ref={fileInputRef}
+                                        required
+                                    />
+                                </label>
+                            </div>
+                            {formData.file && (
+                                <p className="text-sm text-green-300 mt-2">
+                                    File selected: {formData.file.name}
+                                </p>
+                            )}
+                        </div>
                     </div>
 
-                    <button
-                        type="submit"
-                        className={`w-full p-3 rounded-lg transition-all duration-300 ${
-                            whileUpload
-                                ? "bg-gray-500 cursor-not-allowed"
-                                : "bg-blue-500 hover:bg-blue-600"
-                        }`}
-                        disabled={whileUpload}
-                    >
-                        {whileUpload ? "Uploading..." : "Upload Note"}
-                    </button>
-                </div>
-            </form>
+                    <div className="pt-4">
+                        <button
+                            type="submit"
+                            className={`w-full p-3 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                                whileUpload
+                                    ? "bg-blue-700 cursor-not-allowed"
+                                    : "bg-blue-500 hover:bg-blue-600 shadow-lg hover:shadow-blue-500/20"
+                            }`}
+                            disabled={whileUpload}
+                        >
+                            {whileUpload ? (
+                                <>
+                                    <FaSpinner className="animate-spin h-5 w-5 mr-2" />
+                                    Uploading...
+                                </>
+                            ) : (
+                                <>
+                                    <FaCloudUploadAlt className="h-5 w-5 mr-2" />
+                                    Upload Note
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

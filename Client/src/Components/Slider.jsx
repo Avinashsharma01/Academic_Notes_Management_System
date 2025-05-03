@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Slider = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,58 +27,76 @@ const Slider = ({ images }) => {
     }, [currentIndex]);
 
     return (
-        <div className="relative w-full overflow-hidden">
+        <div className="relative w-full overflow-hidden rounded-lg shadow-2xl group">
+            {/* Gradient overlay for top and bottom */}
+            <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-slate-900/60 to-transparent z-10"></div>
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-900/80 to-transparent z-10"></div>
+
             {/* Image container */}
             <div
-                className="flex transition-transform duration-1500 ease-in-out"
+                className="flex transition-all duration-700 ease-in-out"
                 style={{ transform: `translateX(${-currentIndex * 100}%)` }}
             >
                 {images.map((imageObj, index) => (
-                    <div key={index} className="relative w-full flex-shrink-0">
+                    <div
+                        key={index}
+                        className="relative w-full flex-shrink-0 overflow-hidden"
+                    >
                         <img
                             src={imageObj.url}
                             alt={`Slide ${index + 1}`}
-                            className="w-full h-auto"
+                            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        {/* Text overlay
                         {imageObj.text && (
-                            <div className="absolute bottom-12 left-12 text-white text-xl bg-black bg-opacity-50 px-4 py-2 rounded">
-                                {imageObj.text}
+                            <div className="absolute bottom-16 left-0 right-0 mx-auto max-w-3xl px-6 z-20">
+                                <div className="bg-slate-800/70 backdrop-blur-sm text-white p-4 rounded-lg border-l-4 border-blue-500 shadow-lg transform transition-transform duration-500 ease-out">
+                                    <h3 className="text-xl font-bold text-blue-400 mb-1">
+                                        {imageObj.title || "Slide Title"}
+                                    </h3>
+                                    <p>{imageObj.text}</p>
+                                </div>
                             </div>
-                        )} */}
+                        )}
                     </div>
                 ))}
             </div>
 
             {/* Navigation buttons */}
             <button
-                id="next"
-                onClick={() => slideTo(currentIndex + 1)}
-                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-full hover:bg-opacity-75 max-md:w-10  max-md:text-[10px] max-md:flex max-md:justify-center max-md:items-center "
-            >
-                Next
-            </button>
-            <button
-                id="pre"
                 onClick={() => slideTo(currentIndex - 1)}
-                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-full hover:bg-opacity-75  max-md:w-10  max-md:text-[10px] max-md:flex max-md:justify-center max-md:items-center"
+                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-slate-800/50 hover:bg-blue-500 text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300 border border-white/10 shadow-lg opacity-70 hover:opacity-100 z-20"
+                aria-label="Previous slide"
             >
-                Prev
+                <FaChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
+
+            <button
+                onClick={() => slideTo(currentIndex + 1)}
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-slate-800/50 hover:bg-blue-500 text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300 border border-white/10 shadow-lg opacity-70 hover:opacity-100 z-20"
+                aria-label="Next slide"
+            >
+                <FaChevronRight className="w-4 h-4 md:w-5 md:h-5" />
             </button>
 
             {/* Dots navigation */}
-            <div className="Dotn-avigation absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
                 {images.map((_, index) => (
-                    <div
+                    <button
                         key={index}
                         onClick={() => slideTo(index)}
-                        className={` dot w-4 h-4 max-sm:h-2  rounded-full cursor-pointer ${
+                        className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
                             currentIndex === index
-                                ? "bg-lime-500"
-                                : "bg-black bg-opacity-50"
+                                ? "bg-blue-500 w-4 md:w-6"
+                                : "bg-white/40 hover:bg-white/70"
                         }`}
-                    ></div>
+                        aria-label={`Go to slide ${index + 1}`}
+                    ></button>
                 ))}
+            </div>
+
+            {/* Current slide indicator */}
+            <div className="absolute top-4 right-4 bg-slate-800/70 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full z-20 font-medium">
+                {currentIndex + 1} / {totalImages}
             </div>
         </div>
     );

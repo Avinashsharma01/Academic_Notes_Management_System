@@ -1,89 +1,145 @@
 /* eslint-disable react/prop-types */
-
 import { useEffect } from "react";
+import {
+    FaCalendarAlt,
+    FaClock,
+    FaMapMarkerAlt,
+    FaTicketAlt,
+} from "react-icons/fa";
 
 const Events = ({ event }) => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
     return (
-        //  bg-gradient-to-br from-blue-50 to-purple-50
-        <div className="min-h-screen bg-[#1E2A38] flex justify-center items-center p-6">
-            <div className="max-w-2xl w-full bg-white shadow-2xl rounded-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-3xl">
+        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 text-white overflow-hidden relative flex justify-center items-center p-6">
+            {/* Decorative elements */}
+            <div className="absolute top-20 left-20 bg-blue-500/10 h-64 w-64 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-20 bg-indigo-500/10 h-64 w-64 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/3 right-1/4 bg-purple-500/10 h-32 w-32 rounded-full blur-2xl"></div>
+
+            <div className="max-w-2xl w-full bg-slate-700/50 backdrop-blur-sm border border-slate-600 shadow-2xl rounded-xl overflow-hidden z-10 transition-all hover:shadow-blue-500/20">
                 {/* Event Image */}
-                <div className="h-48 bg-blue-200 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-white bg-blue-600 p-4 rounded-full">
-                        {event.title.charAt(0)}
-                    </span>
+                <div className="h-56 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-20">
+                        <svg
+                            className="w-full h-full"
+                            viewBox="0 0 100 100"
+                            preserveAspectRatio="none"
+                        >
+                            <path
+                                d="M0,0 L100,0 L100,100 L0,100 Z"
+                                fill="url(#grid)"
+                            />
+                        </svg>
+                        <defs>
+                            <pattern
+                                id="grid"
+                                width="10"
+                                height="10"
+                                patternUnits="userSpaceOnUse"
+                            >
+                                <path
+                                    d="M 10 0 L 0 0 0 10"
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth="0.5"
+                                />
+                            </pattern>
+                        </defs>
+                    </div>
+                    <div className="z-10 flex flex-col items-center">
+                        <span className="text-5xl font-bold text-white bg-blue-500/60 backdrop-blur-sm h-24 w-24 rounded-full flex items-center justify-center shadow-lg mb-2">
+                            {event.title.charAt(0)}
+                        </span>
+                        <span className="text-white text-sm font-semibold px-4 py-1 bg-blue-600/70 backdrop-blur-sm rounded-full">
+                            {event.category || "Workshop"}
+                        </span>
+                    </div>
                 </div>
 
                 {/* Event Content */}
                 <div className="p-8">
                     {/* Event Title */}
-                    <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                    <h1 className="text-3xl font-bold text-blue-400 mb-6">
                         {event.title}
                     </h1>
 
                     {/* Date & Time */}
-                    <div className="flex items-center space-x-4 text-gray-600 mb-4">
-                        <span className="flex items-center space-x-2">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            <span>{event.date}</span>
-                        </span>
-                        <span className="flex items-center space-x-2">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            <span>{event.time}</span>
-                        </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div className="flex items-center space-x-3 text-gray-300">
+                            <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                <FaCalendarAlt className="h-5 w-5 text-blue-400" />
+                            </div>
+                            <div>
+                                <div className="text-xs text-gray-400">
+                                    Date
+                                </div>
+                                <div>{event.date}</div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-3 text-gray-300">
+                            <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                <FaClock className="h-5 w-5 text-blue-400" />
+                            </div>
+                            <div>
+                                <div className="text-xs text-gray-400">
+                                    Time
+                                </div>
+                                <div>{event.time}</div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Location */}
-                    <div className="flex items-center space-x-2 text-gray-700 mb-6">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
-                        <span>{event.location}</span>
+                    <div className="flex items-center space-x-3 text-gray-300 mb-6">
+                        <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                            <FaMapMarkerAlt className="h-5 w-5 text-blue-400" />
+                        </div>
+                        <div>
+                            <div className="text-xs text-gray-400">
+                                Location
+                            </div>
+                            <div>{event.location}</div>
+                        </div>
                     </div>
 
                     {/* Event Description */}
-                    <p className="text-gray-600 leading-relaxed mb-8">
-                        {event.description}
-                    </p>
+                    <div className="bg-slate-600/50 backdrop-blur-sm border border-slate-500 rounded-lg p-4 mb-8">
+                        <h3 className="text-lg font-semibold text-blue-300 mb-2">
+                            About This Event
+                        </h3>
+                        <p className="text-gray-300 leading-relaxed">
+                            {event.description}
+                        </p>
+                    </div>
 
                     {/* Register Button */}
-                    <button className="w-full bg-gradient-to-r cursor-pointer from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
-                        Register Now
+                    <button className="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-lg transition-all flex items-center justify-center space-x-2 shadow-lg hover:shadow-blue-500/50">
+                        <FaTicketAlt className="h-5 w-5" />
+                        <span className="font-semibold">Register Now</span>
                     </button>
+
+                    {/* Additional information */}
+                    {event.speakers && (
+                        <div className="mt-6 pt-6 border-t border-slate-600">
+                            <h3 className="text-lg font-semibold text-blue-300 mb-3">
+                                Featured Speakers
+                            </h3>
+                            <div className="flex flex-wrap gap-3">
+                                {event.speakers.map((speaker, index) => (
+                                    <div
+                                        key={index}
+                                        className="px-3 py-1 bg-slate-600 rounded-full text-sm text-gray-300"
+                                    >
+                                        {speaker}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

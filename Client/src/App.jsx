@@ -31,6 +31,7 @@ import AllFeedbacks from "./Pages/AdminPages/AllFeedbacks";
 import UserProfile from "./Pages/UserProfile";
 import AdminProfile from "./Pages/AdminPages/AdminProfile";
 import Events from "./Pages/Events";
+import NotFound from "./Components/NotFound";
 // import Breadcrumb from "./Components/Breadcrumb";
 function App() {
     // Example usage:
@@ -47,6 +48,7 @@ function App() {
             <Navbar />
             {/* <Breadcrumb /> */}
             <Routes>
+                <Route path="*" element={<NotFound />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/login" element={<Login />} />
