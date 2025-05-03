@@ -13,6 +13,7 @@ const SignUp = () => {
 
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState("");
+    const [whileSignUp, setWhileSignUp] = useState(false);
 
     // Validation function
     const validateForm = () => {
@@ -55,6 +56,7 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setWhileSignUp(true);
         if (!validateForm()) return;
 
         try {
@@ -73,6 +75,8 @@ const SignUp = () => {
             setMessage(
                 error.response?.data?.message || "Error registering user."
             );
+        } finally{
+            setWhileSignUp(false);
         }
     };
 
@@ -163,7 +167,7 @@ const SignUp = () => {
                         type="submit"
                         className="bg-blue-600 text-white p-2 w-full rounded "
                     >
-                        Register
+                        {whileSignUp ? "Registering..." : "Register"}
                     </button>
                 </form>
             </div>

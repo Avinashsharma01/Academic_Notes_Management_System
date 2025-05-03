@@ -82,7 +82,6 @@ const UploadNote = () => {
         }
     };
 
-    // Session mapping based on year
     const DynamicSession = [
         "2020",
         "2021",
@@ -94,8 +93,6 @@ const UploadNote = () => {
         "2027",
         "2028",
     ];
-
-    // Semester mapping based on course
     const DynamicSemester = [
         "1st",
         "2nd",
@@ -106,9 +103,7 @@ const UploadNote = () => {
         "7th",
         "8th",
     ];
-     // Course mapping based on session
     const DynamicCourse = ["B.Tech", "M.Tech", "BCA", "MCA", "B.Sc", "M.Sc"];
-     // Branch mapping based on Course
     const DynamicBranch = [
         "CSE",
         "IT",

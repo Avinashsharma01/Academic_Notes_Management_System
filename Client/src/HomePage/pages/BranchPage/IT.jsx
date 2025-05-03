@@ -5,10 +5,10 @@ const IT = () => {
         window.scrollTo(0, 0);
     }, []);
     return (
-        <div className="bg-[#1E2A38] text-white w-full min-h-screen flex flex-col items-center p-8">
+        <div className="bg-[#1E2A38] text-white w-full min-h-screen flex flex-col items-center p-4">
             {/* Header Section */}
             <div className="flex justify-center items-center flex-col mb-12">
-                <h1 className="text-5xl font-bold mb-6 text-blue-400">
+                <h1 className="text-5xl font-bold mb-6 text-blue-400 text-center">
                     Information Technology (IT)
                 </h1>
                 <p className="text-lg text-center text-gray-300 max-w-2xl leading-relaxed">
@@ -22,7 +22,7 @@ const IT = () => {
             </div>
 
             {/* Core Subjects Section */}
-            <div className="bg-[#2A3A4D] p-8 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
+            <div className="bg-[#2A3A4D] p-4 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
                 <h2 className="text-3xl font-semibold mb-6 text-blue-400">
                     Core Subjects
                 </h2>
@@ -51,7 +51,7 @@ const IT = () => {
             </div>
 
             {/* Career Opportunities Section */}
-            <div className="bg-[#2A3A4D] p-8 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
+            <div className="bg-[#2A3A4D] p-4 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
                 <h2 className="text-3xl font-semibold mb-6 text-blue-400">
                     Career Opportunities
                 </h2>
@@ -82,7 +82,7 @@ const IT = () => {
             </div>
 
             {/* Top Recruiters Section */}
-            <div className="bg-[#2A3A4D] p-8 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
+            <div className="bg-[#2A3A4D] p-4 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
                 <h2 className="text-3xl font-semibold mb-6 text-blue-400">
                     Top Recruiters
                 </h2>
@@ -114,7 +114,7 @@ const IT = () => {
             </div>
 
             {/* Eligibility & Admission Section */}
-            <div className="bg-[#2A3A4D] p-8 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
+            <div className="bg-[#2A3A4D] p-4 rounded-lg w-full max-w-4xl mb-12 shadow-lg">
                 <h2 className="text-3xl font-semibold mb-6 text-blue-400">
                     Eligibility & Admission
                 </h2>

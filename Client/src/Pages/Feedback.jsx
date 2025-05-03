@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import API from "../Api/axiosInstance";
 import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Feedback = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
     const [rating, setRating] = useState(1);

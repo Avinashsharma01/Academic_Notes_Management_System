@@ -20,6 +20,7 @@ This project is the server-side of the Notes Management System, built using **No
 -   [Controllers](#controllers)
 -   [Routes](#routes)
 -   [License](#license)
+-   [Authentication Context](#authentication-context)
 
 ---
 
@@ -221,5 +222,3 @@ Server/
 This project is licensed under the **MIT License**.
 
 ---
-
-This version improves readability, ensures better formatting, and organizes the content for easy navigation. Let me know if you need any changes! 🚀

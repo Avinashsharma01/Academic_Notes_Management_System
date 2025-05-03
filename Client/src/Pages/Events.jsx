@@ -1,6 +1,11 @@
 /* eslint-disable react/prop-types */
 
+import { useEffect } from "react";
+
 const Events = ({ event }) => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         //  bg-gradient-to-br from-blue-50 to-purple-50
         <div className="min-h-screen bg-[#1E2A38] flex justify-center items-center p-6">

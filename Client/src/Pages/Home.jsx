@@ -62,17 +62,17 @@ function Home() {
             )} */}
 
             {/* Page Header */}
-            <div className="topHeading bg-[#17A2B8] w-full max-w-7xl mx-auto text-center py-2 mb-4 rounded-2xl">
+            <div className="topHeading bg-[#17A2B8] max-sm:w-[90%] sm:w-[90%] w-full max-w-7xl mx-auto text-center py-2 mb-4 rounded-2xl">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
                     Welcome to Academic Notes Management System
                 </h1>
-                <p className="text-sm sm:text-base md:text-lg text-gray-200 mt-2">
+                {/* <p className="text-sm sm:text-base md:text-lg text-gray-200 mt-2">
                     The Academic Notes Management System revolutionizes access
                     to academic materials for students and educators. It offers
                     a centralized, user-friendly platform that efficiently
                     organizes and retrieves study notes, enhancing the overall
                     learning experience.
-                </p>
+                </p> */}
             </div>
 
             {/* Simulated Event Post Button */}

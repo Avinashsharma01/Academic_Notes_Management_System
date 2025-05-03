@@ -1,4 +1,4 @@
-# Server Documentation
+# The College - Server Directory Documentation 
 
 ## Overview
 

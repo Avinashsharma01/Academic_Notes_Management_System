@@ -75,15 +75,16 @@ const ManageNotes = () => {
         searchNotes(query);
     };
 
-    return (
-        <div className="p-10 bg-gray-800 text-white min-h-screen">
-            <h1 className="text-3xl font-bold mb-5">Manage Notes</h1>
 
-            <div className="searchBar w-full p-2 flex justify-center items-center mb-5">
+    return (
+        <div className="p-10 max-sm:p-3 bg-gray-800 text-white min-h-screen">
+            <h1 className="text-3xl font-bold mb-5 text-center">Notes Management Dashboard</h1>
+
+            <div className="searchBar w-full p-2 flex justify-center items-center mb-5  ">
                 <input
                     type="text"
                     placeholder="Search notes (e.g., Title, Description, Session, Course, Branch, Semester, etc)"
-                    className="border w-[50%] h-12 px-4 rounded-2xl"
+                    className="border w-[50%] h-12 px-4 rounded-2xl max-sm:w-full"
                     value={searchQuery}
                     onChange={handleSearchChange}
                 />
@@ -116,16 +117,26 @@ const ManageNotes = () => {
                             <p className="text-sm text-gray-300">
                                 Subject:- {note.subject}
                             </p>
-                            <div className="btn w-full flex justify-around items-center ">
+                            <div className="btn w-full flex justify-around items-center gap-2">
                                 <button
                                     onClick={() => deleteNote(note._id)}
-                                    className="mt-3 bg-red-500 text-white p-2  rounded hover:bg-red-600 cursor-pointer"
+                                    className="mt-3 bg-red-500 text-white p-2 rounded hover:bg-red-600 cursor-pointer max-sm:p-1"
                                 >
                                     🗑 Delete
                                 </button>
+                                <button>
+                                <a
+                                href={note.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block mt-3 bg-blue-500 text-white text-center p-2 rounded hover:bg-blue-600 max-sm:p-1"
+                            >
+                                📄 Preview
+                            </a>
+                                </button>
                                 <button
                                     onClick={() => updateNote(note._id)}
-                                    className="mt-3 bg-yellow-500 text-white p-2  rounded hover:bg-blue-600 cursor-pointer"
+                                    className="mt-3 bg-yellow-500 text-white p-2  rounded hover:bg-blue-600 cursor-pointer max-sm:p-1"
                                 >
                                     📝 Update
                                 </button>

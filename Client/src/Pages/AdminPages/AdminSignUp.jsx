@@ -10,12 +10,13 @@ const AdminSignUp = () => {
         password: "",
     });
     const [message, setMessage] = useState("");
-
+    const [whileSignUp, setWhileSignUp] = useState(false);
     const handleChange = (e) =>
         setForm({ ...form, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setWhileSignUp(true);
         try {
             const { data } = await API.post("/auth/signupAdmin", form);
             setMessage(data.message);
@@ -28,15 +29,17 @@ const AdminSignUp = () => {
             setMessage(
                 error.response?.data?.message || "Error registering user."
             );
+        } finally{
+            setWhileSignUp(false);
         }
     };
 
     return (
-        <div className="max-w-md mx-auto w-full h-screen mt-10 flex  items-center flex-col">
+        <div className="max-w-md mx-auto w-full h-screen mt-10 flex   items-center flex-col">
             <h2 className="text-2xl font-bold mb-4">
                 Admin Please Register here
             </h2>
-            {message && <p className="text-green-600">{String(message)}</p>}
+            {message && <p className="text-green-600 text-center">{String(message)}</p>}
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
                     type="text"
@@ -71,7 +74,7 @@ const AdminSignUp = () => {
                     className="bg-blue-600 text-white p-2 w-full rounded"
                     // onClick={() => navigate("/login")}
                 >
-                    Register
+                    {whileSignUp ? "Registering..." : "Register"}
                 </button>
             </form>
         </div>
