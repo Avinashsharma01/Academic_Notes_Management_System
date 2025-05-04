@@ -109,6 +109,7 @@ const UploadNote = () => {
     ];
     // Course mapping based on session
     const DynamicCourse = ["B.Tech", "M.Tech", "BCA", "MCA", "B.Sc", "M.Sc"];
+
     // Branch mapping based on Course
     const DynamicBranch = [
         "CSE",
@@ -119,69 +120,133 @@ const UploadNote = () => {
         "FT",
         "EEE",
         "AI/ML",
-        "AIROSPACE",
+        "AEROSPACE",
     ];
 
-    // Subjects mapping based on semester
-    const subjectsBySemester = {
-        "1st": [
-            "Engineering Mathematics",
-            "Engineering Physics",
-            "Engineering Chemistry",
-            "Basic Electrical Engineering",
-            "Engineering Mechanics",
-            "Engineering Drawing",
-        ],
-        "2nd": [
-            "Advanced Mathematics",
-            "Data Structures",
-            "Digital Electronics",
-            "Computer Organization",
-            "Programming Fundamentals",
-        ],
-        "3rd": [
-            "Object Oriented Programming",
-            "Database Management Systems",
-            "Computer Networks",
-            "Operating Systems",
-            "Theory of Computation",
-        ],
-        "4th": [
-            "Software Engineering",
-            "Compiler Design",
-            "Computer Architecture",
-            "Microprocessors",
-            "System Programming",
-        ],
-        "5th": [
-            "Machine Learning",
-            "Cloud Computing",
-            "Blockchain Technology",
-            "Web Development",
-            "Mobile Computing",
-        ],
-        "6th": [
-            "Deep Learning",
-            "Big Data Analytics",
-            "Cyber Security",
-            "Internet of Things",
-            "Distributed Systems",
-        ],
-        "7th": [
-            "Artificial Intelligence",
-            "Natural Language Processing",
-            "Computer Vision",
-            "Robotics",
-            "Advanced Database Systems",
-        ],
-        "8th": [
-            "Project Management",
-            "Advanced Topics in AI",
-            "Advanced Topics in ML",
-            "Advanced Topics in Security",
-            "Advanced Topics in Networks",
-        ],
+    // Subjects mapping based on branch and semester
+    const subjectsByBranchAndSemester = {
+        CSE: {
+            "1st": [
+                "Engineering Mathematics",
+                "Engineering Physics",
+                "Engineering Chemistry",
+                "Basic Electrical Engineering",
+                "Engineering Mechanics",
+                "Engineering Drawing",
+            ],
+            "2nd": [
+                "Advanced Mathematics",
+                "Data Structures",
+                "Digital Electronics",
+                "Computer Organization",
+                "Programming Fundamentals",
+            ],
+            "3rd": [
+                "Object Oriented Programming",
+                "Database Management Systems",
+                "Computer Networks",
+                "Operating Systems",
+                "Theory of Computation",
+            ],
+            "4th": [
+                "Software Engineering",
+                "Compiler Design",
+                "Computer Architecture",
+                "Microprocessors",
+                "System Programming",
+            ],
+            "5th": [
+                "Machine Learning",
+                "Cloud Computing",
+                "Blockchain Technology",
+                "Web Development",
+                "Mobile Computing",
+            ],
+            "6th": [
+                "Deep Learning",
+                "Big Data Analytics",
+                "Cyber Security",
+                "Internet of Things",
+                "Distributed Systems",
+            ],
+            "7th": [
+                "Artificial Intelligence",
+                "Natural Language Processing",
+                "Computer Vision",
+                "Robotics",
+                "Advanced Database Systems",
+            ],
+            "8th": [
+                "Project Management",
+                "Advanced Topics in AI",
+                "Advanced Topics in ML",
+                "Advanced Topics in Security",
+                "Advanced Topics in Networks",
+            ],
+        },
+        IT: {
+            "1st": [
+                "Engineering Mathematics",
+                "Computer Fundamentals",
+                "Digital Logic",
+                "Communication Skills",
+                "Introduction to IT",
+                "Workshop Practice",
+            ],
+            "2nd": [
+                "Discrete Mathematics",
+                "Data Structures",
+                "Object Oriented Programming",
+                "Database Concepts",
+                "Web Technologies",
+            ],
+            "3rd": [
+                "Software Engineering",
+                "Advanced Database Systems",
+                "Computer Networks",
+                "Operating Systems",
+                "Design Patterns",
+            ],
+            "4th": [
+                "Web Application Development",
+                "Network Security",
+                "Mobile Application Development",
+                "Cloud Infrastructure",
+                "System Analysis and Design",
+            ],
+            "5th": [
+                "Data Analytics",
+                "DevOps Practices",
+                "IT Service Management",
+                "Enterprise Architecture",
+                "Business Intelligence",
+            ],
+            "6th": [
+                "Information Security",
+                "Software Testing",
+                "IT Project Management",
+                "Data Warehousing",
+                "Enterprise Resource Planning",
+            ],
+            "7th": [
+                "Machine Learning Applications",
+                "IT Governance",
+                "Internet of Things",
+                "Digital Transformation",
+                "Emerging Technologies",
+            ],
+            "8th": [
+                "Capstone Project",
+                "IT Ethics",
+                "IT Innovation and Entrepreneurship",
+                "Industry Internship",
+                "Professional Development",
+            ],
+        },
     };
+
+    // For backwards compatibility
+    const subjectsBySemester = subjectsByBranchAndSemester["CSE"];
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 p-6 w-full text-white flex justify-center items-center relative overflow-hidden">
@@ -357,11 +422,16 @@ const UploadNote = () => {
                                 onChange={handleChange}
                                 value={formData.subject}
                                 required
-                                disabled={!formData.semester}
+                                disabled={
+                                    !formData.semester || !formData.branch
+                                }
                             >
                                 <option value="">Select Subject</option>
                                 {formData.semester &&
-                                    subjectsBySemester[formData.semester]?.map(
+                                    formData.branch &&
+                                    subjectsByBranchAndSemester[
+                                        formData.branch
+                                    ]?.[formData.semester]?.map(
                                         (subject, index) => (
                                             <option key={index} value={subject}>
                                                 {subject}
@@ -372,6 +442,11 @@ const UploadNote = () => {
                             {!formData.semester && (
                                 <p className="text-xs text-blue-300 mt-1">
                                     Select a semester first to view subjects
+                                </p>
+                            )}
+                            {formData.semester && !formData.branch && (
+                                <p className="text-xs text-blue-300 mt-1">
+                                    Select a branch first to view subjects
                                 </p>
                             )}
                         </div>

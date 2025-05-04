@@ -53,7 +53,25 @@ export const loginUser = async (req, res) => {
             expiresIn: "1d",
         });
 
-        res.status(200).json({ token, user: { id: user._id, name: user.name, course: user.course, branch: user.branch, enrollment: user.enrollment, email: user.email, role: user.role } });
+        // Set JWT as cookie
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // secure in production
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+        });
+
+        res.status(200).json({
+            user: {
+                id: user._id,
+                name: user.name,
+                course: user.course,
+                branch: user.branch,
+                enrollment: user.enrollment,
+                email: user.email,
+                role: user.role
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
@@ -125,5 +143,23 @@ export const verifyUserEmail = async (req, res) => {
         res.status(200).render('UserEmailVerify')
     } catch (error) {
         res.status(401).json({ message: "Invalid or expired token!" });
+    }
+};
+
+// Logout user
+export const logoutUser = async (req, res) => {
+    try {
+        // Clear the authentication cookie
+        res.cookie('authToken', '', {
+            httpOnly: true,
+            expires: new Date(0), // Expire immediately
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production'
+        });
+
+        res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
 };

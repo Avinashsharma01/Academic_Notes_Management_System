@@ -20,12 +20,14 @@ const NotesList = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
-    const { AdminToken, UserToken, admin } = useContext(AuthContext);
+    const { AdminToken, UserToken, user, admin } = useContext(AuthContext);
     const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredNotes, setFilteredNotes] = useState([]);
+    const [isAdminView, setIsAdminView] = useState(false);
+    const [showOnlyMyUploads, setShowOnlyMyUploads] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -38,25 +40,71 @@ const NotesList = () => {
     const semester = queryParams.get("semester") || "";
     const subject = queryParams.get("subject") || "";
 
+    // Check if we're in the admin dashboard view and get uploaderId directly from URL
+    const adminDashboard = queryParams.get("adminDashboard") === "true";
+    const urlUploaderId = queryParams.get("uploaderId");
+
+    useEffect(() => {
+        // If this is the admin dashboard view, set appropriate flags
+        if (adminDashboard && admin) {
+            setIsAdminView(true);
+            setShowOnlyMyUploads(true);
+        }
+    }, [adminDashboard, admin]);
+
     useEffect(() => {
         const fetchNotes = async () => {
             setLoading(true);
             try {
-                const token = UserToken || AdminToken;
-                if (!token) {
-                    console.error("No token available");
+                // Check if we're authenticated either through token or cookie-based auth
+                const isAuthenticated =
+                    UserToken || AdminToken || user || admin;
+
+                if (!isAuthenticated) {
+                    console.error("No authentication detected");
                     setError("You must be logged in to view notes");
                     setLoading(false);
                     return;
                 }
 
-                const { data } = await API.get("/notes", {
-                    headers: {
-                        Authorization: token,
-                    },
-                });
+                // Use different approach depending on if we're showing only admin's uploads
+                let url = "/notes";
+                const params = {};
 
-                // Filter notes based on the selected hierarchy (case-insensitive)
+                // Add filter parameters for notes search
+                if (session) params.session = session;
+                if (course) params.course = course;
+                if (branch) params.branch = branch;
+                if (semester) params.semester = semester;
+                if (subject) params.subject = subject;
+
+                // Add admin ID filter if we're showing only their uploads
+                // First priority: Use uploaderId from URL if available
+                if (urlUploaderId) {
+                    params.uploaderId = urlUploaderId;
+                }
+                // Second priority: Use admin ID if in admin view with filter enabled
+                else if (isAdminView && showOnlyMyUploads && admin) {
+                    params.uploaderId = admin._id;
+                }
+
+                // Configure request options
+                const requestConfig = {
+                    params,
+                    withCredentials: true, // Ensure cookies are sent with the request
+                };
+
+                // Add token authorization header if available (for backward compatibility)
+                const token = UserToken || AdminToken;
+                if (token) {
+                    requestConfig.headers = {
+                        Authorization: token,
+                    };
+                }
+
+                const { data } = await API.get(url, requestConfig);
+
+                // Still perform client-side filtering for any parameters not handled by the API
                 const filtered = data.filter(
                     (note) =>
                         (!session ||
@@ -84,13 +132,32 @@ const NotesList = () => {
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching notes:", error);
-                setError("Failed to load notes. Please try again later.");
+
+                // Show a more specific error if it's an authentication issue
+                if (error.response && error.response.status === 401) {
+                    setError("Your session has expired. Please log in again.");
+                } else {
+                    setError("Failed to load notes. Please try again later.");
+                }
                 setLoading(false);
             }
         };
 
         fetchNotes();
-    }, [session, subject, semester, branch, course, UserToken, AdminToken]);
+    }, [
+        session,
+        subject,
+        semester,
+        branch,
+        course,
+        UserToken,
+        AdminToken,
+        user,
+        admin,
+        isAdminView,
+        showOnlyMyUploads,
+        urlUploaderId,
+    ]);
 
     // Handle search
     useEffect(() => {
@@ -152,7 +219,7 @@ const NotesList = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
             {/* Header with background */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 pt-6 pb-24 px-6 relative">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 pt-6 pb-24 px-6 relative overflow-hidden">
                 {/* Breadcrumb */}
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-2 mb-6">
                     <Breadcrumb />
@@ -210,6 +277,29 @@ const NotesList = () => {
                                 onChange={handleSearchChange}
                             />
                         </div>
+
+                        {/* Admin filter toggle */}
+                        {isAdminView && admin && (
+                            <div className="w-full md:w-auto">
+                                <label className="inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={showOnlyMyUploads}
+                                        onChange={() =>
+                                            setShowOnlyMyUploads(
+                                                !showOnlyMyUploads
+                                            )
+                                        }
+                                    />
+                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <span className="ml-3 text-sm font-medium text-gray-900">
+                                        Show Only My Uploads
+                                    </span>
+                                </label>
+                            </div>
+                        )}
+
                         <div className="w-full md:w-auto flex justify-between md:justify-end gap-3 flex-wrap">
                             <button
                                 onClick={() =>
@@ -307,7 +397,7 @@ const NotesList = () => {
                                         href={note.fileUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="block w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-lg shadow-md transition-colors flex items-center justify-center gap-2"
+                                        className=" w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-lg shadow-md transition-colors flex items-center justify-center gap-2"
                                     >
                                         <FaDownload />
                                         Download Note

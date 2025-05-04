@@ -143,7 +143,7 @@ const Branches = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
             {/* Header with background */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 pt-6 pb-24 px-6 relative">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 pt-6 pb-24 px-6 relative overflow-hidden">
                 {/* Breadcrumb */}
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-2 mb-6">
                     <Breadcrumb />

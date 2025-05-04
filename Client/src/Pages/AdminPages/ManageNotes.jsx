@@ -7,13 +7,15 @@ import {
     FaEdit,
     FaFileAlt,
     FaInfoCircle,
+    FaFilter,
 } from "react-icons/fa";
 
 const ManageNotes = () => {
     const [notes, setNotes] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
-    const { AdminToken } = useContext(AuthContext);
+    const [showOnlyMyUploads, setShowOnlyMyUploads] = useState(true);
+    const { AdminToken, admin } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchAllnotes = async () => {
@@ -25,21 +27,39 @@ const ManageNotes = () => {
                     return;
                 }
 
+                // Debug admin object
+                console.log("Admin object:", admin);
+
                 setLoading(true);
+
+                // Build parameters based on filter settings
+                const params = {};
+
+                // Filter by admin ID if "Show Only My Uploads" is enabled
+                if (showOnlyMyUploads && admin && admin._id) {
+                    console.log("Filtering by admin ID:", admin._id);
+                    params.uploaderId = admin._id;
+                }
+
+                console.log("Request params:", params);
+
                 const { data } = await API.get("/notes", {
                     headers: {
                         Authorization: token,
                     },
+                    params,
                 });
+
+                console.log("Notes fetched:", data);
                 setNotes(data);
                 setLoading(false);
             } catch (error) {
-                console.error("Error fetching feedback:", error);
+                console.error("Error fetching notes:", error);
                 setLoading(false);
             }
         };
         fetchAllnotes();
-    }, [AdminToken]);
+    }, [AdminToken, showOnlyMyUploads, admin]);
 
     // Delete a note
     const deleteNote = async (id) => {
@@ -69,14 +89,22 @@ const ManageNotes = () => {
         try {
             const token = AdminToken;
             setLoading(true);
+
+            // Build parameters object
+            const params = { query };
+
+            // Add admin ID filter if showing only my uploads
+            if (showOnlyMyUploads && admin) {
+                params.uploaderId = admin._id;
+            }
+
             const { data } = await API.get(`/notes/search`, {
                 headers: {
                     Authorization: token,
                 },
-                params: {
-                    query,
-                },
+                params,
             });
+
             setNotes(data);
             setLoading(false);
         } catch (err) {
@@ -89,6 +117,15 @@ const ManageNotes = () => {
         const query = e.target.value;
         setSearchQuery(query);
         searchNotes(query);
+    };
+
+    // Toggle filter for my uploads
+    const toggleMyUploadsFilter = () => {
+        // Toggle the state
+        setShowOnlyMyUploads(!showOnlyMyUploads);
+
+        // Clear search when switching views
+        setSearchQuery("");
     };
 
     return (
@@ -164,6 +201,30 @@ const ManageNotes = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Filter toggle */}
+                <div className="bg-gray-800 rounded-xl shadow-lg p-6 mb-8 flex justify-between items-center">
+                    <div className="flex items-center">
+                        <FaFilter className="text-gray-400 mr-3" />
+                        <h3 className="text-white font-medium">Filter Notes</h3>
+                    </div>
+
+                    <label className="inline-flex items-center cursor-pointer">
+                        <span className="mr-3 text-sm font-medium text-gray-400">
+                            Show All Notes
+                        </span>
+                        <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={showOnlyMyUploads}
+                            onChange={toggleMyUploadsFilter}
+                        />
+                        <div className="relative w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        <span className="ml-3 text-sm font-medium text-gray-400">
+                            Show Only My Uploads
+                        </span>
+                    </label>
                 </div>
 
                 {/* Notes grid */}

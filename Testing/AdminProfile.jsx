@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useContext } from "react";
-import AuthContext from "../../Context/AuthContext";
-import API from "../../Api/axiosInstance";
+import { useState } from "react";
 import {
     FaUser,
     FaEnvelope,
@@ -9,140 +7,48 @@ import {
     FaMapMarkerAlt,
     FaEdit,
     FaCamera,
-    FaUserGraduate,
+    FaUserShield,
     FaBuilding,
     FaIdCard,
     FaCalendarAlt,
     FaCog,
-    FaFileAlt,
-    FaSearch,
-    FaTrash,
-    FaBookOpen,
 } from "react-icons/fa";
 
 const AdminProfile = () => {
-    // Use AuthContext to get admin data
-    const { admin } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false);
-    const [adminStats, setAdminStats] = useState({
-        notesCount: 0,
-        coursesCount: 0,
-        queriesCount: 0,
-        rating: "0.0",
+    // Mock data - in a real app, you would fetch this from your backend
+    const [admin, setAdmin] = useState({
+        name: "Avinash Sharma",
+        email: "admin@example.com",
+        phone: "6201693634",
+        address: "Meerut, India",
+        role: "Super Admin",
+        department: "IT Administration",
+        adminId: "ADM-12345",
+        joinDate: "January 10, 2023",
+        lastLogin: "May 4, 2025 - 09:15 AM",
+        profileImage: "https://avatars.githubusercontent.com/u/155890004?v=4",
     });
-
-    // Use admin data from context or set a default empty object
-    const [adminData, setAdminData] = useState({
-        name: admin?.name || "Loading...",
-        email: admin?.email || "Loading...",
-        phone: admin?.phone || "Not Available",
-        address: admin?.address || "Not Available",
-        role: admin?.role || "Admin",
-        department: admin?.department || "Not Available",
-        adminId: admin?._id || "Loading...",
-        joinDate: admin?.createdAt
-            ? new Date(admin.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-              })
-            : "Not Available",
-        lastLogin: "May 5, 2025 - 09:15 AM", // This could be updated with a real timestamp if available
-        profileImage:
-            admin?.profilePic ||
-            "https://avatars.githubusercontent.com/u/155890004?v=4",
-    });
-
-    // Fetch admin details and stats
-    useEffect(() => {
-        const fetchAdminData = async () => {
-            if (!admin) return;
-
-            setLoading(true);
-            try {
-                // Get fresh admin data
-                const response = await API.get("/auth/admin/me");
-
-                if (response.data && response.data.admin) {
-                    const freshAdminData = response.data.admin;
-
-                    setAdminData({
-                        name: freshAdminData.name || "Admin User",
-                        email: freshAdminData.email || "Not Available",
-                        phone: freshAdminData.phone || "Not Available",
-                        address: freshAdminData.address || "Not Available",
-                        role: freshAdminData.role || "Admin",
-                        department:
-                            freshAdminData.department || "Not Available",
-                        adminId: freshAdminData._id || "Not Available",
-                        joinDate: freshAdminData.createdAt
-                            ? new Date(
-                                  freshAdminData.createdAt
-                              ).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                              })
-                            : "Not Available",
-                        lastLogin: "May 5, 2025 - 09:15 AM", // Could update with real data if available
-                        profileImage:
-                            freshAdminData.profilePic ||
-                            "https://avatars.githubusercontent.com/u/155890004?v=4",
-                    });
-
-                    // Optionally fetch admin stats
-                    // This could be a separate API call to get statistics related to this admin
-                    try {
-                        // Example: Get count of notes created by this admin
-                        const notesResponse = await API.get(
-                            `/notes?uploaderId=${freshAdminData._id}`
-                        );
-                        const notesCount = notesResponse.data.length || 0;
-
-                        // Update stats (other stats could be real data if you have endpoints for them)
-                        setAdminStats({
-                            notesCount: notesCount,
-                            coursesCount: 12, // Example static data - replace with real API data when available
-                            queriesCount: 57, // Example static data - replace with real API data when available
-                            rating: "4.8/5", // Example static data - replace with real API data when available
-                        });
-                    } catch (statsError) {
-                        console.error(
-                            "Failed to fetch admin stats:",
-                            statsError
-                        );
-                    }
-                }
-            } catch (error) {
-                console.error("Failed to fetch admin data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAdminData();
-    }, [admin]);
 
     // Stats data
     const stats = [
         {
-            title: "Notes Uploaded",
-            value: adminStats.notesCount.toString(),
+            title: "Total Users",
+            value: "1,234",
             bgColor: "bg-gradient-to-r from-blue-500 to-blue-600",
         },
         {
-            title: "Courses Managed",
-            value: adminStats.coursesCount.toString(),
+            title: "Notes Uploaded",
+            value: "5,678",
             bgColor: "bg-gradient-to-r from-green-500 to-green-600",
         },
         {
-            title: "Student Queries",
-            value: adminStats.queriesCount.toString(),
+            title: "Issues Resolved",
+            value: "432",
             bgColor: "bg-gradient-to-r from-purple-500 to-purple-600",
         },
         {
-            title: "Average Rating",
-            value: adminStats.rating,
+            title: "System Uptime",
+            value: "99.9%",
             bgColor: "bg-gradient-to-r from-amber-500 to-amber-600",
         },
     ];
@@ -150,40 +56,22 @@ const AdminProfile = () => {
     // Activity data
     const recentActivity = [
         {
-            action: "Uploaded Operating Systems notes",
+            action: "Approved new user registration",
             time: "10 minutes ago",
-            details: "CS101, Semester 4",
+            user: "jane.smith@example.com",
         },
+        { action: "Deleted spam content", time: "1 hour ago", user: "system" },
         {
-            action: "Updated Data Structures content",
-            time: "1 hour ago",
-            details: "CS203, Semester 3",
-        },
-        {
-            action: "Deleted outdated Python materials",
+            action: "Updated system settings",
             time: "Yesterday at 4:30 PM",
-            details: "CS105, Semester 2",
+            user: "admin",
         },
         {
-            action: "Responded to student queries",
+            action: "Resolved user complaint #45928",
             time: "2 days ago",
-            details: "Database Management notes",
+            user: "support",
         },
     ];
-
-    // Show loading state
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-xl text-gray-700">
-                        Loading admin profile...
-                    </p>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
@@ -194,7 +82,7 @@ const AdminProfile = () => {
                         Admin Profile
                     </h1>
                     <p className="text-xl text-white/80 max-w-2xl">
-                        Manage your profile and educational content
+                        Manage your profile and view your admin dashboard
                     </p>
                 </div>
 
@@ -213,7 +101,7 @@ const AdminProfile = () => {
                             <div className="flex justify-center">
                                 <div className="relative">
                                     <img
-                                        src={adminData.profileImage}
+                                        src={admin.profileImage}
                                         alt="Admin profile"
                                         className="w-32 h-32 rounded-full border-4 border-white object-cover"
                                     />
@@ -226,11 +114,11 @@ const AdminProfile = () => {
 
                         <div className="p-6 text-center">
                             <h2 className="text-2xl font-bold text-gray-800">
-                                {adminData.name}
+                                {admin.name}
                             </h2>
                             <p className="text-blue-600 font-medium flex items-center justify-center gap-1 mt-1">
-                                <FaUserGraduate className="text-blue-500" />
-                                {adminData.role}
+                                <FaUserShield className="text-blue-500" />
+                                {admin.role}
                             </p>
 
                             <div className="flex items-center justify-center mt-3">
@@ -245,19 +133,19 @@ const AdminProfile = () => {
                                     <div className="flex items-center text-gray-700">
                                         <FaEnvelope className="text-gray-500 mr-3" />
                                         <span className="text-sm">
-                                            {adminData.email}
+                                            {admin.email}
                                         </span>
                                     </div>
                                     <div className="flex items-center text-gray-700">
                                         <FaPhone className="text-gray-500 mr-3" />
                                         <span className="text-sm">
-                                            {adminData.phone}
+                                            {admin.phone}
                                         </span>
                                     </div>
                                     <div className="flex items-center text-gray-700">
                                         <FaMapMarkerAlt className="text-gray-500 mr-3" />
                                         <span className="text-sm">
-                                            {adminData.address}
+                                            {admin.address}
                                         </span>
                                     </div>
                                 </div>
@@ -288,7 +176,7 @@ const AdminProfile = () => {
                                             Department
                                         </p>
                                         <p className="font-medium text-gray-800">
-                                            {adminData.department}
+                                            {admin.department}
                                         </p>
                                     </div>
                                 </div>
@@ -302,7 +190,7 @@ const AdminProfile = () => {
                                             Admin ID
                                         </p>
                                         <p className="font-medium text-gray-800">
-                                            {adminData.adminId}
+                                            {admin.adminId}
                                         </p>
                                     </div>
                                 </div>
@@ -316,7 +204,7 @@ const AdminProfile = () => {
                                             Join Date
                                         </p>
                                         <p className="font-medium text-gray-800">
-                                            {adminData.joinDate}
+                                            {admin.joinDate}
                                         </p>
                                     </div>
                                 </div>
@@ -330,7 +218,7 @@ const AdminProfile = () => {
                                             Last Login
                                         </p>
                                         <p className="font-medium text-gray-800">
-                                            {adminData.lastLogin}
+                                            {admin.lastLogin}
                                         </p>
                                     </div>
                                 </div>
@@ -359,50 +247,6 @@ const AdminProfile = () => {
                             ))}
                         </div>
 
-                        {/* Quick actions */}
-                        <div className="bg-white rounded-xl shadow-lg p-6">
-                            <h2 className="text-xl font-bold text-gray-800 mb-4">
-                                Quick Actions
-                            </h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <button className="bg-blue-50 hover:bg-blue-100 p-4 rounded-xl transition-colors flex flex-col items-center gap-2">
-                                    <div className="bg-blue-100 p-3 rounded-full">
-                                        <FaFileAlt className="text-blue-600 text-xl" />
-                                    </div>
-                                    <span className="font-medium text-gray-800">
-                                        Upload Notes
-                                    </span>
-                                </button>
-
-                                <button className="bg-green-50 hover:bg-green-100 p-4 rounded-xl transition-colors flex flex-col items-center gap-2">
-                                    <div className="bg-green-100 p-3 rounded-full">
-                                        <FaEdit className="text-green-600 text-xl" />
-                                    </div>
-                                    <span className="font-medium text-gray-800">
-                                        Update Content
-                                    </span>
-                                </button>
-
-                                <button className="bg-purple-50 hover:bg-purple-100 p-4 rounded-xl transition-colors flex flex-col items-center gap-2">
-                                    <div className="bg-purple-100 p-3 rounded-full">
-                                        <FaSearch className="text-purple-600 text-xl" />
-                                    </div>
-                                    <span className="font-medium text-gray-800">
-                                        Find Notes
-                                    </span>
-                                </button>
-
-                                <button className="bg-amber-50 hover:bg-amber-100 p-4 rounded-xl transition-colors flex flex-col items-center gap-2">
-                                    <div className="bg-amber-100 p-3 rounded-full">
-                                        <FaBookOpen className="text-amber-600 text-xl" />
-                                    </div>
-                                    <span className="font-medium text-gray-800">
-                                        View Courses
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-
                         {/* Recent activity */}
                         <div className="bg-white rounded-xl shadow-lg p-6">
                             <h2 className="text-xl font-bold text-gray-800 mb-4">
@@ -424,7 +268,7 @@ const AdminProfile = () => {
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-500">
-                                            {activity.details}
+                                            By: {activity.user}
                                         </p>
                                     </div>
                                 ))}

@@ -103,14 +103,6 @@ function App() {
                     <Route path="/admin/feedback" element={<AllFeedbacks />} />
                 </Route>
 
-                {/* Home Branch Page  || this is public page available for anyone */}
-                {/* <Route path="/CSE" element={<CSE />} />
-                <Route path="/IT" element={<IT />} />
-                <Route path="/MACHENICAL" element={<Machenical />} />
-                <Route path="/ECE" element={<ECE />} />
-                <Route path="/EEE" element={<EEE />} />
-                <Route path="/CIVIL" element={<CIVIL />} /> */}
-
                 {/* User and Admin Profile */}
                 <Route path="userprofile" element={<UserProfile />} />
                 <Route path="adminprofile" element={<AdminProfile />} />

@@ -55,12 +55,39 @@ export const loginAdmin = async (req, res) => {
             expiresIn: "1d",
         });
 
-        res.status(200).json({ token, admin: { id: admin._id, name: admin.name, course: admin.course, branch: admin.branch, enrollment: admin.enrollment, email: admin.email, role: admin.role } });
+        // Set JWT as cookie
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // secure in production
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+        });
+
+        res.status(200).json({
+            admin: {
+                id: admin._id,
+                name: admin.name,
+                email: admin.email,
+                role: admin.role
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
 };
 
+// fetch the logged admin
+export const authAdmin = async (req, res) => {
+    try {
+        const admin = await Admin.findById(req.user.id).select("-password"); // Exclude password
+        if (!admin) return res.status(404).json({ message: "Admin not found" });
+
+        res.status(200).json({ admin });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
 
 export const verifyAdminEmail = async (req, res) => {
     try {

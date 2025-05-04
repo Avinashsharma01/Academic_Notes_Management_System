@@ -1,4 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../../Context/AuthContext";
 import {
     FaFileUpload,
     FaFolderOpen,
@@ -15,6 +18,7 @@ import {
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
+    const { admin } = useContext(AuthContext);
 
     // Mock data for statistics
     const stats = [
@@ -219,7 +223,7 @@ const AdminDashboard = () => {
                                     <FaUserShield className="text-white text-2xl" />
                                 </div>
                                 <h3 className="text-white font-bold text-lg">
-                                    Assign Roles
+                                    Post Event
                                 </h3>
                                 <p className="text-purple-100 text-sm mt-1">
                                     Manage user permissions
@@ -258,6 +262,25 @@ const AdminDashboard = () => {
                                 >
                                     View Report
                                 </button>
+                            </div>
+
+                            <div
+                                className="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl p-6 shadow-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-300 cursor-pointer"
+                                onClick={() =>
+                                    navigate(
+                                        `/notes?adminDashboard=true&uploaderId=${admin?._id}`
+                                    )
+                                }
+                            >
+                                <div className="bg-teal-500/30 rounded-lg p-3 inline-block mb-4">
+                                    <FaFileAlt className="text-white text-2xl" />
+                                </div>
+                                <h3 className="text-white font-bold text-lg">
+                                    My Uploads
+                                </h3>
+                                <p className="text-teal-100 text-sm mt-1">
+                                    View notes you've uploaded
+                                </p>
                             </div>
 
                             <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">

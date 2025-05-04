@@ -24,14 +24,9 @@ const UserProfile = () => {
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [updateError, setUpdateError] = useState(false);
 
-    const token = localStorage.getItem("authToken");
-
     // Fetch user details
     useEffect(() => {
-        if (!token) return;
-        API.get("/auth/me", {
-            headers: { Authorization: token },
-        })
+        API.get("/auth/me")
             .then((res) => {
                 setProfile(res.data.user);
                 setNewName(res.data.user.name);
@@ -39,7 +34,7 @@ const UserProfile = () => {
                 setLoading(false);
             })
             .catch(() => setLoading(false));
-    }, [token]);
+    }, []);
 
     // Handle file selection for profile picture
     const handleFileChange = (e) => {
@@ -53,34 +48,27 @@ const UserProfile = () => {
         setUpdateSuccess(false);
         setUpdateError(false);
 
-        // Uncomment this when the API is ready
-        // try {
-        //     const formData = new FormData();
-        //     formData.append("name", newName);
-        //     if (newProfilePic) {
-        //         formData.append("profilePic", newProfilePic);
-        //     }
+        try {
+            const formData = new FormData();
+            formData.append("name", newName);
+            if (newProfilePic) {
+                formData.append("profilePic", newProfilePic);
+            }
 
-        //     const response = await API.put("/auth/update-profile", formData, {
-        //         headers: {
-        //             Authorization: token,
-        //             "Content-Type": "multipart/form-data",
-        //         },
-        //     });
+            const response = await API.put("/auth/update-profile", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
 
-        //     setProfile(response.data.user);
-        //     setUpdateSuccess(true);
-        //     setTimeout(() => setUpdateSuccess(false), 3000);
-        //     setIsEditing(false);
-        // } catch (error) {
-        //     setUpdateError(true);
-        //     setTimeout(() => setUpdateError(false), 3000);
-        // }
-
-        // For now, show a success message since the functionality is coming soon
-        setUpdateSuccess(true);
-        setTimeout(() => setUpdateSuccess(false), 3000);
-        setIsEditing(false);
+            setProfile(response.data.user);
+            setUpdateSuccess(true);
+            setTimeout(() => setUpdateSuccess(false), 3000);
+            setIsEditing(false);
+        } catch (error) {
+            setUpdateError(true);
+            setTimeout(() => setUpdateError(false), 3000);
+        }
     };
 
     // Toggle edit mode

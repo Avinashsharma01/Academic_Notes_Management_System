@@ -19,6 +19,7 @@ This project is the server-side of the Notes Management System, built using **No
 -   [Models](#models)
 -   [Controllers](#controllers)
 -   [Routes](#routes)
+-   [Authentication System](#authentication-system)
 -   [License](#license)
 -   [Authentication Context](#authentication-context)
 
@@ -214,6 +215,41 @@ Server/
 ### 💬 Feedback Routes
 
 -   **feedbackRoutes.js**: Defines routes for handling feedback.
+
+---
+
+## 🔒 Authentication System
+
+The application uses a robust authentication system with the following features:
+
+### Cookie-Based Authentication
+
+Cookie-based authentication has been implemented for enhanced security. Key features include:
+
+-   **HTTP-Only Cookies**: Authentication tokens are stored in HTTP-only cookies, protecting against XSS attacks
+-   **Secure Cookie Transfer**: Cookies are configured with sameSite and secure options for HTTPS environments
+-   **Automatic Token Transmission**: Authentication tokens are sent automatically with each request
+-   **Dual Authentication Support**: The system supports both cookie-based and localStorage-based authentication for backward compatibility
+
+### Implementation Details
+
+-   **Backend Implementation**:
+
+    -   **cookie-parser middleware**: Added to parse and handle cookies in Express
+    -   **Token Storage**: JWT tokens stored in HTTP-only cookies upon login
+    -   **Middleware Flexibility**: Auth middleware checks cookies first, then falls back to Authorization headers
+
+-   **Frontend Implementation**:
+    -   **Authorization Context**: Updated to work with cookie-based authentication
+    -   **Protected Routes**: Adapted to handle multiple authentication methods
+    -   **API Calls**: Configured with withCredentials option to handle cookies
+
+### Benefits
+
+-   **Improved Security**: Protects against common client-side attacks
+-   **Better User Experience**: No manual token management required
+-   **Reduced Code Complexity**: Centralized authentication handling
+-   **Modern Best Practices**: Follows current web security standards
 
 ---
 

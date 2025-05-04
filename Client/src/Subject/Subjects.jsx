@@ -30,8 +30,8 @@ const Subjects = () => {
 
     // Map of subject names to icons and colors
     const subjectIcons = {
-        "Compiler Design": <FaLaptopCode size={32} />,
-        "Computer Network": <FaNetworkWired size={32} />,
+        "Big Data Analytics": <FaLaptopCode size={32} />,
+        "Deep Learning": <FaNetworkWired size={32} />,
         "Cloud Computer": <FaServer size={32} />,
         "Programming Fundamentals": <FaLaptopCode size={32} />,
         "Data Structures": <FaDatabase size={32} />,
@@ -43,8 +43,8 @@ const Subjects = () => {
     // Get a color for a specific subject
     const getSubjectColor = (subject) => {
         const colors = {
-            "Compiler Design": "from-indigo-500 to-indigo-600",
-            "Computer Network": "from-blue-500 to-blue-600",
+            "Big Data Analytics": "from-indigo-500 to-indigo-600",
+            "Deep Learning": "from-blue-500 to-blue-600",
             "Cloud Computer": "from-sky-500 to-sky-600",
             "Programming Fundamentals": "from-green-500 to-green-600",
             "Data Structures": "from-purple-500 to-purple-600",
@@ -58,9 +58,9 @@ const Subjects = () => {
     // Get subject descriptions
     const getSubjectDescription = (subject) => {
         const descriptions = {
-            "Compiler Design":
+            "Big Data Analytics":
                 "Learn about lexical analysis, parsing, and code generation",
-            "Computer Network":
+            "Deep Learning":
                 "Study network architecture, protocols, and communication systems",
             "Cloud Computer":
                 "Explore distributed computing resources and services",
@@ -84,8 +84,8 @@ const Subjects = () => {
                 // Simulate API call delay
                 // await new Promise((resolve) => setTimeout(resolve, 1000));
                 const data = [
-                    "Compiler Design",
-                    "Computer Network",
+                    "Big Data Analytics",
+                    "Deep Learning",
                     "Cloud Computer",
                     "Programming Fundamentals",
                     "Data Structures",
@@ -142,7 +142,7 @@ const Subjects = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
             {/* Header with background */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 pt-6 pb-24 px-6 relative">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 pt-6 pb-24 px-6 relative overflow-hidden">
                 {/* Breadcrumb */}
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-2 mb-6">
                     <Breadcrumb />
