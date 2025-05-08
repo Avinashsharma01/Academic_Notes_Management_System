@@ -13,7 +13,7 @@ const Events = ({ event }) => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 text-white overflow-hidden relative flex justify-center items-center p-6">
+        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 text-white overflow-hidden relative flex flex-col justify-center items-center p-6">
             {/* Decorative elements */}
             <div className="absolute top-20 left-20 bg-blue-500/10 h-64 w-64 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 right-20 bg-indigo-500/10 h-64 w-64 rounded-full blur-3xl"></div>
@@ -141,6 +141,17 @@ const Events = ({ event }) => {
                         </div>
                     )}
                 </div>
+            </div>
+            {/* Footer */}
+            <div className="text-center pt-8 border-t border-slate-600/50">
+                <p className="text-gray-400">
+                    © {new Date().getFullYear()} The College Notes Hub. All
+                    rights reserved.
+                </p>
+                <p>
+                    Designed and developed with ❤️ to support educational
+                    excellence.
+                </p>
             </div>
         </div>
     );

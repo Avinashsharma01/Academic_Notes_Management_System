@@ -127,25 +127,12 @@ const About = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center p-4">
                             <div className="text-5xl font-bold text-blue-300 mb-2">
-                                <i className="fab fa-react"></i>
+                                <i className="fas fa-database"></i>
                             </div>
                             <h3 className="text-lg font-medium text-gray-200">
-                                React
+                                MongoDB
                             </h3>
-                            <p className="text-gray-400 text-sm">
-                                Frontend Framework
-                            </p>
-                        </div>
-                        <div className="text-center p-4">
-                            <div className="text-5xl font-bold text-blue-300 mb-2">
-                                <i className="fab fa-node-js"></i>
-                            </div>
-                            <h3 className="text-lg font-medium text-gray-200">
-                                Node.js
-                            </h3>
-                            <p className="text-gray-400 text-sm">
-                                Backend Runtime
-                            </p>
+                            <p className="text-gray-400 text-sm">Database</p>
                         </div>
                         <div className="text-center p-4">
                             <div className="text-5xl font-bold text-blue-300 mb-2">
@@ -160,12 +147,26 @@ const About = () => {
                         </div>
                         <div className="text-center p-4">
                             <div className="text-5xl font-bold text-blue-300 mb-2">
-                                <i className="fas fa-database"></i>
+                                <i className="fab fa-react"></i>
                             </div>
                             <h3 className="text-lg font-medium text-gray-200">
-                                MongoDB
+                                React
                             </h3>
-                            <p className="text-gray-400 text-sm">Database</p>
+                            <p className="text-gray-400 text-sm">
+                                Frontend Framework
+                            </p>
+                        </div>
+
+                        <div className="text-center p-4">
+                            <div className="text-5xl font-bold text-blue-300 mb-2">
+                                <i className="fab fa-node-js"></i>
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-200">
+                                Node.js
+                            </h3>
+                            <p className="text-gray-400 text-sm">
+                                Backend Runtime
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -174,7 +175,7 @@ const About = () => {
                 <h2 className="text-3xl font-bold text-center text-blue-400 mb-10">
                     Who Uses Our Platform
                 </h2>
-                <div className="grid md:grid-cols-2 gap-8 mb-16">
+                <div className="grid md:grid-cols-3 gap-8 mb-16">
                     <div className="bg-slate-700/30 p-6 rounded-lg border border-slate-600">
                         <div className="flex items-center mb-4">
                             <div className="h-12 w-12 rounded-full bg-blue-500/20 flex items-center justify-center mr-4">
@@ -199,6 +200,22 @@ const About = () => {
                             </div>
                             <h3 className="text-xl font-semibold text-blue-300">
                                 Administrators
+                            </h3>
+                        </div>
+                        <p className="text-gray-300">
+                            Faculty and staff can manage educational content,
+                            upload new materials, organize resources by academic
+                            parameters, and ensure quality control of the
+                            available study materials.
+                        </p>
+                    </div>
+                    <div className="bg-slate-700/30 p-6 rounded-lg border border-slate-600">
+                        <div className="flex items-center mb-4">
+                            <div className="h-12 w-12 rounded-full bg-blue-500/20 flex items-center justify-center mr-4">
+                                <FaFolderOpen className="h-6 w-6 text-blue-400" />
+                            </div>
+                            <h3 className="text-xl font-semibold text-blue-300">
+                                Sudo Administrators
                             </h3>
                         </div>
                         <p className="text-gray-300">

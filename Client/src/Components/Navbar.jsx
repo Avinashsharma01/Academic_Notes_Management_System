@@ -80,7 +80,7 @@ const Navbar = () => {
     const renderAuthButtons = () => (
         <>
             {/* Desktop View */}
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-3">
                 <NavLink
                     to="/signup"
                     className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 px-5 py-2 rounded-lg text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-md"
@@ -101,8 +101,8 @@ const Navbar = () => {
                 </NavLink>
             </div>
 
-            {/* Mobile View */}
-            <div className="sm:hidden" ref={authDropdownRef}>
+            {/* Tablet and Mobile View */}
+            <div className="md:hidden" ref={authDropdownRef}>
                 <button
                     onClick={toggleAuthDropdown}
                     className="bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-lg flex items-center gap-1 shadow-md"
@@ -155,7 +155,7 @@ const Navbar = () => {
                     alt="Profile"
                     className="w-8 h-8 rounded-full border-2 border-white"
                 />
-                <span className="max-sm:hidden">
+                <span className="md:inline hidden">
                     {admin ? admin.name : user.name}
                 </span>
                 <FaChevronDown
@@ -257,7 +257,7 @@ const Navbar = () => {
         >
             <div className="flex items-center">
                 <button
-                    className="mr-3 p-2 rounded-lg text-2xl md:hidden hover:bg-white/10 transition-colors"
+                    className="mr-3 p-2 rounded-lg text-2xl lg:hidden hover:bg-white/10 transition-colors"
                     onClick={toggleMenu}
                     aria-label="Toggle menu"
                 >
@@ -275,9 +275,9 @@ const Navbar = () => {
             <div
                 className={`${
                     showMenu
-                        ? "max-md:flex max-md:flex-col max-md:absolute max-md:top-16 max-md:left-0 max-md:right-0 max-md:bg-gradient-to-b max-md:from-slate-800 max-md:to-gray-900 max-md:p-4 max-md:shadow-xl max-md:z-30 max-md:animate-slideDown"
-                        : "max-md:hidden"
-                } md:flex md:items-center md:space-x-1`}
+                        ? "max-lg:flex max-lg:flex-col max-lg:absolute max-lg:top-16 max-lg:left-0 max-lg:right-0 max-lg:bg-gradient-to-b max-lg:from-slate-800 max-lg:to-gray-900 max-lg:p-4 max-lg:shadow-xl max-lg:z-30 max-lg:animate-slideDown"
+                        : "max-lg:hidden"
+                } lg:flex lg:items-center lg:space-x-1`}
             >
                 <NavLink
                     to="/"

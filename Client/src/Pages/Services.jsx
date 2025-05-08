@@ -227,6 +227,10 @@ const Services = () => {
                         © {new Date().getFullYear()} The College Notes Hub. All
                         rights reserved.
                     </p>
+                    <p>
+                        Designed and developed with ❤️ to support educational
+                        excellence.
+                    </p>
                 </div>
             </div>
         </div>

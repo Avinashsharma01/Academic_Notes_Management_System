@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from "react";
 import {
     FaEnvelope,
@@ -414,6 +415,10 @@ const Contact = () => {
                     <p className="text-gray-400">
                         © {new Date().getFullYear()} The College Notes Hub. All
                         rights reserved.
+                    </p>
+                    <p className="text-gray-400">
+                        Designed and developed with ❤️ to support educational
+                        excellence.
                     </p>
                 </div>
             </div>

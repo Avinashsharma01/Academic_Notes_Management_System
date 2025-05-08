@@ -210,6 +210,10 @@ const Feedback = () => {
                         and deliver a better experience for all students and
                         educators using The College Notes Hub.
                     </p>
+                    <p className="text-gray-500 text-sm mt-2">
+                        Designed and developed with ❤️ to support educational
+                        excellence.
+                    </p>
                 </div>
             </div>
         </div>
