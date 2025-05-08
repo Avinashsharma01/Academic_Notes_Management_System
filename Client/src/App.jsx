@@ -22,7 +22,9 @@ const AdminLogin = lazy(() => import("./Pages/AdminPages/AdminLogin"));
 const Branches = lazy(() => import("./Branches/Branches"));
 const Semester = lazy(() => import("./Semesters/Semester"));
 const Subjects = lazy(() => import("./Subject/Subjects"));
-const UploadNote = lazy(() => import("./Pages/AdminPages/NoteUpload/UploadNote"));
+const UploadNote = lazy(() =>
+    import("./Pages/AdminPages/NoteUpload/UploadNote")
+);
 const NotesList = lazy(() => import("./Notes/NotesList"));
 const AdminDashboard = lazy(() => import("./Pages/AdminPages/AdminDashboard"));
 const ManageNotes = lazy(() => import("./Pages/AdminPages/ManageNotes"));
@@ -33,9 +35,9 @@ const Events = lazy(() => import("./Pages/Events"));
 
 // Loading component
 const Loading = () => (
-  <div className="flex justify-center items-center min-h-[60vh]">
-    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
-  </div>
+    <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+    </div>
 );
 
 function App() {
@@ -96,7 +98,10 @@ function App() {
                         />
                     </Route>
                     <Route element={<ProtectedAdminRoute />}>
-                        <Route path="/admin/uploadnotes" element={<UploadNote />} />
+                        <Route
+                            path="/admin/uploadnotes"
+                            element={<UploadNote />}
+                        />
                     </Route>
                     <Route element={<ProtectedAdminRoute />}>
                         <Route
@@ -105,7 +110,10 @@ function App() {
                         />
                     </Route>
                     <Route element={<ProtectedAdminRoute />}>
-                        <Route path="/admin/feedback" element={<AllFeedbacks />} />
+                        <Route
+                            path="/admin/feedback"
+                            element={<AllFeedbacks />}
+                        />
                     </Route>
 
                     {/* User and Admin Profile */}
@@ -113,7 +121,10 @@ function App() {
                         <Route path="/userprofile" element={<UserProfile />} />
                     </Route>
                     <Route element={<ProtectedUserRoute />}>
-                        <Route path="/adminprofile" element={<AdminProfile />} />
+                        <Route
+                            path="/adminprofile"
+                            element={<AdminProfile />}
+                        />
                     </Route>
                 </Routes>
             </Suspense>
@@ -123,3 +134,19 @@ function App() {
 }
 
 export default App;
+
+// I've successfully implemented lazy loading in your React application to improve frontend performance. Here's what I did:
+
+// Added Suspense and lazy imports from React
+// Converted all route component imports to use lazy loading
+// Created a loading spinner component to display while components are loading
+// Wrapped all routes in a Suspense component with the loading spinner as fallback
+// The implementation is now error-free. This lazy loading approach provides several performance benefits:
+
+// Initial page load is faster since only essential components are loaded immediately
+// Code-splitting automatically occurs, reducing the initial bundle size
+// Components are loaded on-demand when the user navigates to specific routes
+// The loading spinner provides visual feedback during component loading
+// This implementation follows React's recommended approach for code-splitting and lazy loading. The loading spinner will appear momentarily when navigating between pages while the component is being loaded.
+
+// Is there any specific part of the application where you'd like additional performance optimizations beyond the route-level lazy loading I've implemented?
