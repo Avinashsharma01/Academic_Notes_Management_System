@@ -163,3 +163,26 @@ export const logoutUser = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+
+
+// Fetch all users
+export const getAllUsers = async (req, res) => {
+    try {
+        // Check if the requesting user is an admin
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Access denied. Admin privileges required." });
+        }
+
+        // Fetch all users excluding their passwords
+        const users = await User.find().select("-password");
+
+        res.status(200).json({
+            users,
+            count: users.length
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error while fetching users." });
+    }
+};

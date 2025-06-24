@@ -1,7 +1,7 @@
 import express from "express";
-import { registerUser, loginUser, verifyUserEmail, authUser, updateUserProfile, logoutUser } from "../Controllers/authController.js";
+import { registerUser, loginUser, verifyUserEmail, authUser, updateUserProfile, logoutUser, getAllUsers } from "../Controllers/authController.js";
 import { registerAdmin, loginAdmin, verifyAdminEmail, authAdmin } from "../Controllers/AdminController.js";
-import { authenticateUser } from "../Middleware/authMiddleware.js";
+import { authenticateUser, authorizeAdmin } from "../Middleware/authMiddleware.js";
 import upload from "../Middleware/multerMiddlewareForProFilePic.js";
 const router = express.Router();
 
@@ -13,6 +13,9 @@ router.post("/login", loginUser);
 
 // User Logout
 router.post("/logout", logoutUser);
+
+// Fetch all users
+router.get("/users", authenticateUser, authorizeAdmin, getAllUsers)
 
 // Auth User
 router.get("/me", authenticateUser, authUser);

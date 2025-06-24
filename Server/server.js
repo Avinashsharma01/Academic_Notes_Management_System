@@ -29,6 +29,9 @@ app.use(
 // Auth Routes
 app.use("/api/auth", authRoutes);
 
+// Fetch User Route
+app.use("/api/all", authRoutes)
+
 // Notes Routes
 app.use("/api/notes", noteRoutes);
 

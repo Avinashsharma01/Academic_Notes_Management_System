@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import Navbar from "./Components/Navbar";
+import Navbar from "./Components/Navbaar/Navbar";
 import ProtectedUserRoute from "./Config/ProtectedUserRoute";
 import ProtectedAdminRoute from "./Config/ProtectedAdminRoute";
 import Footer from "./Components/Footer";
@@ -32,6 +32,7 @@ const AllFeedbacks = lazy(() => import("./Pages/AdminPages/AllFeedbacks"));
 const UserProfile = lazy(() => import("./Pages/UserProfile"));
 const AdminProfile = lazy(() => import("./Pages/AdminPages/AdminProfile"));
 const Events = lazy(() => import("./Pages/Events"));
+const AllUser = lazy(() => import("./Pages/AdminPages/AllUsers"));
 
 // Loading component
 const Loading = () => (
@@ -114,6 +115,9 @@ function App() {
                             path="/admin/feedback"
                             element={<AllFeedbacks />}
                         />
+                    </Route>
+                    <Route element={<ProtectedAdminRoute />}>
+                        <Route path="/admin/allUser" element={<AllUser />} />
                     </Route>
 
                     {/* User and Admin Profile */}

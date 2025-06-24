@@ -1,21 +1,19 @@
 /* eslint-disable no-unused-vars */
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Breadcrumb from "../Components/Breadcrumb";
-import {
-    FaBook,
-    FaGraduationCap,
-    FaLaptopCode,
-    FaToolbox,
-    FaArrowRight,
-} from "react-icons/fa";
+import { useLocation } from "react-router-dom";
+import CoursesHeader from "./Components/CoursesHeader";
+import SessionDetails from "./Components/SessionDetails";
+import CourseCard from "./Components/CourseCard";
+import EmptyCoursesList from "./Components/EmptyCoursesList";
+import { CoursesLoading, CoursesError } from "./Components/CoursesStates";
+import { getMockCoursesData } from "./utils/coursesData";
 
 const Courses = () => {
-    const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const session = queryParams.get("session") || "Session";
 
@@ -30,45 +28,7 @@ const Courses = () => {
             try {
                 // Simulate API call delay
                 // await new Promise((resolve) => setTimeout(resolve, 500));
-                const data = [
-                    {
-                        name: "B-TECH",
-                        route: "b.tech",
-                        icon: <FaLaptopCode size={36} />,
-                        description: "Bachelor of Technology",
-                        color: "from-blue-500 to-blue-600",
-                        subjects: 42,
-                        years: 4,
-                    },
-                    {
-                        name: "BCA",
-                        route: "bca",
-                        icon: <FaBook size={36} />,
-                        description: "Bachelor of Computer Applications",
-                        color: "from-purple-500 to-purple-600",
-                        subjects: 36,
-                        years: 3,
-                    },
-                    {
-                        name: "MCA",
-                        route: "mca",
-                        icon: <FaGraduationCap size={36} />,
-                        description: "Master of Computer Applications",
-                        color: "from-emerald-500 to-emerald-600",
-                        subjects: 24,
-                        years: 2,
-                    },
-                    {
-                        name: "DIPLOMA",
-                        route: "diploma",
-                        icon: <FaToolbox size={36} />,
-                        description: "Technical Diploma",
-                        color: "from-amber-500 to-amber-600",
-                        subjects: 30,
-                        years: 3,
-                    },
-                    // Add more courses as needed
-                ];
+                const data = getMockCoursesData();
                 setCourses(data);
             } catch (err) {
                 setError("Failed to fetch courses. Please try again later.");
@@ -81,149 +41,34 @@ const Courses = () => {
     }, []);
 
     if (loading) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex justify-center items-center">
-                <div className="p-8 rounded-lg bg-white shadow-lg flex flex-col items-center">
-                    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <div className="text-blue-600 text-xl font-semibold">
-                        Loading courses...
-                    </div>
-                </div>
-            </div>
-        );
+        return <CoursesLoading />;
     }
 
     if (error) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex justify-center items-center">
-                <div className="p-8 rounded-lg bg-white shadow-lg text-center">
-                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-500 text-2xl mx-auto mb-4">
-                        !
-                    </div>
-                    <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                        Error
-                    </h2>
-                    <p className="text-gray-600 mb-6">{error}</p>
-                    <button
-                        onClick={() => window.location.reload()}
-                        className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Try Again
-                    </button>
-                </div>
-            </div>
-        );
+        return <CoursesError error={error} />;
     }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
-            {/* Header with background */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 pt-6 pb-24 px-6 relative overflow-hidden">
-                {/* Breadcrumb */}
-                <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-2 mb-6">
-                    <Breadcrumb />
-                </div>
-
-                <div className="max-w-7xl mx-auto mt-4 relative z-10">
-                    <h1 className="text-4xl font-bold text-white mb-3">
-                        Academic Courses
-                    </h1>
-                    <p className="text-xl text-white/80 max-w-2xl">
-                        Browse available courses for the {session} academic
-                        session and explore related branches, subjects, and
-                        notes.
-                    </p>
-                </div>
-
-                {/* Decorative elements */}
-                <div className="absolute bottom-0 right-0 w-72 h-72 bg-white/5 rounded-full -mb-36 -mr-36 z-0"></div>
-                <div className="absolute top-12 right-32 w-16 h-16 bg-white/5 rounded-full z-0"></div>
-                <div className="absolute bottom-12 left-16 w-24 h-24 bg-white/5 rounded-full z-0"></div>
-            </div>
+            <CoursesHeader session={session} />
 
             {/* Main content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 -mt-16 relative z-20">
-                <div className="bg-white rounded-xl shadow-lg p-6 mb-12">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">
-                                Session Details
-                            </h2>
-                            <p className="text-gray-600">
-                                Viewing courses for the academic session{" "}
-                                <span className="font-semibold text-blue-600">
-                                    {session}
-                                </span>
-                            </p>
-                        </div>
-                        <button
-                            onClick={() => navigate("/dashboard")}
-                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg flex items-center gap-2 transition-colors"
-                        >
-                            Change Session
-                            <FaArrowRight className="text-sm" />
-                        </button>
-                    </div>
-                </div>
+                <SessionDetails session={session} />
 
                 {/* Courses Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {courses.map((course) => (
-                        <div
-                            key={course.route}
-                            onClick={() =>
-                                navigate(
-                                    `/branch?course=${course.route}&session=${session}`
-                                )
-                            }
-                            className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 duration-300"
-                        >
-                            <div
-                                className={`bg-gradient-to-r ${course.color} p-6 flex justify-center items-center text-white`}
-                            >
-                                {course.icon}
-                            </div>
-                            <div className="p-6">
-                                <h2 className="text-xl font-bold text-gray-800 mb-2">
-                                    {course.name}
-                                </h2>
-                                <p className="text-gray-600 text-sm mb-4">
-                                    {course.description}
-                                </p>
-
-                                <div className="flex justify-between text-sm text-gray-500 mb-4">
-                                    <span>{course.subjects} Subjects</span>
-                                    <span>{course.years} Years</span>
-                                </div>
-
-                                <button className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg flex items-center justify-center gap-2 transition-colors">
-                                    Explore Branches
-                                    <FaArrowRight className="text-xs" />
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Empty State */}
-                {courses.length === 0 && (
-                    <div className="bg-white rounded-xl p-8 text-center shadow-md">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 text-2xl mx-auto mb-4">
-                            <FaBook size={28} />
-                        </div>
-                        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                            No Courses Available
-                        </h2>
-                        <p className="text-gray-600 mb-6">
-                            There are no courses available for this session yet.
-                        </p>
-                        <button
-                            onClick={() => navigate("/dashboard")}
-                            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                            Back to Dashboard
-                        </button>
+                {courses.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {courses.map((course) => (
+                            <CourseCard
+                                key={course.route}
+                                course={course}
+                                session={session}
+                            />
+                        ))}
                     </div>
+                ) : (
+                    <EmptyCoursesList />
                 )}
             </div>
         </div>

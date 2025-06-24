@@ -14,6 +14,7 @@ import {
     FaFileAlt,
     FaUserShield,
     FaClipboardList,
+    FaUser,
 } from "react-icons/fa";
 
 const AdminDashboard = () => {
@@ -202,16 +203,16 @@ const AdminDashboard = () => {
 
                             <div
                                 className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl p-6 shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-300 cursor-pointer"
-                                onClick={() => navigate("/admin/reports")}
+                                onClick={() => navigate("/admin/allUser")}
                             >
                                 <div className="bg-amber-400/30 rounded-lg p-3 inline-block mb-4">
-                                    <FaFileAlt className="text-white text-2xl" />
+                                    <FaUser className="text-white text-2xl" />
                                 </div>
                                 <h3 className="text-white font-bold text-lg">
-                                    View Contact
+                                    User Management
                                 </h3>
                                 <p className="text-amber-100 text-sm mt-1">
-                                    Analyze submitted issues
+                                    Manage users and permissions
                                 </p>
                             </div>
 
@@ -283,7 +284,7 @@ const AdminDashboard = () => {
                                 </p>
                             </div>
 
-                            <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
+                            {/* <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
                                 <h3 className="text-white font-bold text-lg flex items-center">
                                     <FaUsers className="mr-2" /> User Management
                                 </h3>
@@ -296,7 +297,7 @@ const AdminDashboard = () => {
                                 >
                                     Manage Users
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 

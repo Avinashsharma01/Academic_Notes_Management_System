@@ -270,6 +270,11 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // Fetch User
+    const FetchAllUser = async () => {
+        const AllUser = await API.get("./admin/users");
+    };
+
     return (
         <AuthContext.Provider
             value={{

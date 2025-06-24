@@ -11,7 +11,6 @@ router.post("/", authenticateUser, SubmitContact)
 router.get("/", authenticateUser, authorizeAdmin, GetAllContact)
 
 // admin delete the contact
-
 router.delete("/:id", authenticateUser, authorizeAdmin, DeleteContact)
 
 export default router

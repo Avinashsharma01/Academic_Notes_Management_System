@@ -1,4 +1,4 @@
-[
+const subjectList = [
     {
         "semester": 1,
         "subjects": [
@@ -96,15 +96,16 @@
             "NLP Lab",
             "Elective - 1"
         ]
-    },
-    {
+    }, {
         "semester": 8,
         "subjects": [
-            "Project Management",
-            "Entrepreneurship and Innovation",
+            "Capstone Project",
+            "IT Ethics",
+            "IT Innovation and Entrepreneurship",
             "Industry Internship",
-            "Major Project",
-            "Elective - 2"
+            "Professional Development"
         ]
     }
-]
+];
+
+export default subjectList;
