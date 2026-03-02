@@ -81,8 +81,8 @@ const Navbar = () => {
     return (
         <nav
             className={`${scrolled
-                ? "bg-gradient-to-r from-gray-900 to-slate-900 shadow-lg"
-                : "bg-gradient-to-r from-gray-800 to-slate-800"
+                ? "bg-linear-to-r from-gray-900 to-slate-900 shadow-lg"
+                : "bg-linear-to-r from-gray-800 to-slate-800"
                 } 
             w-full py-3 text-white flex justify-between items-center sticky top-0 left-0 z-40 px-4 sm:px-8 transition-all duration-300`}
         >

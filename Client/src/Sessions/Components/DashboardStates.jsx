@@ -2,7 +2,7 @@
 
 export const DashboardLoading = () => {
     return (
-        <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4">
+        <div className="flex justify-center items-center h-screen bg-linear-to-br from-blue-50 via-white to-indigo-50 px-4">
             <div className="w-full max-w-sm rounded-2xl bg-white/90 backdrop-blur-sm shadow-xl ring-1 ring-blue-100 p-8 flex flex-col items-center text-center">
                 <div className="relative mb-5">
                     <div className="w-20 h-20 rounded-full border-4 border-blue-100"></div>
@@ -29,7 +29,7 @@ export const DashboardLoading = () => {
 
 export const DashboardError = ({ error }) => {
     return (
-        <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-50 to-white">
+        <div className="flex justify-center items-center h-screen bg-linear-to-br from-blue-50 to-white">
             <div className="p-8 rounded-lg bg-white shadow-lg text-center">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-500 text-2xl mx-auto mb-4">
                     !

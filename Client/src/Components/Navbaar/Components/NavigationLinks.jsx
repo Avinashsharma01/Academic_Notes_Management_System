@@ -6,7 +6,7 @@ const NavigationLinks = ({ showMenu, setShowMenu, user, admin, superAdmin }) => 
         <div
             className={`${
                 showMenu
-                    ? "max-lg:flex max-lg:flex-col max-lg:absolute max-lg:top-16 max-lg:left-0 max-lg:right-0 max-lg:bg-gradient-to-b max-lg:from-slate-800 max-lg:to-gray-900 max-lg:p-4 max-lg:shadow-xl max-lg:z-30 max-lg:animate-slideDown"
+                    ? "max-lg:flex max-lg:flex-col max-lg:absolute max-lg:top-16 max-lg:left-0 max-lg:right-0 max-lg:bg-linear-to-b max-lg:from-slate-800 max-lg:to-gray-900 max-lg:p-4 max-lg:shadow-xl max-lg:z-30 max-lg:animate-slideDown"
                     : "max-lg:hidden"
             } lg:flex lg:items-center lg:space-x-1`}
         >

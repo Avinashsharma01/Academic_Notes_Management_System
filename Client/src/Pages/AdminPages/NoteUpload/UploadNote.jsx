@@ -199,7 +199,7 @@ const UploadNote = () => {
     const selectClass = "appearance-none block w-full p-3 bg-slate-600 border border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white";
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 p-6 w-full text-white flex justify-center items-center relative overflow-hidden">
+        <div className="min-h-screen bg-linear-to-r from-slate-800 to-slate-900 p-6 w-full text-white flex justify-center items-center relative overflow-hidden">
             <ToastContainer
                 position="top-left"
                 autoClose={2000}

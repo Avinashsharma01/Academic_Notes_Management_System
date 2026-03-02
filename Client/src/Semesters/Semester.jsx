@@ -65,7 +65,7 @@ const Semester = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
+        <div className="min-h-screen bg-linear-to-br from-blue-50 to-white pb-16">
             <SemesterHeader branch={branch} course={course} session={session} />
 
             {/* Main content */}

@@ -54,7 +54,7 @@ const SemesterCard = ({
             className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 duration-300"
         >
             <div
-                className={`bg-gradient-to-r ${getSemesterColor(
+                className={`bg-linear-to-r ${getSemesterColor(
                     index
                 )} p-6 flex justify-center items-center text-white`}
             >

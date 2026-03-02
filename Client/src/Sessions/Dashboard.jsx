@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import DashboardHeader from "./Components/DashboardHeader";
 import DashboardStats from "./Components/DashboardStats";
@@ -72,7 +71,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
+        <div className="min-h-screen bg-linear-to-br from-blue-50 to-white pb-16">
             <DashboardHeader />
 
             {/* Main content */}

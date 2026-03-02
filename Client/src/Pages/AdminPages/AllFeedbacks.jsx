@@ -67,7 +67,7 @@ const AllFeedbacks = () => {
         );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+        <div className="min-h-screen bg-linear-to-br from-gray-900 to-gray-800 text-white">
             {/* Header */}
             <div className="bg-gray-800 p-6 shadow-md">
                 <div className="max-w-7xl mx-auto">

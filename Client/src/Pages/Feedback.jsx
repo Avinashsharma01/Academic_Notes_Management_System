@@ -110,7 +110,7 @@ const Feedback = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 text-white overflow-hidden relative">
+        <div className="min-h-screen bg-linear-to-r from-slate-800 to-slate-900 text-white overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-20 left-20 bg-blue-500/10 h-64 w-64 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 right-20 bg-indigo-500/10 h-64 w-64 rounded-full blur-3xl"></div>
@@ -161,11 +161,11 @@ const Feedback = () => {
                                 }
                                 className="text-left bg-slate-600/50 hover:bg-slate-500/50 border border-slate-500 rounded-lg p-3 transition-all duration-300 text-sm md:text-base flex items-start group"
                             >
-                                <FaTags className="h-3 w-3 md:h-4 md:w-4 text-blue-400 mt-1 mr-2 flex-shrink-0 group-hover:text-yellow-400" />
+                                <FaTags className="h-3 w-3 md:h-4 md:w-4 text-blue-400 mt-1 mr-2 shrink-0 group-hover:text-yellow-400" />
                                 <span className="text-gray-200 group-hover:text-white">
                                     {suggestion.text}
                                 </span>
-                                <div className="ml-auto pl-2 flex flex-shrink-0">
+                                <div className="ml-auto pl-2 flex shrink-0">
                                     {[...Array(suggestion.rating)].map(
                                         (_, i) => (
                                             <FaStar

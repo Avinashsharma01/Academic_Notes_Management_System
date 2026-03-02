@@ -26,7 +26,7 @@ const ProfileDropdown = ({
         <div className="relative" ref={profileRef}>
             <button
                 onClick={toggleProfile}
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 px-3 py-2 rounded-lg flex items-center gap-2 shadow-md hover:from-indigo-600 hover:to-blue-500 transition-all duration-300"
+                className="bg-linear-to-r from-blue-500 to-indigo-600 px-3 py-2 rounded-lg flex items-center gap-2 shadow-md hover:from-indigo-600 hover:to-blue-500 transition-all duration-300"
             >
                 <img
                     src={PROFILE_IMAGE_URL}
@@ -44,7 +44,7 @@ const ProfileDropdown = ({
 
             {showProfile && (
                 <div className="absolute right-0 mt-2 w-64 bg-white text-gray-800 shadow-xl rounded-lg overflow-hidden z-50 transform transition-all duration-300 ease-out animate-fadeIn">
-                    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 text-white">
+                    <div className="bg-linear-to-r from-blue-500 to-indigo-600 p-4 text-white">
                         <div className="flex items-center gap-3">
                             <img
                                 src={PROFILE_IMAGE_URL}

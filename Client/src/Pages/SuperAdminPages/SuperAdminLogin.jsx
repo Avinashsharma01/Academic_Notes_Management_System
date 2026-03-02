@@ -39,7 +39,7 @@ const SuperAdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center py-12 px-4">
+        <div className="min-h-screen bg-linear-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center py-12 px-4">
             <div className="max-w-md w-full space-y-8 bg-gray-800/80 backdrop-blur-sm p-8 rounded-xl shadow-2xl border border-purple-500/20">
                 <div className="text-center">
                     <div className="mx-auto w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mb-4">

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../Context/AuthContext";
@@ -100,7 +99,7 @@ const AdminDashboard = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+        <div className="min-h-screen bg-linear-to-br from-gray-900 to-gray-800">
             {/* Header with search and quick actions */}
             <div className="bg-gray-800 p-6">
                 <div className="max-w-7xl mx-auto">
@@ -144,7 +143,7 @@ const AdminDashboard = () => {
                             className="bg-gray-800 rounded-xl shadow-lg overflow-hidden"
                         >
                             <div
-                                className={`h-1 bg-gradient-to-r ${stat.bgColor}`}
+                                className={`h-1 bg-linear-to-r ${stat.bgColor}`}
                             ></div>
                             <div className="p-6">
                                 <div className="flex justify-between items-start">
@@ -183,7 +182,7 @@ const AdminDashboard = () => {
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div
-                                className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-6 shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 cursor-pointer"
+                                className="bg-linear-to-br from-blue-600 to-blue-700 rounded-xl p-6 shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 cursor-pointer"
                                 onClick={() => navigate("/admin/uploadnotes")}
                             >
                                 <div className="bg-blue-500/30 rounded-lg p-3 inline-block mb-4">
@@ -198,7 +197,7 @@ const AdminDashboard = () => {
                             </div>
 
                             <div
-                                className="bg-gradient-to-br from-green-600 to-green-700 rounded-xl p-6 shadow-lg hover:from-green-700 hover:to-green-800 transition-all duration-300 cursor-pointer"
+                                className="bg-linear-to-br from-green-600 to-green-700 rounded-xl p-6 shadow-lg hover:from-green-700 hover:to-green-800 transition-all duration-300 cursor-pointer"
                                 onClick={() => navigate("/admin/managenotes")}
                             >
                                 <div className="bg-green-500/30 rounded-lg p-3 inline-block mb-4">
@@ -213,7 +212,7 @@ const AdminDashboard = () => {
                             </div>
 
                             <div
-                                className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl p-6 shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-300 cursor-pointer"
+                                className="bg-linear-to-br from-amber-500 to-amber-600 rounded-xl p-6 shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-300 cursor-pointer"
                                 onClick={() => navigate("/admin/allUser")}
                             >
                                 <div className="bg-amber-400/30 rounded-lg p-3 inline-block mb-4">
@@ -228,7 +227,7 @@ const AdminDashboard = () => {
                             </div>
 
                             <div
-                                className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl p-6 shadow-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 cursor-pointer"
+                                className="bg-linear-to-br from-purple-600 to-purple-700 rounded-xl p-6 shadow-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 cursor-pointer"
                                 onClick={() => navigate("/admin/roles")}
                             >
                                 <div className="bg-purple-500/30 rounded-lg p-3 inline-block mb-4">

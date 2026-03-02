@@ -130,7 +130,7 @@ const AdminSignUp = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-screen bg-linear-to-r from-slate-800 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             <ToastContainer
                 position="top-left"
                 autoClose={2000}

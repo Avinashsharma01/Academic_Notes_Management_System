@@ -84,7 +84,7 @@ const ManageNotes = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+        <div className="min-h-screen bg-linear-to-br from-gray-900 to-gray-800">
             {/* Header */}
             <div className="bg-gray-800 p-6 border-b border-gray-700">
                 <div className="max-w-7xl mx-auto">
@@ -170,7 +170,7 @@ const ManageNotes = () => {
                                 key={note._id}
                                 className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700 hover:border-blue-500 transition-all duration-300"
                             >
-                                <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+                                <div className="h-2 bg-linear-to-r from-blue-500 to-purple-600"></div>
                                 <div className="p-6">
                                     <h2 className="font-bold text-xl text-white mb-2 truncate">
                                         {note.title}
