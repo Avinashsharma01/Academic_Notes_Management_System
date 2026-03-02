@@ -13,6 +13,7 @@
     "@gsap/react": "^2.1.2",
     "@heroicons/react": "^2.2.0",
     "axios": "^1.7.9",
+    "firebase": "^12.10.0",
     "gsap": "^3.12.7",
     "lucide-react": "^0.475.0",
     "motion": "^12.4.7",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@tailwindcss/vite": "^4.1.17",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react-swc": "^3.5.0",

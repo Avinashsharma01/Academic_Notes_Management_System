@@ -1,4 +1,3 @@
-Here's a well-formatted version of your `README.md` file with proper Markdown structure and readability improvements:
 
 ---
 

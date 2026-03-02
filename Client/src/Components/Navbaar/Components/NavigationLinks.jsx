@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { NavLink } from "react-router-dom";
 
-const NavigationLinks = ({ showMenu, setShowMenu, user, admin }) => {
+const NavigationLinks = ({ showMenu, setShowMenu, user, admin, superAdmin }) => {
     return (
         <div
             className={`${
@@ -22,7 +22,7 @@ const NavigationLinks = ({ showMenu, setShowMenu, user, admin }) => {
                 Home
             </NavLink>
 
-            {(user || admin) && (
+            {(user || admin || superAdmin) && (
                 <NavLink
                     to="/dashboard"
                     className={({ isActive }) =>

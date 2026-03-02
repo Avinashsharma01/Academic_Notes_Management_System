@@ -1,19 +1,99 @@
 import Note from "../Models/Note.js";
+import Admin from "../Models/AdminModel.js";
+import Course from "../Models/CourseModel.js";
+import Branch from "../Models/BranchModel.js";
+import Semester from "../Models/SemesterModel.js";
+import Subject from "../Models/SubjectModel.js";
 import cloudinary from "../Config/cloudinary.js"
 // Upload a Note (Admin only)
 export const uploadNote = async (req, res) => {
     // console.log("uploadNote", req);
     try {
-        const { title, description, fileUrl, session, course, branch, semester, subject } = req.body;
+        const { title, description, session, course, branch, semester, subject } = req.body;
 
         // Ensure all required fields are provided
-        if (!title || !description || !course || !branch || !semester || !session || !subject) {
+        if (!title || !description || !course || !semester || !session || !subject) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
         // Ensure a file is uploaded
         if (!req.file) {
             return res.status(400).json({ message: "File is required" });
+        }
+
+        const admin = await Admin.findById(req.user.id).select("course department");
+        if (!admin) {
+            return res.status(403).json({ message: "Admin not found" });
+        }
+
+        if ((course || "").toLowerCase() !== (admin.course || "").toLowerCase()) {
+            return res.status(403).json({ message: "You can upload notes only for your assigned course" });
+        }
+
+        const courseDoc = await Course.findOne({ name: { $regex: `^${admin.course}$`, $options: "i" }, isActive: true });
+        if (!courseDoc) {
+            return res.status(400).json({ message: "Assigned course is not active" });
+        }
+
+        let semesterDoc = await Semester.findOne({ name: { $regex: `^${semester}$`, $options: "i" }, course: courseDoc._id, isActive: true });
+        if (!semesterDoc) {
+            const semesterNumber = Number(String(semester).replace(/[^0-9]/g, ""));
+            if (!Number.isNaN(semesterNumber) && semesterNumber > 0) {
+                semesterDoc = await Semester.findOne({ number: semesterNumber, course: courseDoc._id, isActive: true });
+            }
+        }
+
+        if (!semesterDoc) {
+            return res.status(400).json({ message: "Invalid semester for selected course" });
+        }
+
+        const courseBranches = await Branch.find({ course: courseDoc._id, isActive: true }).select("name");
+        const hasGeneralOnlyBranch =
+            courseBranches.length === 1 &&
+            courseBranches[0].name.toLowerCase() === "general";
+
+        const adminDepartment = (admin.department || "").trim();
+        let requestedBranch = (branch || "").trim();
+
+        if (adminDepartment) {
+            requestedBranch = adminDepartment;
+        }
+
+        if (!requestedBranch && hasGeneralOnlyBranch) {
+            requestedBranch = "General";
+        }
+
+        if (!requestedBranch && courseBranches.length > 0) {
+            return res.status(400).json({ message: "Branch/Department is required for this course" });
+        }
+
+        let branchDoc = null;
+        if (requestedBranch) {
+            branchDoc = await Branch.findOne({
+                name: { $regex: `^${requestedBranch}$`, $options: "i" },
+                course: courseDoc._id,
+                isActive: true,
+            });
+
+            if (!branchDoc) {
+                return res.status(400).json({ message: "Invalid department/branch for selected course" });
+            }
+        }
+
+        const subjectFilter = {
+            name: { $regex: `^${subject}$`, $options: "i" },
+            semester: semesterDoc._id,
+            course: courseDoc._id,
+            isActive: true,
+        };
+
+        if (branchDoc) {
+            subjectFilter.branch = branchDoc._id;
+        }
+
+        const subjectDoc = await Subject.findOne(subjectFilter);
+        if (!subjectDoc) {
+            return res.status(400).json({ message: "Invalid subject for selected course/semester/branch" });
         }
 
         console.log("Uploaded File:", req.file);
@@ -26,10 +106,10 @@ export const uploadNote = async (req, res) => {
             uploadedBy: req.user.id, // Admin ID from JWT
             uploaderModel: 'Admin', // Set the model reference to Admin
             session,
-            course,
-            branch,
-            semester,
-            subject,
+            course: courseDoc.name,
+            branch: branchDoc?.name || requestedBranch,
+            semester: semesterDoc.name,
+            subject: subjectDoc.name,
         });
 
         await newNote.save();

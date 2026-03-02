@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import API from "../../Api/axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import {
     FaUser,
+    FaBook,
     FaEnvelope,
     FaLock,
     FaUserPlus,
     FaUserShield,
+    FaBuilding,
+    FaUniversity,
+    FaBriefcase,
 } from "react-icons/fa";
 
 const AdminSignUp = () => {
@@ -15,7 +19,13 @@ const AdminSignUp = () => {
         name: "",
         email: "",
         password: "",
+        course: "",
+        department: "",
+        college: "",
+        designation: "",
     });
+    const [courses, setCourses] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const [message, setMessage] = useState("");
     const [whileSignUp, setWhileSignUp] = useState(false);
     const handleChange = (e) =>
@@ -32,7 +42,11 @@ const AdminSignUp = () => {
                 name: "",
                 email: "",
                 password: "",
-            }); // Reset on success
+                course: "",
+                department: "",
+                college: "",
+                designation: "",
+            });
         } catch (error) {
             const errorMsg =
                 error.response?.data?.message || "Error registering user.";
@@ -42,6 +56,78 @@ const AdminSignUp = () => {
             setWhileSignUp(false);
         }
     };
+
+    const selectedCourseDepartments = useMemo(
+        () =>
+            departments.filter((dept) => {
+                const departmentCourseName = dept.course?.name || "";
+                const departmentCourseCode = dept.course?.code || "";
+                return (
+                    departmentCourseName.toLowerCase() === form.course.toLowerCase() ||
+                    departmentCourseCode.toLowerCase() === form.course.toLowerCase()
+                );
+            }),
+        [departments, form.course]
+    );
+
+    const hasGeneralOnlyDepartment =
+        selectedCourseDepartments.length === 1 &&
+        selectedCourseDepartments[0].name?.toLowerCase() === "general";
+
+    useEffect(() => {
+        if (!form.course) {
+            if (form.department) {
+                setForm((prev) => ({ ...prev, department: "" }));
+            }
+            return;
+        }
+
+        if (hasGeneralOnlyDepartment) {
+            if (form.department !== "General") {
+                setForm((prev) => ({ ...prev, department: "General" }));
+            }
+            return;
+        }
+
+        const isValidSelectedDepartment = selectedCourseDepartments.some(
+            (dept) => dept.name === form.department
+        );
+
+        if (!isValidSelectedDepartment) {
+            setForm((prev) => ({ ...prev, department: "" }));
+        }
+    }, [form.course, hasGeneralOnlyDepartment, selectedCourseDepartments, form.department]);
+
+    // Fetch courses and departments (branches) from API
+    useEffect(() => {
+        const fetchAcademicData = async () => {
+            try {
+                const [coursesRes, branchesRes] = await Promise.all([
+                    API.get("/academic/courses"),
+                    API.get("/academic/branches"),
+                ]);
+                setCourses(coursesRes.data);
+                setDepartments(branchesRes.data);
+            } catch (error) {
+                console.error("Failed to fetch course/department data:", error);
+                setCourses([
+                    { _id: "btech", name: "B.Tech" },
+                    { _id: "bca", name: "BCA" },
+                    { _id: "mca", name: "MCA" },
+                ]);
+                // Fallback departments
+                setDepartments([
+                    { _id: "cse", name: "CSE" },
+                    { _id: "it", name: "IT" },
+                    { _id: "ece", name: "ECE" },
+                    { _id: "eee", name: "EEE" },
+                    { _id: "civil", name: "Civil" },
+                    { _id: "me", name: "Mechanical" },
+                ]);
+            }
+        };
+        fetchAcademicData();
+    }, []);
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-slate-800 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -78,11 +164,10 @@ const AdminSignUp = () => {
 
                 {message && (
                     <div
-                        className={`${
-                            message.includes("Error")
+                        className={`${message.includes("Error")
                                 ? "bg-red-900/40 border-red-500 text-red-100"
                                 : "bg-green-900/40 border-green-500 text-green-100"
-                        } border-l-4 p-4 rounded-md`}
+                            } border-l-4 p-4 rounded-md`}
                         role="alert"
                     >
                         <p>{String(message)}</p>
@@ -165,6 +250,127 @@ const AdminSignUp = () => {
                                 Password should be at least 6 characters long
                             </p>
                         </div>
+
+                        <div className="mb-4">
+                            <label
+                                htmlFor="course"
+                                className="block text-sm font-medium text-gray-300 mb-1"
+                            >
+                                Course *
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaBook className="h-5 w-5 text-blue-400" />
+                                </div>
+                                <select
+                                    id="course"
+                                    name="course"
+                                    value={form.course}
+                                    onChange={handleChange}
+                                    required
+                                    className="appearance-none relative block w-full px-10 py-3 border border-slate-500 bg-slate-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                                >
+                                    <option value="">Select Course</option>
+                                    {courses.map((course) => (
+                                        <option key={course._id} value={course.name}>
+                                            {course.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label
+                                htmlFor="department"
+                                className="block text-sm font-medium text-gray-300 mb-1"
+                            >
+                                Department {hasGeneralOnlyDepartment ? "" : "*"}
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaBuilding className="h-5 w-5 text-blue-400" />
+                                </div>
+                                {hasGeneralOnlyDepartment ? (
+                                    <input
+                                        id="department"
+                                        name="department"
+                                        value={form.department || "General"}
+                                        readOnly
+                                        className="appearance-none relative block w-full px-10 py-3 border border-slate-500 bg-slate-600/50 text-gray-300 rounded-lg cursor-not-allowed sm:text-sm"
+                                    />
+                                ) : (
+                                    <select
+                                        id="department"
+                                        name="department"
+                                        value={form.department}
+                                        onChange={handleChange}
+                                        required={Boolean(form.course)}
+                                        disabled={!form.course}
+                                        className="appearance-none relative block w-full px-10 py-3 border border-slate-500 bg-slate-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm disabled:opacity-70"
+                                    >
+                                        <option value="">Select Department</option>
+                                        {selectedCourseDepartments.map((dept) => (
+                                            <option key={dept._id} value={dept.name}>
+                                                {dept.name} {dept.fullName ? `- ${dept.fullName}` : ""}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label
+                                htmlFor="college"
+                                className="block text-sm font-medium text-gray-300 mb-1"
+                            >
+                                College / Institution
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaUniversity className="h-5 w-5 text-blue-400" />
+                                </div>
+                                <input
+                                    id="college"
+                                    type="text"
+                                    name="college"
+                                    placeholder="ABC Engineering College"
+                                    value={form.college}
+                                    onChange={handleChange}
+                                    className="appearance-none relative block w-full px-10 py-3 border border-slate-500 bg-slate-600 placeholder-gray-300 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label
+                                htmlFor="designation"
+                                className="block text-sm font-medium text-gray-300 mb-1"
+                            >
+                                Designation
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaBriefcase className="h-5 w-5 text-blue-400" />
+                                </div>
+                                <select
+                                    id="designation"
+                                    name="designation"
+                                    value={form.designation}
+                                    onChange={handleChange}
+                                    className="appearance-none relative block w-full px-10 py-3 border border-slate-500 bg-slate-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                                >
+                                    <option value="">Select Designation</option>
+                                    <option value="Professor">Professor</option>
+                                    <option value="Associate Professor">Associate Professor</option>
+                                    <option value="Assistant Professor">Assistant Professor</option>
+                                    <option value="HOD">HOD</option>
+                                    <option value="Lecturer">Lecturer</option>
+                                    <option value="Lab Assistant">Lab Assistant</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="mt-6">
@@ -172,11 +378,10 @@ const AdminSignUp = () => {
                             type="submit"
                             disabled={whileSignUp}
                             className={`group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white 
-                            ${
-                                whileSignUp
+                            ${whileSignUp
                                     ? "bg-blue-700"
                                     : "bg-blue-500 hover:bg-blue-600"
-                            } 
+                                } 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 shadow-md`}
                         >
                             {whileSignUp ? (

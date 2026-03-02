@@ -9,7 +9,7 @@ import AuthButtons from "./Components/AuthButtons";
 import ProfileDropdown from "./Components/ProfileDropdown";
 
 const Navbar = () => {
-    const { user, logout, admin, Adminlogout } = useContext(AuthContext);
+    const { user, logout, admin, Adminlogout, superAdmin, superAdminLogout } = useContext(AuthContext);
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [showAuthDropdown, setShowAuthDropdown] = useState(false);
@@ -56,7 +56,13 @@ const Navbar = () => {
     }, []);
 
     const handleLogout = () => {
-        admin ? Adminlogout() : logout();
+        if (superAdmin) {
+            superAdminLogout();
+        } else if (admin) {
+            Adminlogout();
+        } else {
+            logout();
+        }
         setShowProfile(false);
     };
 
@@ -74,11 +80,10 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`${
-                scrolled
-                    ? "bg-gradient-to-r from-gray-900 to-slate-900 shadow-lg"
-                    : "bg-gradient-to-r from-gray-800 to-slate-800"
-            } 
+            className={`${scrolled
+                ? "bg-gradient-to-r from-gray-900 to-slate-900 shadow-lg"
+                : "bg-gradient-to-r from-gray-800 to-slate-800"
+                } 
             w-full py-3 text-white flex justify-between items-center sticky top-0 left-0 z-40 px-4 sm:px-8 transition-all duration-300`}
         >
             <NavbarBrand toggleMenu={toggleMenu} />
@@ -89,17 +94,19 @@ const Navbar = () => {
                 setShowMenu={setShowMenu}
                 user={user}
                 admin={admin}
+                superAdmin={superAdmin}
             />
 
             {/* Auth or Profile Section */}
             <div className="flex items-center">
-                {user || admin ? (
+                {user || admin || superAdmin ? (
                     <ProfileDropdown
                         toggleProfile={toggleProfile}
                         showProfile={showProfile}
                         profileRef={profileRef}
                         admin={admin}
                         user={user}
+                        superAdmin={superAdmin}
                         handleLogout={handleLogout}
                         navigate={navigate}
                         setShowProfile={setShowProfile}

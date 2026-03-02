@@ -11,13 +11,24 @@ import {
 const BranchCard = ({ branch, course, session }) => {
     const navigate = useNavigate();
 
+    const buildSemesterUrl = () => {
+        const params = new URLSearchParams({
+            branch: branch.route,
+            course,
+            session,
+            branchId: branch._id,
+        });
+
+        if (branch.courseId) {
+            params.set("courseId", branch.courseId);
+        }
+
+        return `/semester?${params.toString()}`;
+    };
+
     return (
         <div
-            onClick={() =>
-                navigate(
-                    `/semester?branch=${branch.route}&course=${course}&session=${session}`
-                )
-            }
+            onClick={() => navigate(buildSemesterUrl())}
             className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 duration-300"
         >
             <div

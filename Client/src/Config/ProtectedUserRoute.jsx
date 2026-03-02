@@ -6,7 +6,7 @@ import AuthContext from "../Context/AuthContext"; // Import Auth Context
 
 const ProtectedUserRoute = () => {
     try {
-        const { user, admin, loading } = useContext(AuthContext); // Get authenticated state from context
+        const { user, admin, superAdmin, loading } = useContext(AuthContext); // Get authenticated state from context
 
         // Show loading indicator while checking authentication status
         if (loading) {
@@ -20,9 +20,10 @@ const ProtectedUserRoute = () => {
         // Check localStorage as fallback
         const Luser = localStorage.getItem("user");
         const Ladmin = localStorage.getItem("admin");
+        const LsuperAdmin = localStorage.getItem("superAdmin");
 
-        // Allow access if user or admin is authenticated (via context or localStorage)
-        return user || admin || Luser || Ladmin ? (
+        // Allow access if user, admin, or superadmin is authenticated (via context or localStorage)
+        return user || admin || superAdmin || Luser || Ladmin || LsuperAdmin ? (
             <Outlet />
         ) : (
             <Navigate to="/login" replace />

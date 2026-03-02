@@ -1,4 +1,5 @@
 import User from "../Models/UserModel.js";
+import Admin from "../Models/AdminModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendVerificationEmail } from "../utils/UserEmailVerification.js"
@@ -174,8 +175,21 @@ export const getAllUsers = async (req, res) => {
             return res.status(403).json({ message: "Access denied. Admin privileges required." });
         }
 
-        // Fetch all users excluding their passwords
-        const users = await User.find().select("-password");
+        const admin = await Admin.findById(req.user.id).select("course");
+        if (!admin) {
+            return res.status(404).json({ message: "Admin not found." });
+        }
+
+        if (!admin.course) {
+            return res.status(200).json({ users: [], count: 0 });
+        }
+
+        const escapedCourse = admin.course.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        // Fetch only users matching admin's assigned course
+        const users = await User.find({
+            course: { $regex: `^${escapedCourse}$`, $options: "i" },
+        }).select("-password");
 
         res.status(200).json({
             users,

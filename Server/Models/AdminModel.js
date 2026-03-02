@@ -7,7 +7,10 @@ const AdminSchema = new mongoose.Schema(
         password: { type: String, required: true },
         role: { type: String, default: "admin" },
         isVerified: { type: Boolean, default: false },
-        // enum: ["student", "admin"],
+        course: { type: String, required: true }, // e.g., "B.Tech", "BCA"
+        department: { type: String, default: "" }, // e.g., "CSE", "IT", "Civil"
+        college: { type: String, default: "" }, // e.g., "ABC Engineering College"
+        designation: { type: String, default: "" }, // e.g., "Professor", "HOD"
     },
     { timestamps: true }
 );

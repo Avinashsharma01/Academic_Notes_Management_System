@@ -7,6 +7,7 @@ import {
     FaUser,
     FaUserCircle,
     FaSignOutAlt,
+    FaShieldAlt,
 } from "react-icons/fa";
 import { PROFILE_IMAGE_URL } from "./constants";
 
@@ -16,6 +17,7 @@ const ProfileDropdown = ({
     profileRef,
     admin,
     user,
+    superAdmin,
     handleLogout,
     navigate,
     setShowProfile,
@@ -32,12 +34,11 @@ const ProfileDropdown = ({
                     className="w-8 h-8 rounded-full border-2 border-white"
                 />
                 <span className="md:inline hidden">
-                    {admin ? admin.name : user.name}
+                    {superAdmin ? superAdmin.name : admin ? admin.name : user?.name}
                 </span>
                 <FaChevronDown
-                    className={`transition-transform duration-200 ${
-                        showProfile ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-200 ${showProfile ? "rotate-180" : ""
+                        }`}
                 />
             </button>
 
@@ -52,10 +53,10 @@ const ProfileDropdown = ({
                             />
                             <div>
                                 <p className="font-bold text-lg">
-                                    {admin ? admin.name : user.name}
+                                    {superAdmin ? superAdmin.name : admin ? admin.name : user?.name}
                                 </p>
                                 <p className="text-sm text-blue-100">
-                                    {admin ? "Administrator" : "Student"}
+                                    {superAdmin ? "SuperAdmin" : admin ? "Administrator" : "Student"}
                                 </p>
                             </div>
                         </div>
@@ -87,6 +88,23 @@ const ProfileDropdown = ({
                                     <FaUser className="text-indigo-600" />
                                     <span className="cursor-pointer">
                                         Admin Profile
+                                    </span>
+                                </button>
+                            </div>
+                        )}
+
+                        {superAdmin && (
+                            <div>
+                                <button
+                                    onClick={() => {
+                                        navigate("/dashboard");
+                                        setShowProfile(false);
+                                    }}
+                                    className="flex w-full items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                >
+                                    <FaShieldAlt className="text-purple-600" />
+                                    <span className="cursor-pointer">
+                                        Dashboard
                                     </span>
                                 </button>
                             </div>

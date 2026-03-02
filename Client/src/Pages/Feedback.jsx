@@ -4,7 +4,14 @@ import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaPaperPlane, FaComment, FaStar } from "react-icons/fa";
+import {
+    FaPaperPlane,
+    FaComment,
+    FaStar,
+    FaLightbulb,
+    FaTags,
+} from "react-icons/fa";
+import CallToAction from "../Components/CallToAction";
 
 const Feedback = () => {
     useEffect(() => {
@@ -15,7 +22,50 @@ const Feedback = () => {
     const [rating, setRating] = useState(1);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    const { user, admin, AdminToken, UserToken } = useContext(AuthContext);
+    const { user, admin } = useContext(AuthContext);
+
+    // Suggested feedback messages for lazy users
+    const suggestedFeedbacks = [
+        {
+            text: "The notes quality is excellent and very helpful for my studies.",
+            rating: 5,
+        },
+        {
+            text: "The website is easy to navigate and find what I need.",
+            rating: 4,
+        },
+        {
+            text: "The search functionality could be improved to find notes faster.",
+            rating: 3,
+        },
+        { text: "I'd like to see more notes on advanced topics.", rating: 4 },
+        { text: "The download process is smooth and quick.", rating: 5 },
+        {
+            text: "Some notes need better formatting and organization.",
+            rating: 2,
+        },
+        {
+            text: "The platform has helped me improve my academic performance.",
+            rating: 5,
+        },
+        {
+            text: "I wish there were more notes available for my specific course.",
+            rating: 3,
+        },
+    ];
+
+    const handleSuggestedFeedback = (suggestion) => {
+        setMessage(suggestion.text);
+        setRating(suggestion.rating);
+
+        // Scroll to the submit button
+        setTimeout(() => {
+            document.getElementById("submit-button")?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        }, 100);
+    };
 
     const emojiRatings = [
         { name: "Angry", emoji: "😡" },
@@ -42,19 +92,10 @@ const Feedback = () => {
         }
 
         try {
-            const { data } = await API.post(
-                "/feedback",
-                {
-                    message,
-                    rating,
-                },
-                {
-                    headers: {
-                        Authorization: UserToken || AdminToken,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const { data } = await API.post("/feedback", {
+                message,
+                rating,
+            });
             setMessage(data.message);
             setSuccess("Feedback submitted successfully!");
             toast.success("Feedback submitted successfully!");
@@ -100,6 +141,45 @@ const Feedback = () => {
                     <p className="text-lg md:text-xl text-gray-300">
                         Your opinion matters to us! Help us improve our
                         services.
+                    </p>{" "}
+                </div>
+
+                {/* Suggested Feedback Section */}
+                <div className="w-full mb-6 md:mb-8">
+                    <div className="flex items-center gap-2 mb-3 justify-center md:justify-start">
+                        <FaLightbulb className="text-yellow-400 h-4 w-4 md:h-5 md:w-5" />
+                        <h3 className="text-blue-300 font-medium text-base md:text-lg">
+                            Quick Feedback Suggestions
+                        </h3>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+                        {suggestedFeedbacks.map((suggestion, index) => (
+                            <button
+                                key={index}
+                                onClick={() =>
+                                    handleSuggestedFeedback(suggestion)
+                                }
+                                className="text-left bg-slate-600/50 hover:bg-slate-500/50 border border-slate-500 rounded-lg p-3 transition-all duration-300 text-sm md:text-base flex items-start group"
+                            >
+                                <FaTags className="h-3 w-3 md:h-4 md:w-4 text-blue-400 mt-1 mr-2 flex-shrink-0 group-hover:text-yellow-400" />
+                                <span className="text-gray-200 group-hover:text-white">
+                                    {suggestion.text}
+                                </span>
+                                <div className="ml-auto pl-2 flex flex-shrink-0">
+                                    {[...Array(suggestion.rating)].map(
+                                        (_, i) => (
+                                            <FaStar
+                                                key={i}
+                                                className="h-2 w-2 md:h-3 md:w-3 text-yellow-400"
+                                            />
+                                        )
+                                    )}
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2 text-center md:text-left">
+                        Click any suggestion to use it as your feedback
                     </p>
                 </div>
 
@@ -134,7 +214,6 @@ const Feedback = () => {
                                 required
                             />
                         </div>
-
                         <div>
                             <label className="block text-blue-300 font-medium mb-2 text-base md:text-lg">
                                 Rate Your Experience:
@@ -144,28 +223,25 @@ const Feedback = () => {
                                     {emojiRatings.map((item, index) => (
                                         <div
                                             key={index}
-                                            className={`flex flex-col items-center cursor-pointer transition-all duration-300 transform hover:scale-110 p-2 ${
-                                                rating === index + 1
-                                                    ? "scale-110"
-                                                    : ""
-                                            }`}
+                                            className={`flex flex-col items-center cursor-pointer transition-all duration-300 transform hover:scale-110 p-2 ${rating === index + 1
+                                                ? "scale-110"
+                                                : ""
+                                                }`}
                                             onClick={() => setRating(index + 1)}
                                         >
                                             <span
-                                                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-1 md:mb-2 ${
-                                                    rating === index + 1
-                                                        ? "opacity-100"
-                                                        : "opacity-60 hover:opacity-90"
-                                                }`}
+                                                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-1 md:mb-2 ${rating === index + 1
+                                                    ? "opacity-100"
+                                                    : "opacity-60 hover:opacity-90"
+                                                    }`}
                                             >
                                                 {item.emoji}
                                             </span>
                                             <span
-                                                className={`text-xs md:text-sm text-center ${
-                                                    rating === index + 1
-                                                        ? "text-blue-300 font-medium"
-                                                        : "text-gray-400"
-                                                }`}
+                                                className={`text-xs md:text-sm text-center ${rating === index + 1
+                                                    ? "text-blue-300 font-medium"
+                                                    : "text-gray-400"
+                                                    }`}
                                             >
                                                 {item.name}
                                             </span>
@@ -174,12 +250,11 @@ const Feedback = () => {
                                                     (_, i) => (
                                                         <FaStar
                                                             key={i}
-                                                            className={`h-2 w-2 md:h-3 md:w-3 ${
-                                                                rating ===
+                                                            className={`h-2 w-2 md:h-3 md:w-3 ${rating ===
                                                                 index + 1
-                                                                    ? "text-yellow-400"
-                                                                    : "text-gray-500"
-                                                            }`}
+                                                                ? "text-yellow-400"
+                                                                : "text-gray-500"
+                                                                }`}
                                                         />
                                                     )
                                                 )}
@@ -188,9 +263,9 @@ const Feedback = () => {
                                     ))}
                                 </div>
                             </div>
-                        </div>
-
+                        </div>{" "}
                         <button
+                            id="submit-button"
                             type="submit"
                             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 md:py-4 px-4 md:px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-blue-500/50 text-sm md:text-base"
                         >
@@ -199,6 +274,9 @@ const Feedback = () => {
                         </button>
                     </form>
                 </div>
+
+                {/* CTA Section */}
+                <CallToAction />
 
                 {/* Testimonial or thank you message */}
                 <div className="mt-8 md:mt-12 text-center px-2">

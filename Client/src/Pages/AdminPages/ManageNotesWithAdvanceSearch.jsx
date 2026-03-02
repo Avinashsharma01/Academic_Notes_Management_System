@@ -14,22 +14,15 @@ const ManageNotesWithAdvanceSearch = () => {
     });
     const [page, setPage] = useState(1);
     const [limit] = useState(10); // Default limit per page
-    const { AdminToken } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
     useEffect(() => {
         fetchNotes();
-    }, [AdminToken, page, filters]); // Refetch when filters or page changes
+    }, [page, filters]);
 
     const fetchNotes = async () => {
         try {
-            const token = AdminToken;
-            if (!token) {
-                console.error("No token available");
-                return;
-            }
-
             const { data } = await API.get("/notes/search", {
-                headers: { Authorization: token },
                 params: {
                     query: searchQuery,
                     ...filters,
@@ -45,10 +38,7 @@ const ManageNotesWithAdvanceSearch = () => {
 
     const deleteNote = async (id) => {
         try {
-            const token = AdminToken;
-            await API.delete(`/notes/${id}`, {
-                headers: { Authorization: token },
-            });
+            await API.delete(`/notes/${id}`);
             setNotes(notes.filter((note) => note._id !== id));
         } catch (err) {
             console.error("Error deleting note:", err);

@@ -13,6 +13,15 @@ import { useNavigate } from "react-router-dom";
 const CourseCard = ({ course, session }) => {
     const navigate = useNavigate();
 
+    const buildBranchUrl = () => {
+        const params = new URLSearchParams({
+            course: course.route,
+            session,
+            courseId: course.id,
+        });
+        return `/branch?${params.toString()}`;
+    };
+
     const renderIcon = (iconName) => {
         switch (iconName) {
             case "graduation-cap":
@@ -53,9 +62,7 @@ const CourseCard = ({ course, session }) => {
 
     return (
         <div
-            onClick={() =>
-                navigate(`/branch?course=${course.route}&session=${session}`)
-            }
+            onClick={() => navigate(buildBranchUrl())}
             className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 duration-300"
         >
             {" "}

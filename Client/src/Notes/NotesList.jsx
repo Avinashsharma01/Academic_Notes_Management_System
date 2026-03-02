@@ -15,7 +15,7 @@ const NotesList = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    const { AdminToken, UserToken, user, admin } = useContext(AuthContext);
+    const { user, admin } = useContext(AuthContext);
     const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -50,9 +50,8 @@ const NotesList = () => {
         const fetchNotes = async () => {
             setLoading(true);
             try {
-                // Check if we're authenticated either through token or cookie-based auth
-                const isAuthenticated =
-                    UserToken || AdminToken || user || admin;
+                // Check if we're authenticated via context or localStorage
+                const isAuthenticated = user || admin || localStorage.getItem("user") || localStorage.getItem("admin");
 
                 if (!isAuthenticated) {
                     console.error("No authentication detected");
@@ -82,19 +81,10 @@ const NotesList = () => {
                     params.uploaderId = admin._id;
                 }
 
-                // Configure request options
+                // Configure request options — cookies handle auth automatically
                 const requestConfig = {
                     params,
-                    withCredentials: true, // Ensure cookies are sent with the request
                 };
-
-                // Add token authorization header if available (for backward compatibility)
-                const token = UserToken || AdminToken;
-                if (token) {
-                    requestConfig.headers = {
-                        Authorization: token,
-                    };
-                }
 
                 const { data } = await API.get(url, requestConfig); // Still perform client-side filtering for any parameters not handled by the API
                 // More robust filtering to handle format mismatches (especially for semester like "6" vs "6th")                // Log all notes and filters for debugging
@@ -152,15 +142,15 @@ const NotesList = () => {
                         note.branch.toLowerCase() === branch.toLowerCase() ||
                         // Remove spaces and dots for more flexible matching
                         note.branch.toLowerCase().replace(/[\s.]/g, "") ===
-                            branch.toLowerCase().replace(/[\s.]/g, "");
+                        branch.toLowerCase().replace(/[\s.]/g, "");
 
                     // Semester filtering - numeric comparison to handle "6th" vs "6" etc.
                     const semesterMatch =
                         !semester ||
                         note.semester.toLowerCase() ===
-                            semester.toLowerCase() ||
+                        semester.toLowerCase() ||
                         extractNumeric(note.semester) ===
-                            extractNumeric(semester);
+                        extractNumeric(semester);
 
                     // Subject filtering - more flexible matching
                     const subjectMatch =
@@ -196,8 +186,7 @@ const NotesList = () => {
                                 );
                             if (!semesterMatch)
                                 mismatchReason.push(
-                                    `semester: "${
-                                        note.semester
+                                    `semester: "${note.semester
                                     }" vs filter "${semester}" (numeric: ${extractNumeric(
                                         note.semester
                                     )} vs ${extractNumeric(semester)})`
@@ -266,8 +255,6 @@ const NotesList = () => {
         semester,
         branch,
         course,
-        UserToken,
-        AdminToken,
         user,
         admin,
         isAdminView,
@@ -312,6 +299,7 @@ const NotesList = () => {
                 branch={branch}
                 course={course}
                 semester={semester}
+                session={session}
             />
 
             {/* Main content */}

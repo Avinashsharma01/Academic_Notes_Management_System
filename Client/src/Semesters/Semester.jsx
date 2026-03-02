@@ -6,6 +6,7 @@ import BranchDetails from "./Components/BranchDetails";
 import SemesterCard from "./Components/SemesterCard";
 import EmptySemesterList from "./Components/EmptySemesterList";
 import { SemesterLoading, SemesterError } from "./Components/SemesterStates";
+import API from "../Api/axiosInstance";
 
 const Semester = () => {
     // Scroll to top on component mount
@@ -24,68 +25,28 @@ const Semester = () => {
     const branch = queryParams.get("branch") || "Branch";
     const course = queryParams.get("course") || "Course";
     const session = queryParams.get("session") || "Session";
+    const branchId = queryParams.get("branchId") || "";
+    const courseId = queryParams.get("courseId") || "";
 
-    // Simulate fetching semester data from an API
+    // Fetch semesters from API
     useEffect(() => {
         const fetchSemesters = async () => {
             try {
-                // Simulate API call delay
-                // await new Promise((resolve) => setTimeout(resolve, 1000));
-                const data = [
-                    {
-                        name: "Semester 1",
-                        route: "1st",
-                        subjects: 8,
-                        description:
-                            "Foundational courses for first-year students",
-                    },
-                    {
-                        name: "Semester 2",
-                        route: "2nd",
-                        subjects: 7,
-                        description: "Continuation of core fundamentals",
-                    },
-                    {
-                        name: "Semester 3",
-                        route: "3rd",
-                        subjects: 8,
-                        description: "Introduction to specialized topics",
-                    },
-                    {
-                        name: "Semester 4",
-                        route: "4th",
-                        subjects: 6,
-                        description: "Advanced concepts and applications",
-                    },
-                    {
-                        name: "Semester 5",
-                        route: "5th",
-                        subjects: 7,
-                        description:
-                            "Specialization and industry-relevant skills",
-                    },
-                    {
-                        name: "Semester 6",
-                        route: "6th",
-                        subjects: 6,
-                        description: "Advanced professional courses",
-                    },
-                    {
-                        name: "Semester 7",
-                        route: "7th",
-                        subjects: 5,
-                        description: "Final year specialization and projects",
-                    },
-                    {
-                        name: "Semester 8",
-                        route: "8th",
-                        subjects: 4,
-                        description:
-                            "Capstone projects and industry preparation",
-                    },
-                ];
-                setSemesters(data);
+                let url = "/academic/semesters";
+                if (courseId) url += `?course=${courseId}`;
+
+                const { data } = await API.get(url);
+                const mapped = data.map((s) => ({
+                    name: s.name,
+                    route: `${s.number}`,
+                    subjects: 0,
+                    description: "",
+                    _id: s._id,
+                    number: s.number,
+                }));
+                setSemesters(mapped);
             } catch (err) {
+                console.error("Failed to fetch semesters:", err);
                 setError("Failed to fetch semesters. Please try again later.");
             } finally {
                 setLoading(false);
@@ -93,7 +54,7 @@ const Semester = () => {
         };
 
         fetchSemesters();
-    }, []);
+    }, [courseId]);
 
     if (loading) {
         return <SemesterLoading />;
@@ -120,11 +81,13 @@ const Semester = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {semesters.map((semester, index) => (
                             <SemesterCard
-                                key={index}
+                                key={semester._id || index}
                                 semester={semester}
                                 branch={branch}
+                                branchId={branchId}
                                 course={course}
                                 session={session}
+                                courseId={courseId}
                                 index={index}
                             />
                         ))}

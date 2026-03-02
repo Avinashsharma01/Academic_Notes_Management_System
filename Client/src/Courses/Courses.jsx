@@ -6,7 +6,7 @@ import SessionDetails from "./Components/SessionDetails";
 import CourseCard from "./Components/CourseCard";
 import EmptyCoursesList from "./Components/EmptyCoursesList";
 import { CoursesLoading, CoursesError } from "./Components/CoursesStates";
-import { getMockCoursesData } from "./utils/coursesData";
+import API from "../Api/axiosInstance";
 
 const Courses = () => {
     const [courses, setCourses] = useState([]);
@@ -22,15 +22,25 @@ const Courses = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    // Simulate fetching course data from an API
+    // Fetch courses from API
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                // Simulate API call delay
-                // await new Promise((resolve) => setTimeout(resolve, 500));
-                const data = getMockCoursesData();
-                setCourses(data);
+                const { data } = await API.get("/academic/courses");
+                // Map API data to match the expected format
+                const mapped = data.map((c) => ({
+                    id: c._id,
+                    name: c.name,
+                    description: c.description,
+                    route: c.code,
+                    icon: c.icon || "graduation-cap",
+                    color: c.color || "blue",
+                    departments: 0,
+                    students: 0,
+                }));
+                setCourses(mapped);
             } catch (err) {
+                console.error("Failed to fetch courses:", err);
                 setError("Failed to fetch courses. Please try again later.");
             } finally {
                 setLoading(false);
@@ -61,7 +71,7 @@ const Courses = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {courses.map((course) => (
                             <CourseCard
-                                key={course.route}
+                                key={course.id}
                                 course={course}
                                 session={session}
                             />

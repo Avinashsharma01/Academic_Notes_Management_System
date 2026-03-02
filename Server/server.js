@@ -1,6 +1,7 @@
+import dotenv from "dotenv"
+dotenv.config()
 import express from "express"
 import cors from "cors"
-import dotenv from "dotenv"
 import path from "path"
 import cookieParser from "cookie-parser"
 import ConnectTODB from './Database/db.js'
@@ -9,7 +10,9 @@ import noteRoutes from "./Routes/noteRoutes.js";
 import feedbackRoutes from "./Routes/feedbackRoutes.js"
 import ContactRoutes from "./Routes/ContactRoute.js"
 import superAdminRoutes from "./Routes/SuperAdminRoute.js"
-dotenv.config()
+import subscribeRoutes from "./Routes/SubscribeRoute.js"
+import academicRoutes from "./Routes/AcademicRoutes.js"
+
 
 const app = express()
 app.use(express.urlencoded({ extended: true }));
@@ -44,11 +47,22 @@ app.use("/api/contact", ContactRoutes);
 // SuperAdmin routes
 app.use("/api/superadmin", superAdminRoutes);
 
+// Subscribe routes
+app.use("/api/subscribe", subscribeRoutes);
+
+// Academic data routes (sessions, courses, branches, semesters, subjects)
+app.use("/api/academic", academicRoutes);
+
 app.get('/user', (req, res) => {
     res.render('UserEmailVerify')
 })
 app.get('/admin', (req, res) => {
     res.render('AdminEmailVerify')
+})
+
+
+app.get("/", (req, res) => {
+    res.send("API is running...")
 })
 
 const port = process.env.PORT || 4000

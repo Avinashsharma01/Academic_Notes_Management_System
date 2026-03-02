@@ -42,10 +42,10 @@ const AdminProfile = () => {
         adminId: admin?._id || "Loading...",
         joinDate: admin?.createdAt
             ? new Date(admin.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-              })
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            })
             : "Not Available",
         lastLogin: "May 5, 2025 - 09:15 AM", // This could be updated with a real timestamp if available
         profileImage:
@@ -77,12 +77,12 @@ const AdminProfile = () => {
                         adminId: freshAdminData._id || "Not Available",
                         joinDate: freshAdminData.createdAt
                             ? new Date(
-                                  freshAdminData.createdAt
-                              ).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                              })
+                                freshAdminData.createdAt
+                            ).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })
                             : "Not Available",
                         lastLogin: "May 5, 2025 - 09:15 AM", // Could update with real data if available
                         profileImage:

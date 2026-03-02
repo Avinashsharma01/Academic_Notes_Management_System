@@ -8,6 +8,8 @@ import {
     FaUsers,
     FaFolderOpen,
 } from "react-icons/fa";
+import CallToAction from "../Components/CallToAction";
+import Designed_And_Developed from "../Components/Designed_And_Developed";
 
 const About = () => {
     useEffect(() => {
@@ -227,17 +229,10 @@ const About = () => {
                     </div>
                 </div>
 
+                {/* CTA Section */}
+                <CallToAction />
                 {/* Footer */}
-                <div className="text-center pt-8 border-t border-slate-600/50">
-                    <p className="text-gray-400">
-                        © {new Date().getFullYear()} The College Notes Hub. All
-                        rights reserved.
-                    </p>
-                    <p className="text-gray-500 text-sm mt-2">
-                        Designed and developed with ❤️ to support educational
-                        excellence.
-                    </p>
-                </div>
+                <Designed_And_Developed />
             </div>
         </div>
     );

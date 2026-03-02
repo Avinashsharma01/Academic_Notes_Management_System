@@ -1,4 +1,6 @@
 import Admin from "../Models/AdminModel.js";
+import Course from "../Models/CourseModel.js";
+import Branch from "../Models/BranchModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendVerificationEmail } from "../utils/AdminEmailVerification.js"
@@ -6,18 +8,57 @@ import { sendVerificationEmail } from "../utils/AdminEmailVerification.js"
 // Admin Signup
 export const registerAdmin = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, course, department, college, designation } = req.body;
 
         // Check if Admin already exists
         const existingAdmin = await Admin.findOne({ email });
         if (existingAdmin) return res.status(400).json({ message: "Admin already exists" });
+
+        if (!course) return res.status(400).json({ message: "Course is required" });
+
+        const courseDoc = await Course.findOne({ name: { $regex: `^${course}$`, $options: "i" }, isActive: true });
+        if (!courseDoc) return res.status(400).json({ message: "Invalid course selected" });
+
+        const availableBranches = await Branch.find({ course: courseDoc._id, isActive: true }).select("name");
+        const hasGeneralOnlyBranch =
+            availableBranches.length === 1 &&
+            availableBranches[0].name.toLowerCase() === "general";
+
+        let normalizedDepartment = (department || "").trim();
+
+        if (hasGeneralOnlyBranch && !normalizedDepartment) {
+            normalizedDepartment = "General";
+        }
+
+        if (!hasGeneralOnlyBranch && availableBranches.length > 0 && !normalizedDepartment) {
+            return res.status(400).json({ message: "Department is required for the selected course" });
+        }
+
+        if (normalizedDepartment) {
+            const departmentExists = availableBranches.some(
+                (branch) => branch.name.toLowerCase() === normalizedDepartment.toLowerCase()
+            );
+
+            if (!departmentExists) {
+                return res.status(400).json({ message: "Invalid department for selected course" });
+            }
+        }
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create Admin
-        const newAdmin = new Admin({ name, email, password: hashedPassword, role });
+        const newAdmin = new Admin({
+            name,
+            email,
+            password: hashedPassword,
+            role,
+            course: courseDoc.name,
+            department: normalizedDepartment,
+            college,
+            designation,
+        });
         await newAdmin.save();
 
         await sendVerificationEmail(email, newAdmin._id)
@@ -68,7 +109,11 @@ export const loginAdmin = async (req, res) => {
                 id: admin._id,
                 name: admin.name,
                 email: admin.email,
-                role: admin.role
+                role: admin.role,
+                course: admin.course,
+                department: admin.department,
+                college: admin.college,
+                designation: admin.designation,
             }
         });
     } catch (error) {

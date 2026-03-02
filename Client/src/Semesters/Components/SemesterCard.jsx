@@ -17,16 +17,40 @@ const getSemesterColor = (index) => {
     return colors[index % colors.length];
 };
 
-const SemesterCard = ({ semester, branch, course, session, index }) => {
+const SemesterCard = ({
+    semester,
+    branch,
+    branchId,
+    course,
+    session,
+    courseId,
+    index,
+}) => {
     const navigate = useNavigate();
+
+    const buildSubjectsUrl = () => {
+        const params = new URLSearchParams({
+            semester: semester.route,
+            branch,
+            course,
+            session,
+            semesterId: semester._id,
+        });
+
+        if (branchId) {
+            params.set("branchId", branchId);
+        }
+
+        if (courseId) {
+            params.set("courseId", courseId);
+        }
+
+        return `/subjects?${params.toString()}`;
+    };
 
     return (
         <div
-            onClick={() =>
-                navigate(
-                    `/subjects?semester=${semester.route}&branch=${branch}&course=${course}&session=${session}`
-                )
-            }
+            onClick={() => navigate(buildSubjectsUrl())}
             className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 duration-300"
         >
             <div

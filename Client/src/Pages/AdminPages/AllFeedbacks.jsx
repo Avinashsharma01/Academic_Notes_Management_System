@@ -18,28 +18,14 @@ const AllFeedbacks = () => {
     const [error, setError] = useState(null);
     const [filterRating, setFilterRating] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
-    const { AdminToken } = useContext(AuthContext);
+    const { superAdmin } = useContext(AuthContext);
+    const feedbackBasePath = superAdmin ? "/superadmin/feedback" : "/feedback";
 
     useEffect(() => {
         const fetchFeedback = async () => {
             setLoading(true);
             try {
-                const token = AdminToken;
-
-                if (!token) {
-                    console.error("No token available");
-                    setError("Authentication error. Please login again.");
-                    setLoading(false);
-                    return;
-                }
-
-                // Fetch feedback from API
-                const { data } = await API.get("/feedback", {
-                    headers: {
-                        Authorization: token,
-                    },
-                });
-
+                const { data } = await API.get(feedbackBasePath);
                 setFeedbacks(data);
                 setError(null);
             } catch (error) {
@@ -50,26 +36,12 @@ const AllFeedbacks = () => {
             }
         };
         fetchFeedback();
-    }, [AdminToken]);
+    }, [feedbackBasePath]);
 
     // delete the feedback
     const handleDelete = async (id) => {
         try {
-            const token = AdminToken;
-
-            if (!token) {
-                console.error("No token available");
-                setError("Authentication error. Please login again.");
-                return;
-            }
-
-            await API.delete(`/feedback/${id}`, {
-                headers: {
-                    Authorization: token,
-                },
-            });
-
-            // Remove the deleted feedback from the state
+            await API.delete(`${feedbackBasePath}/${id}`);
             setFeedbacks(feedbacks.filter((feedback) => feedback._id !== id));
         } catch (error) {
             console.error("Error deleting feedback:", error);
@@ -123,11 +95,10 @@ const AllFeedbacks = () => {
                                     <button
                                         key={rating}
                                         onClick={() => setFilterRating(rating)}
-                                        className={`px-3 py-1 rounded-md transition-colors ${
-                                            filterRating === rating
+                                        className={`px-3 py-1 rounded-md transition-colors ${filterRating === rating
                                                 ? "bg-blue-600 text-white"
                                                 : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                                        }`}
+                                            }`}
                                     >
                                         {rating === 0 ? "All" : `${rating}★`}
                                     </button>
@@ -199,12 +170,11 @@ const AllFeedbacks = () => {
                                                         (_, i) => (
                                                             <FaStar
                                                                 key={i}
-                                                                className={`${
-                                                                    i <
-                                                                    feedback.rating
+                                                                className={`${i <
+                                                                        feedback.rating
                                                                         ? "text-yellow-400"
                                                                         : "text-gray-600"
-                                                                }`}
+                                                                    }`}
                                                             />
                                                         )
                                                     )}

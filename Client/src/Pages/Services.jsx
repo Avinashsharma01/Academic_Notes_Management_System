@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import {
     FaSearch,
     FaCloudUploadAlt,
@@ -7,6 +8,8 @@ import {
     FaUserShield,
     FaFilter,
 } from "react-icons/fa";
+import CallToAction from "../Components/CallToAction";
+import Designed_And_Developed from "../Components/Designed_And_Developed";
 
 const Services = () => {
     useEffect(() => {
@@ -196,42 +199,10 @@ const Services = () => {
                 </div>
 
                 {/* CTA Section */}
-                <div className="bg-gradient-to-r from-blue-600/20 to-indigo-600/20 p-8 rounded-lg shadow-xl border border-blue-500/30 text-center mt-8 mb-8">
-                    <h2 className="text-2xl font-bold text-blue-300 mb-4">
-                        Ready to Enhance Your Learning Experience?
-                    </h2>
-                    <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-                        Join thousands of students already using our platform to
-                        access quality educational materials and improve their
-                        academic performance.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a
-                            href="/register"
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-300 flex items-center justify-center"
-                        >
-                            Register Now
-                        </a>
-                        <a
-                            href="/notes"
-                            className="bg-slate-700 hover:bg-slate-600 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-300 flex items-center justify-center"
-                        >
-                            Browse Notes
-                        </a>
-                    </div>
-                </div>
+                <CallToAction />
 
                 {/* Footer */}
-                <div className="text-center pt-8 border-t border-slate-600/50">
-                    <p className="text-gray-400">
-                        © {new Date().getFullYear()} The College Notes Hub. All
-                        rights reserved.
-                    </p>
-                    <p>
-                        Designed and developed with ❤️ to support educational
-                        excellence.
-                    </p>
-                </div>
+                <Designed_And_Developed />
             </div>
         </div>
     );

@@ -170,11 +170,10 @@ const AdminLogin = () => {
                             type="submit"
                             disabled={loading}
                             className={`group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white 
-                            ${
-                                loading
+                            ${loading
                                     ? "bg-blue-700"
                                     : "bg-blue-500 hover:bg-blue-600"
-                            } 
+                                } 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 shadow-md`}
                         >
                             {loading ? (

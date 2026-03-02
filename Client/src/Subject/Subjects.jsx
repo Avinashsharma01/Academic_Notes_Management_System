@@ -5,7 +5,7 @@ import SemesterDetails from "./Components/SemesterDetails";
 import SubjectCard from "./Components/SubjectCard";
 import EmptySubjectsList from "./Components/EmptySubjectsList";
 import { SubjectsLoading, SubjectsError } from "./Components/SubjectsStates";
-import subjectListData from "./SubJectList.js";
+import API from "../Api/axiosInstance";
 
 const Subjects = () => {
     const [loading, setLoading] = useState(true);
@@ -24,36 +24,26 @@ const Subjects = () => {
     const semester = queryParams.get("semester") || "Semester";
     const branch = queryParams.get("branch") || "Branch";
     const course = queryParams.get("course") || "Course";
-    const session = queryParams.get("session") || "Session"; // Fetch subject data based on the selected semester
+    const session = queryParams.get("session") || "Session";
+    const branchId = queryParams.get("branchId") || "";
+    const semesterId = queryParams.get("semesterId") || "";
+
+    // Fetch subjects from API
     useEffect(() => {
         const fetchSubjects = async () => {
             try {
-                // // Simulate API call delay
-                // await new Promise((resolve) => setTimeout(resolve, 500));
+                let url = "/academic/subjects?";
+                const params = [];
+                if (branchId) params.push(`branch=${branchId}`);
+                if (semesterId) params.push(`semester=${semesterId}`);
+                url += params.join("&");
 
-                // Parse semester number from the semester string or default to 1
-                let semesterNum = 1;
-                if (semester && semester !== "Semester") {
-                    // Extract numeric part from strings like "Semester 3"
-                    const match = semester.match(/\d+/);
-                    if (match) {
-                        semesterNum = parseInt(match[0], 10);
-                    }
-                }
-
-                // Find the subjects for the selected semester from the imported data
-                const semesterData = subjectListData.find(
-                    (item) => item.semester === semesterNum
-                );
-
-                if (semesterData && semesterData.subjects) {
-                    setSubjects(semesterData.subjects);
-                } else {
-                    // If no subjects found for the semester, show empty array
-                    setSubjects([]);
-                }
+                const { data } = await API.get(url);
+                // Map to the format SubjectCard expects (just name strings or objects)
+                const mapped = data.map((s) => s.name);
+                setSubjects(mapped);
             } catch (err) {
-                console.error("Error fetching subjects:", err);
+                console.error("Failed to fetch subjects:", err);
                 setError("Failed to fetch subjects. Please try again later.");
             } finally {
                 setLoading(false);
@@ -61,7 +51,7 @@ const Subjects = () => {
         };
 
         fetchSubjects();
-    }, [semester]); // Re-fetch when semester changes
+    }, [branchId, semesterId]);
 
     if (loading) {
         return <SubjectsLoading />;

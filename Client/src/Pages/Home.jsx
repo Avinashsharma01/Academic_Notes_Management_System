@@ -40,7 +40,7 @@ function Home() {
                 </div>
 
                 {/* Hero Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 flex items-end">
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-black/20 flex items-end">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 max-w-3xl">
                             Your Academic Journey Starts Here
@@ -50,6 +50,7 @@ function Home() {
                             seamlessly with our notes management system.
                         </p>
                         <div className="flex flex-wrap gap-4">
+                            {/* i need to hide this on mobile devices */}
                             <Link
                                 to="/notes"
                                 className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105"
@@ -445,7 +446,7 @@ function Home() {
                                 </div>
                             </div>
                             <p className="text-gray-600 italic">
-                                "As a working professional pursuing MCA, this
+                                "As a working professional pursuing B-TECH, this
                                 platform has made it possible for me to access
                                 quality notes even when I miss classes."
                             </p>

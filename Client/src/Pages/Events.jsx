@@ -6,6 +6,8 @@ import {
     FaMapMarkerAlt,
     FaTicketAlt,
 } from "react-icons/fa";
+import CallToAction from "../Components/CallToAction";
+import Designed_And_Developed from "../Components/Designed_And_Developed";
 
 const Events = ({ event }) => {
     useEffect(() => {
@@ -142,17 +144,11 @@ const Events = ({ event }) => {
                     )}
                 </div>
             </div>
+
+            {/* CTA Section */}
+            <CallToAction />
             {/* Footer */}
-            <div className="text-center pt-8 border-t border-slate-600/50">
-                <p className="text-gray-400">
-                    © {new Date().getFullYear()} The College Notes Hub. All
-                    rights reserved.
-                </p>
-                <p>
-                    Designed and developed with ❤️ to support educational
-                    excellence.
-                </p>
-            </div>
+            <Designed_And_Developed />
         </div>
     );
 };

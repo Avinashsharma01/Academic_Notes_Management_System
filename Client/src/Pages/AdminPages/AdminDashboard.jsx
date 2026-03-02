@@ -1,38 +1,71 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../Context/AuthContext";
+import API from "../../Api/axiosInstance";
 import {
     FaFileUpload,
     FaFolderOpen,
     FaComments,
     FaUsers,
-    FaChartBar,
     FaCog,
     FaBell,
     FaSearch,
-    FaFileAlt,
     FaUserShield,
-    FaClipboardList,
     FaUser,
 } from "react-icons/fa";
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const { admin } = useContext(AuthContext);
+    const [dashboardCounts, setDashboardCounts] = useState({
+        totalUsers: 0,
+        notesUploaded: 0,
+    });
 
-    // Mock data for statistics
+    useEffect(() => {
+        const fetchDashboardCounts = async () => {
+            try {
+                const adminId = admin?._id || admin?.id;
+                const [usersRes, notesRes] = await Promise.all([
+                    API.get("/all/users"),
+                    API.get("/notes", {
+                        params: adminId ? { uploaderId: adminId } : {},
+                    }),
+                ]);
+
+                const users = Array.isArray(usersRes.data)
+                    ? usersRes.data
+                    : Array.isArray(usersRes.data?.users)
+                    ? usersRes.data.users
+                    : [];
+
+                const notes = Array.isArray(notesRes.data) ? notesRes.data : [];
+
+                setDashboardCounts({
+                    totalUsers: users.length,
+                    notesUploaded: notes.length,
+                });
+            } catch (error) {
+                console.error("Error fetching admin dashboard counts:", error);
+            }
+        };
+
+        fetchDashboardCounts();
+    }, [admin]);
+
+    // Dashboard statistics
     const stats = [
         {
             title: "Total Users",
-            value: "1,234",
+            value: dashboardCounts.totalUsers.toLocaleString(),
             icon: <FaUsers className="text-blue-400" />,
             change: "+5.3%",
             bgColor: "from-blue-500 to-blue-600",
         },
         {
             title: "Notes Uploaded",
-            value: "5,678",
+            value: dashboardCounts.notesUploaded.toLocaleString(),
             icon: <FaFileUpload className="text-green-400" />,
             change: "+12.8%",
             bgColor: "from-green-500 to-green-600",
@@ -43,13 +76,6 @@ const AdminDashboard = () => {
             icon: <FaComments className="text-yellow-400" />,
             change: "+2.4%",
             bgColor: "from-yellow-500 to-yellow-600",
-        },
-        {
-            title: "System Uptime",
-            value: "99.9%",
-            icon: <FaChartBar className="text-purple-400" />,
-            change: "+0.1%",
-            bgColor: "from-purple-500 to-purple-600",
         },
     ];
 
@@ -111,7 +137,7 @@ const AdminDashboard = () => {
             {/* Main content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
                 {/* Stats section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     {stats.map((stat, index) => (
                         <div
                             key={index}
@@ -187,21 +213,6 @@ const AdminDashboard = () => {
                             </div>
 
                             <div
-                                className="bg-gradient-to-br from-yellow-600 to-yellow-700 rounded-xl p-6 shadow-lg hover:from-yellow-700 hover:to-yellow-800 transition-all duration-300 cursor-pointer"
-                                onClick={() => navigate("/admin/feedback")}
-                            >
-                                <div className="bg-yellow-500/30 rounded-lg p-3 inline-block mb-4">
-                                    <FaComments className="text-white text-2xl" />
-                                </div>
-                                <h3 className="text-white font-bold text-lg">
-                                    View Feedback
-                                </h3>
-                                <p className="text-yellow-100 text-sm mt-1">
-                                    Check user comments
-                                </p>
-                            </div>
-
-                            <div
                                 className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl p-6 shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-300 cursor-pointer"
                                 onClick={() => navigate("/admin/allUser")}
                             >
@@ -230,74 +241,6 @@ const AdminDashboard = () => {
                                     Manage user permissions
                                 </p>
                             </div>
-
-                            <div
-                                className="bg-gradient-to-br from-orange-600 to-orange-700 rounded-xl p-6 shadow-lg hover:from-orange-700 hover:to-orange-800 transition-all duration-300 cursor-pointer"
-                                onClick={() => navigate("/admin/logs")}
-                            >
-                                <div className="bg-orange-500/30 rounded-lg p-3 inline-block mb-4">
-                                    <FaClipboardList className="text-white text-2xl" />
-                                </div>
-                                <h3 className="text-white font-bold text-lg">
-                                    System Logs
-                                </h3>
-                                <p className="text-orange-100 text-sm mt-1">
-                                    View activity history
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Additional shortcut cards can be added here */}
-                        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                                <h3 className="text-white font-bold text-lg flex items-center">
-                                    <FaChartBar className="mr-2" /> Analytics
-                                    Overview
-                                </h3>
-                                <p className="text-gray-400 text-sm mt-1">
-                                    View detailed statistics and user data
-                                </p>
-                                <button
-                                    className="mt-4 bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-600 text-sm"
-                                    onClick={() => navigate("/admin/analytics")}
-                                >
-                                    View Report
-                                </button>
-                            </div>
-
-                            <div
-                                className="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl p-6 shadow-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-300 cursor-pointer"
-                                onClick={() =>
-                                    navigate(
-                                        `/notes?adminDashboard=true&uploaderId=${admin?._id}`
-                                    )
-                                }
-                            >
-                                <div className="bg-teal-500/30 rounded-lg p-3 inline-block mb-4">
-                                    <FaFileAlt className="text-white text-2xl" />
-                                </div>
-                                <h3 className="text-white font-bold text-lg">
-                                    My Uploads
-                                </h3>
-                                <p className="text-teal-100 text-sm mt-1">
-                                    View notes you've uploaded
-                                </p>
-                            </div>
-
-                            {/* <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                                <h3 className="text-white font-bold text-lg flex items-center">
-                                    <FaUsers className="mr-2" /> User Management
-                                </h3>
-                                <p className="text-gray-400 text-sm mt-1">
-                                    Manage users and permissions
-                                </p>
-                                <button
-                                    className="mt-4 bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-600 text-sm"
-                                    onClick={() => navigate("/admin/users")}
-                                >
-                                    Manage Users
-                                </button>
-                            </div> */}
                         </div>
                     </div>
 

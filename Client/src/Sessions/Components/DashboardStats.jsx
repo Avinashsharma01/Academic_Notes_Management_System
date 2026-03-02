@@ -2,7 +2,7 @@
 
 import { FaCalendarAlt, FaGraduationCap, FaBook } from "react-icons/fa";
 
-const DashboardStats = ({ sessions }) => {
+const DashboardStats = ({ sessions, totalCourses = 0, totalNotes = 0 }) => {
     return (
         <div className="bg-white rounded-xl shadow-lg p-6 mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-center">
@@ -22,12 +22,7 @@ const DashboardStats = ({ sessions }) => {
                 </div>
                 <div>
                     <p className="text-gray-500 text-sm">Total Courses</p>
-                    <p className="text-2xl font-bold text-gray-800">
-                        {sessions.reduce(
-                            (total, session) => total + session.courses,
-                            0
-                        )}
-                    </p>
+                    <p className="text-2xl font-bold text-gray-800">{totalCourses}</p>
                 </div>
             </div>
             <div className="flex items-center">
@@ -36,12 +31,7 @@ const DashboardStats = ({ sessions }) => {
                 </div>
                 <div>
                     <p className="text-gray-500 text-sm">Total Notes</p>
-                    <p className="text-2xl font-bold text-gray-800">
-                        {sessions.reduce(
-                            (total, session) => total + session.notes,
-                            0
-                        )}
-                    </p>
+                    <p className="text-2xl font-bold text-gray-800">{totalNotes}</p>
                 </div>
             </div>
         </div>

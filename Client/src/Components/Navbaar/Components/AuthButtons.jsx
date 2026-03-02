@@ -31,6 +31,12 @@ const AuthButtons = ({
                 >
                     Admin
                 </NavLink>
+                <NavLink
+                    to="/superadmin/login"
+                    className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 px-5 py-2 rounded-lg text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-md"
+                >
+                    Super Admin
+                </NavLink>
             </div>
 
             {/* Tablet and Mobile View */}
@@ -41,9 +47,8 @@ const AuthButtons = ({
                 >
                     Auth
                     <FaChevronDown
-                        className={`ml-1 transition-transform duration-200 ${
-                            showAuthDropdown ? "rotate-180" : ""
-                        }`}
+                        className={`ml-1 transition-transform duration-200 ${showAuthDropdown ? "rotate-180" : ""
+                            }`}
                     />
                 </button>
 
@@ -69,6 +74,13 @@ const AuthButtons = ({
                             onClick={() => setShowAuthDropdown(false)}
                         >
                             Admin Login
+                        </NavLink>
+                        <NavLink
+                            to="/superadmin/login"
+                            className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 px-5 py-2 rounded-lg text-white font-medium text-center transition-colors"
+                            onClick={() => setShowAuthDropdown(false)}
+                        >
+                            Super Admin Login
                         </NavLink>
                     </div>
                 )}

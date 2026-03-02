@@ -8,9 +8,7 @@ import CourseDetails from "./Components/CourseDetails";
 import BranchCard from "./Components/BranchCard";
 import EmptyBranchesList from "./Components/EmptyBranchesList";
 import { BranchesLoading, BranchesError } from "./Components/BranchesStates";
-
-// Import utility functions
-import { getMockBranchesData } from "./utils/branchUtils";
+import API from "../Api/axiosInstance";
 
 const Branches = () => {
     // Scroll to top on component mount
@@ -28,16 +26,27 @@ const Branches = () => {
     const queryParams = new URLSearchParams(location.search);
     const course = queryParams.get("course") || "Course"; // Default value
     const session = queryParams.get("session") || "Session";
+    const courseId = queryParams.get("courseId") || "";
 
-    // Simulate fetching branch data from an API
+    // Fetch branches from API
     useEffect(() => {
         const fetchBranches = async () => {
             try {
-                // this is used for Simulate API call delay
-                // await new Promise((resolve) => setTimeout(resolve, 500));
-                const data = getMockBranchesData();
-                setBranches(data);
+                // If we have a courseId, filter branches by course
+                let url = "/academic/branches";
+                if (courseId) url += `?course=${courseId}`;
+
+                const { data } = await API.get(url);
+                const mapped = data.map((b) => ({
+                    name: b.name,
+                    route: b.code,
+                    fullName: b.fullName,
+                    _id: b._id,
+                    courseId: b.course?._id || b.course || "",
+                }));
+                setBranches(mapped);
             } catch (err) {
+                console.error("Failed to fetch branches:", err);
                 setError("Failed to fetch branches. Please try again later.");
             } finally {
                 setLoading(false);
@@ -45,7 +54,7 @@ const Branches = () => {
         };
 
         fetchBranches();
-    }, []);
+    }, [courseId]);
 
     if (loading) {
         return <BranchesLoading />;
@@ -69,7 +78,7 @@ const Branches = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {branches.map((branch) => (
                             <BranchCard
-                                key={branch.route}
+                                key={branch._id || branch.route}
                                 branch={branch}
                                 course={course}
                                 session={session}

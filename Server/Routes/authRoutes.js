@@ -1,6 +1,7 @@
 import express from "express";
 import { registerUser, loginUser, verifyUserEmail, authUser, updateUserProfile, logoutUser, getAllUsers } from "../Controllers/authController.js";
 import { registerAdmin, loginAdmin, verifyAdminEmail, authAdmin } from "../Controllers/AdminController.js";
+import { socialLogin } from "../Controllers/socialAuthController.js";
 import { authenticateUser, authorizeAdmin } from "../Middleware/authMiddleware.js";
 import upload from "../Middleware/multerMiddlewareForProFilePic.js";
 const router = express.Router();
@@ -13,6 +14,9 @@ router.post("/login", loginUser);
 
 // User Logout
 router.post("/logout", logoutUser);
+
+// Google / Social Login
+router.post("/google", socialLogin);
 
 // Fetch all users
 router.get("/users", authenticateUser, authorizeAdmin, getAllUsers)
@@ -39,3 +43,4 @@ router.post("/loginAdmin", loginAdmin);
 router.get("/verify/admin/:token", verifyAdminEmail);
 
 export default router;
+

@@ -1,8 +1,12 @@
 // filepath: c:\Desktop\The College\Client\src\Notes\NotesHeader.jsx
 /* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const NotesHeader = ({ subject, branch, course, semester }) => {
+const NotesHeader = ({ subject, branch, course, semester, session }) => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <div className="bg-gradient-to-r from-blue-600 to-indigo-800 pt-24 pb-32 px-4 sm:px-6">
             <div className="max-w-7xl mx-auto">
@@ -12,6 +16,11 @@ const NotesHeader = ({ subject, branch, course, semester }) => {
                     </h1>
 
                     <div className="flex flex-wrap justify-center gap-2 mt-6">
+                        {session && (
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                                Session: {session.toUpperCase()}
+                            </span>
+                        )}
                         {course && (
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                                 Course: {course.toUpperCase()}
