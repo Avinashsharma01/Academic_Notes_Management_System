@@ -69,7 +69,7 @@ const SessionCard = ({ session }) => {
 
                 <div className="space-y-3 mb-6">
                     <div className="flex items-center">
-                        <FaGraduationCap className="text-purple-500 mr-3 flex-shrink-0" />
+                        <FaGraduationCap className="text-purple-500 mr-3 shrink-0" />
                         <span className="text-gray-700 text-sm sm:text-base">
                             <span className="font-medium">
                                 {session.courses}
@@ -78,14 +78,14 @@ const SessionCard = ({ session }) => {
                         </span>
                     </div>
                     <div className="flex items-center">
-                        <FaBook className="text-green-500 mr-3 flex-shrink-0" />
+                        <FaBook className="text-green-500 mr-3 shrink-0" />
                         <span className="text-gray-700 text-sm sm:text-base">
                             <span className="font-medium">{session.notes}</span>{" "}
                             Notes Uploaded
                         </span>
                     </div>
                     <div className="flex items-center">
-                        <FaCalendarAlt className="text-blue-500 mr-3 flex-shrink-0" />
+                        <FaCalendarAlt className="text-blue-500 mr-3 shrink-0" />
                         <span className="text-gray-700 text-sm sm:text-base">
                             <span className="font-medium">
                                 {session.startYear} - {session.endYear}

@@ -111,6 +111,16 @@ const NotesList = () => {
                         );
                     };
 
+                    const normalizeText = (value) =>
+                        String(value || "")
+                            .toLowerCase()
+                            .replace(/[^a-z0-9]/g, "");
+
+                    const branchAliases = {
+                        gen: "general",
+                        general: "general",
+                    };
+
                     // Session filtering - exact match
                     const sessionMatch =
                         !session ||
@@ -135,14 +145,23 @@ const NotesList = () => {
                         // Match without spaces and dots (btech = b.tech = b tech)
                         normalizedNoteCourse === normalizedCourse ||
                         normalizedNoteCourse.includes(normalizedCourse) ||
-                        normalizedCourse.includes(normalizedNoteCourse); // Branch filtering - exact match with case insensitivity
-                    // Also handle common abbreviations like "it" vs "IT" or "CSE" vs "Computer Science Engineering"
+                        normalizedCourse.includes(normalizedNoteCourse);
+
+                    // Branch filtering - robust matching for code/name combos (e.g. GEN vs General)
+                    const normalizedFilterBranch = normalizeText(branch);
+                    const normalizedNoteBranch = normalizeText(note.branch);
+                    const resolvedFilterBranch =
+                        branchAliases[normalizedFilterBranch] || normalizedFilterBranch;
+                    const resolvedNoteBranch =
+                        branchAliases[normalizedNoteBranch] || normalizedNoteBranch;
+
                     const branchMatch =
                         !branch ||
                         note.branch.toLowerCase() === branch.toLowerCase() ||
-                        // Remove spaces and dots for more flexible matching
-                        note.branch.toLowerCase().replace(/[\s.]/g, "") ===
-                        branch.toLowerCase().replace(/[\s.]/g, "");
+                        normalizedNoteBranch === normalizedFilterBranch ||
+                        normalizedNoteBranch.includes(normalizedFilterBranch) ||
+                        normalizedFilterBranch.includes(normalizedNoteBranch) ||
+                        resolvedNoteBranch === resolvedFilterBranch;
 
                     // Semester filtering - numeric comparison to handle "6th" vs "6" etc.
                     const semesterMatch =
@@ -293,7 +312,7 @@ const NotesList = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
+        <div className="min-h-screen bg-linear-to-br from-blue-50 to-white pb-16">
             <NotesHeader
                 subject={subject}
                 branch={branch}

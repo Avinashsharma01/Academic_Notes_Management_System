@@ -8,7 +8,7 @@ const NotesHeader = ({ subject, branch, course, semester, session }) => {
         window.scrollTo(0, 0);
     }, []);
     return (
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-800 pt-24 pb-32 px-4 sm:px-6">
+        <div className="bg-linear-to-r from-blue-600 to-indigo-800 pt-24 pb-32 px-4 sm:px-6">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center">
                     <h1 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">

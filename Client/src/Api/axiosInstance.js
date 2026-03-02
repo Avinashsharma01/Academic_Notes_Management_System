@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API = axios.create({
     baseURL: "http://localhost:5000/api",
+    // baseURL: "https://fz5nw02t-5000.inc1.devtunnels.ms/api",
     withCredentials: true, // ✅ Cookies are sent automatically with every request
     headers: {
         "Content-Type": "application/json",
