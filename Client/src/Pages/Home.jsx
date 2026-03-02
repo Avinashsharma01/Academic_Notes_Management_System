@@ -1,9 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import Breadcrumb from "../Components/Breadcrumb";
 import Slider from "../Components/Slider";
 import { Link } from "react-router-dom";
 import AuthContext from "../Context/AuthContext";
+import API from "../Api/axiosInstance";
 import image1 from "../assets/images/image1.png";
 import image2 from "../assets/images/image2.jpg";
 import image3 from "../assets/images/image3.jpg";
@@ -11,8 +12,17 @@ import image4 from "../assets/images/image4.jpg";
 import image5 from "../assets/images/image5.jpg";
 
 function Home() {
-    const { user } = useContext(AuthContext);
-    const { admin } = useContext(AuthContext);
+    const { user, admin } = useContext(AuthContext);
+    const [latestNotes, setLatestNotes] = useState([]);
+    const [testimonials, setTestimonials] = useState([]);
+    const [stats, setStats] = useState({
+        students: 0,
+        notes: 0,
+        subjects: 0,
+        branches: 0,
+    });
+    const [homeLoading, setHomeLoading] = useState(true);
+
     const images = [
         { url: image1 },
         { url: image2 },
@@ -21,8 +31,50 @@ function Home() {
         { url: image5 },
     ];
 
+    const noteAccentColors = [
+        "bg-blue-600",
+        "bg-green-600",
+        "bg-purple-600",
+        "bg-red-600",
+    ];
+
+    const initialsColors = [
+        "bg-blue-100 text-blue-600",
+        "bg-green-100 text-green-600",
+        "bg-purple-100 text-purple-600",
+        "bg-red-100 text-red-600",
+    ];
+
+    const getInitials = (name = "") => {
+        const parts = name.trim().split(" ").filter(Boolean);
+        if (!parts.length) return "ST";
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    };
+
     useEffect(() => {
         window.scrollTo(0, 0);
+
+        const fetchHomeData = async () => {
+            try {
+                const response = await API.get("/notes/home-data");
+                const data = response?.data || {};
+                setLatestNotes(Array.isArray(data.latestNotes) ? data.latestNotes : []);
+                setTestimonials(Array.isArray(data.testimonials) ? data.testimonials : []);
+                setStats({
+                    students: Number(data?.stats?.students) || 0,
+                    notes: Number(data?.stats?.notes) || 0,
+                    subjects: Number(data?.stats?.subjects) || 0,
+                    branches: Number(data?.stats?.branches) || 0,
+                });
+            } catch (error) {
+                console.error("Failed to fetch home data:", error);
+            } finally {
+                setHomeLoading(false);
+            }
+        };
+
+        fetchHomeData();
     }, []);
 
     return (
@@ -198,158 +250,72 @@ function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {/* Note Card 1 */}
-                        <div className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all">
-                            <div className="h-3 bg-blue-600"></div>
-                            <div className="p-6">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
-                                            B.Tech
-                                        </span>
-                                        <span className="text-xs font-medium text-gray-600 bg-gray-200 px-2 py-1 rounded-full ml-2">
-                                            CSE
-                                        </span>
-                                    </div>
-                                    <span className="text-xs text-gray-500">
-                                        3rd Sem
-                                    </span>
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                    Data Structures & Algorithms
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                                    Comprehensive notes covering sorting
-                                    algorithms, tree structures, and graph
-                                    algorithms.
-                                </p>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-xs text-gray-500">
-                                        Uploaded: May 1, 2025
-                                    </span>
-                                    <Link
-                                        to="#"
-                                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                                    >
-                                        View
-                                    </Link>
-                                </div>
+                        {homeLoading ? (
+                            <div className="col-span-full text-center text-gray-500 py-8">
+                                Loading latest notes...
                             </div>
-                        </div>
-
-                        {/* Note Card 2 */}
-                        <div className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all">
-                            <div className="h-3 bg-green-600"></div>
-                            <div className="p-6">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
-                                            MCA
-                                        </span>
-                                        <span className="text-xs font-medium text-gray-600 bg-gray-200 px-2 py-1 rounded-full ml-2">
-                                            IT
-                                        </span>
+                        ) : latestNotes.length > 0 ? (
+                            latestNotes.map((note, index) => (
+                                <div
+                                    key={note._id || `${note.title}-${index}`}
+                                    className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all"
+                                >
+                                    <div
+                                        className={`h-3 ${noteAccentColors[index % noteAccentColors.length]}`}
+                                    ></div>
+                                    <div className="p-6">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div>
+                                                <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                                                    {note.course || "Course"}
+                                                </span>
+                                                <span className="text-xs font-medium text-gray-600 bg-gray-200 px-2 py-1 rounded-full ml-2">
+                                                    {note.branch || "Branch"}
+                                                </span>
+                                            </div>
+                                            <span className="text-xs text-gray-500">
+                                                {note.semester || "Semester"}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                                            {note.title}
+                                        </h3>
+                                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                                            {note.description ||
+                                                "No description available."}
+                                        </p>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs text-gray-500">
+                                                Uploaded: {" "}
+                                                {note.createdAt
+                                                    ? new Date(
+                                                          note.createdAt
+                                                      ).toLocaleDateString()
+                                                    : "Recently"}
+                                            </span>
+                                            {note.fileUrl ? (
+                                                <a
+                                                    href={note.fileUrl}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                                >
+                                                    View
+                                                </a>
+                                            ) : (
+                                                <span className="text-gray-400 text-sm font-medium cursor-not-allowed">
+                                                    View
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <span className="text-xs text-gray-500">
-                                        2nd Sem
-                                    </span>
                                 </div>
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                    Database Management Systems
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                                    Complete notes on relational database
-                                    design, SQL, and normalization techniques.
-                                </p>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-xs text-gray-500">
-                                        Uploaded: Apr 28, 5
-                                    </span>
-                                    <Link
-                                        to="#"
-                                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                                    >
-                                        View
-                                    </Link>
-                                </div>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center text-gray-500 py-8">
+                                No notes available yet.
                             </div>
-                        </div>
-
-                        {/* Note Card 3 */}
-                        <div className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all">
-                            <div className="h-3 bg-purple-600"></div>
-                            <div className="p-6">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <span className="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
-                                            B.Sc
-                                        </span>
-                                        <span className="text-xs font-medium text-gray-600 bg-gray-200 px-2 py-1 rounded-full ml-2">
-                                            Physics
-                                        </span>
-                                    </div>
-                                    <span className="text-xs text-gray-500">
-                                        4th Sem
-                                    </span>
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                    Quantum Mechanics
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                                    Detailed notes on wave functions,
-                                    Schrödinger equation, and quantum phenomena.
-                                </p>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-xs text-gray-500">
-                                        Uploaded: Apr 25, 2025
-                                    </span>
-                                    <Link
-                                        to="#"
-                                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                                    >
-                                        View
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Note Card 4 */}
-                        <div className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all">
-                            <div className="h-3 bg-red-600"></div>
-                            <div className="p-6">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <span className="text-xs font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full">
-                                            M.Tech
-                                        </span>
-                                        <span className="text-xs font-medium text-gray-600 bg-gray-200 px-2 py-1 rounded-full ml-2">
-                                            AI/ML
-                                        </span>
-                                    </div>
-                                    <span className="text-xs text-gray-500">
-                                        1st Sem
-                                    </span>
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                    Machine Learning Fundamentals
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                                    Introduction to supervised and unsupervised
-                                    learning algorithms and techniques.
-                                </p>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-xs text-gray-500">
-                                        Uploaded: Apr 22, 2025
-                                    </span>
-                                    <Link
-                                        to="#"
-                                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                                    >
-                                        View
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </section>
@@ -369,23 +335,31 @@ function Home() {
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                         <div className="text-center">
-                            <div className="text-5xl font-bold mb-2">5000+</div>
+                            <div className="text-5xl font-bold mb-2">
+                                {stats.students}+
+                            </div>
                             <div className="text-white/80 text-lg">
                                 Students
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-5xl font-bold mb-2">2500+</div>
+                            <div className="text-5xl font-bold mb-2">
+                                {stats.notes}+
+                            </div>
                             <div className="text-white/80 text-lg">Notes</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-5xl font-bold mb-2">50+</div>
+                            <div className="text-5xl font-bold mb-2">
+                                {stats.subjects}+
+                            </div>
                             <div className="text-white/80 text-lg">
                                 Subjects
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-5xl font-bold mb-2">15+</div>
+                            <div className="text-5xl font-bold mb-2">
+                                {stats.branches}+
+                            </div>
                             <div className="text-white/80 text-lg">
                                 Branches
                             </div>
@@ -408,72 +382,51 @@ function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Testimonial 1 */}
-                        <div className="bg-white p-8 rounded-xl shadow-md">
-                            <div className="flex items-center mb-6">
-                                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-4">
-                                    <span className="font-bold">AS</span>
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">
-                                        Avinash Sharma
-                                    </h3>
-                                    <p className="text-sm text-gray-600">
-                                        B.Tech, IT
+                        {homeLoading ? (
+                            <div className="col-span-full text-center text-gray-500 py-8">
+                                Loading testimonials...
+                            </div>
+                        ) : testimonials.length > 0 ? (
+                            testimonials.map((item, index) => (
+                                <div
+                                    key={item._id || `${item.message}-${index}`}
+                                    className="bg-white p-8 rounded-xl shadow-md"
+                                >
+                                    <div className="flex items-center mb-6">
+                                        <div
+                                            className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${
+                                                initialsColors[
+                                                    index %
+                                                        initialsColors.length
+                                                ]
+                                            }`}
+                                        >
+                                            <span className="font-bold">
+                                                {getInitials(item.user?.name)}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-gray-900">
+                                                {item.user?.name || "Student"}
+                                            </h3>
+                                            <p className="text-sm text-gray-600">
+                                                {item.user?.course || "Course"}
+                                                {item.user?.branch
+                                                    ? `, ${item.user.branch}`
+                                                    : ""}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <p className="text-gray-600 italic">
+                                        "{item.message}"
                                     </p>
                                 </div>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center text-gray-500 py-8">
+                                No testimonials available yet.
                             </div>
-                            <p className="text-gray-600 italic">
-                                "This platform has been a lifesaver during exam
-                                preparations. The organized notes and easy
-                                download feature helped me study efficiently."
-                            </p>
-                        </div>
-
-                        {/* Testimonial 2 */}
-                        <div className="bg-white p-8 rounded-xl shadow-md">
-                            <div className="flex items-center mb-6">
-                                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mr-4">
-                                    <span className="font-bold">SK</span>
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">
-                                        Soumya Kumari
-                                    </h3>
-                                    <p className="text-sm text-gray-600">
-                                        B.Tech, CSE
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 italic">
-                                "As a working professional pursuing B-TECH, this
-                                platform has made it possible for me to access
-                                quality notes even when I miss classes."
-                            </p>
-                        </div>
-
-                        {/* Testimonial 3 */}
-                        <div className="bg-white p-8 rounded-xl shadow-md">
-                            <div className="flex items-center mb-6">
-                                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 mr-4">
-                                    <span className="font-bold">RS</span>
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">
-                                        Rahul Sharma
-                                    </h3>
-                                    <p className="text-sm text-gray-600">
-                                        B.Tech, CSE
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 italic">
-                                "The quality of notes available here is
-                                exceptional. I've been able to understand
-                                complex concepts much better thanks to these
-                                resources."
-                            </p>
-                        </div>
+                        )}
                     </div>
                 </div>
             </section>

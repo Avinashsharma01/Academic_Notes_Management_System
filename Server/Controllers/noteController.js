@@ -4,6 +4,8 @@ import Course from "../Models/CourseModel.js";
 import Branch from "../Models/BranchModel.js";
 import Semester from "../Models/SemesterModel.js";
 import Subject from "../Models/SubjectModel.js";
+import User from "../Models/UserModel.js";
+import Feedback from "../Models/Feedback.js";
 import cloudinary from "../Config/cloudinary.js"
 // Upload a Note (Admin only)
 export const uploadNote = async (req, res) => {
@@ -323,5 +325,51 @@ export const searchNotes = async (req, res) => {
         res.status(200).json(notes);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+export const getPublicHomeData = async (req, res) => {
+    try {
+        const [latestNotes, studentsCount, notesCount, subjectsCount, branchesCount, feedbacks] = await Promise.all([
+            Note.find({})
+                .populate("uploadedBy", "name")
+                .select("title description fileUrl session course branch semester subject createdAt uploadedBy")
+                .sort({ createdAt: -1 })
+                .limit(4),
+            User.countDocuments({ isVerified: true }),
+            Note.countDocuments({}),
+            Subject.countDocuments({ isActive: true }),
+            Branch.countDocuments({ isActive: true }),
+            Feedback.find({})
+                .populate("user", "name course branch")
+                .select("message rating createdAt user")
+                .sort({ createdAt: -1 })
+                .limit(3),
+        ]);
+
+        const testimonials = feedbacks.map((item) => ({
+            _id: item._id,
+            message: item.message,
+            rating: item.rating,
+            createdAt: item.createdAt,
+            user: {
+                name: item.user?.name || "Student",
+                course: item.user?.course || "",
+                branch: item.user?.branch || "",
+            },
+        }));
+
+        return res.status(200).json({
+            latestNotes,
+            stats: {
+                students: studentsCount,
+                notes: notesCount,
+                subjects: subjectsCount,
+                branches: branchesCount,
+            },
+            testimonials,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", error: error.message });
     }
 };
