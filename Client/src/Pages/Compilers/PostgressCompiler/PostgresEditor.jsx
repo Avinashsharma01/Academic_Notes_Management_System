@@ -1,251 +1,237 @@
-import { useState, useRef } from "react"
-import Editor from "@monaco-editor/react"
+/* eslint-disable react/prop-types */
+import { useCallback, useEffect, useState } from "react";
+import Editor from "@monaco-editor/react";
 
-const DEFAULT_SQL = `-- PostgreSQL Query Editor
--- Try these example queries:
+const DEFAULT_SQL = `
+-- Avinash Sharma's SQL Sandbox
+SELECT first_name, age
+FROM customers;`;
 
--- Create a table
-CREATE TABLE IF NOT EXISTS employeesMM (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    department VARCHAR(50),
-    salary NUMERIC(10, 2),
-    hired_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+const TABLE_SCHEMA = [
+    {
+        name: "Customers",
+        columns: [
+            "customer_id [int]",
+            "first_name [varchar(100)]",
+            "last_name [varchar(100)]",
+            "age [int]",
+            "country [varchar(100)]",
+        ],
+    },
+    {
+        name: "Orders",
+        columns: ["order_id [integer]", "item [varchar(100)]", "amount [integer]", "customer_id [int]"],
+    },
+    {
+        name: "Shippings",
+        columns: ["shipping_id [integer]", "status [integer]", "customer [integer]"],
+    },
+];
 
--- Insert data
-INSERT INTO employeesMM (name, department, salary) VALUES
-    ('Alice Johnson', 'Engineering', 95000.00),
-    ('Bob Smith', 'Marketing', 72000.00),
-    ('Charlie Brown', 'Engineering', 88000.00),
-    ('Diana Prince', 'HR', 68000.00);
+const previewTitleMap = {
+    customers: "Customers",
+    orders: "Orders",
+    shippings: "Shippings",
+};
 
--- Query with aggregation
-SELECT
-    department,
-    COUNT(*) as employee_count,
-    AVG(salary)::NUMERIC(10,2) as avg_salary,
-    MAX(salary) as max_salary
-FROM employeesMM
-GROUP BY department
-ORDER BY avg_salary DESC;`
-
-function PostgresEditor() {
-  const [sql, setSql] = useState(DEFAULT_SQL)
-  const [results, setResults] = useState(null)
-  const [error, setError] = useState("")
-  const [isRunning, setIsRunning] = useState(false)
-  const editorRef = useRef(null)
-
-  const handleEditorMount = (editor, monaco) => {
-    editorRef.current = editor
-
-    // Register PostgreSQL keywords for autocomplete
-    monaco.languages.registerCompletionItemProvider("sql", {
-      provideCompletionItems: (model, position) => {
-        const pgKeywords = [
-          "SELECT", "FROM", "WHERE", "INSERT", "UPDATE", "DELETE",
-          "CREATE", "ALTER", "DROP", "TABLE", "INDEX", "VIEW",
-          "JOIN", "LEFT", "RIGHT", "INNER", "OUTER", "CROSS",
-          "ON", "AND", "OR", "NOT", "IN", "EXISTS", "BETWEEN",
-          "GROUP BY", "ORDER BY", "HAVING", "LIMIT", "OFFSET",
-          "AS", "DISTINCT", "UNION", "INTERSECT", "EXCEPT",
-          "SERIAL", "BIGSERIAL", "VARCHAR", "TEXT", "INTEGER",
-          "NUMERIC", "BOOLEAN", "TIMESTAMP", "DATE", "JSONB",
-          "PRIMARY KEY", "FOREIGN KEY", "REFERENCES", "UNIQUE",
-          "NOT NULL", "DEFAULT", "CHECK", "CASCADE",
-          "BEGIN", "COMMIT", "ROLLBACK", "SAVEPOINT",
-          "EXPLAIN", "ANALYZE", "VACUUM", "REINDEX",
-          "COALESCE", "NULLIF", "CAST", "CASE", "WHEN", "THEN",
-          "CURRENT_TIMESTAMP", "NOW()", "EXTRACT", "DATE_TRUNC",
-          "STRING_AGG", "ARRAY_AGG", "JSON_AGG", "JSONB_AGG",
-          "ROW_NUMBER()", "RANK()", "DENSE_RANK()", "LAG()", "LEAD()",
-          "PARTITION BY", "OVER", "WINDOW",
-          "WITH", "RECURSIVE", "RETURNING", "ON CONFLICT",
-          "DO NOTHING", "DO UPDATE SET", "employeesMM",
-        ]
-
-        const word = model.getWordUntilPosition(position)
-        const range = {
-          startLineNumber: position.lineNumber,
-          endLineNumber: position.lineNumber,
-          startColumn: word.startColumn,
-          endColumn: word.endColumn,
-        }
-
-        return {
-          suggestions: pgKeywords.map((kw) => ({
-            label: kw,
-            kind: monaco.languages.CompletionItemKind.Keyword,
-            insertText: kw,
-            range,
-          })),
-        }
-      },
-    })
-  }
-
-  const handleExecute = async () => {
-    if (!sql.trim()) {
-      setError("Query cannot be empty")
-      return
+function DataTable({ rows }) {
+    if (!rows || rows.length === 0) {
+        return <p className="text-xs text-slate-400">No rows found.</p>;
     }
 
-    setIsRunning(true)
-    setError("")
-    setResults(null)
+    const columns = Object.keys(rows[0]);
 
-    try {
-      // Send to backend for execution
-      const res = await fetch("/api/query", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: sql }),
-      })
-      const contentType = res.headers.get("content-type") || ""
-
-      if (!contentType.includes("application/json")) {
-        const text = await res.text()
-        throw new Error(text || `Request failed with status ${res.status}`)
-      }
-
-      const data = await res.json()
-
-      if (!res.ok || data.error) {
-        throw new Error(data.error || `Request failed with status ${res.status}`)
-      }
-
-      setResults(Array.isArray(data.rows) ? data.rows : [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error executing query")
-    } finally {
-      setIsRunning(false)
-    }
-  }
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <h2 style={{ color: "#fff", padding: "10px" }}>
-        PostgreSQL Query Editor
-      </h2>
-
-      <Editor
-        height="50%"
-        defaultLanguage="sql"
-        value={sql}
-        onChange={(value) => setSql(value ?? "")}
-        theme="vs-dark"
-        onMount={handleEditorMount}
-        options={{
-          minimap: { enabled: false },
-          fontSize: 14,
-          wordWrap: "on",
-          automaticLayout: true,
-          suggestOnTriggerCharacters: true,
-          quickSuggestions: true,
-        }}
-      />
-
-      <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
-        <button
-          onClick={handleExecute}
-          disabled={isRunning}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: isRunning ? "#6c757d" : "#336791",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: isRunning ? "not-allowed" : "pointer",
-            fontWeight: "bold",
-          }}
-        >
-          {isRunning ? "⏳ Executing..." : "▶ Run Query (Ctrl+Enter)"}
-        </button>
-      </div>
-
-      {/* Error display */}
-      {error && (
-        <div
-          style={{
-            backgroundColor: "#2d1b1b",
-            color: "#ff6b6b",
-            padding: "10px 15px",
-            margin: "0 10px",
-            borderRadius: "5px",
-            fontFamily: "Consolas, monospace",
-          }}
-        >
-          {error}
+    return (
+        <div className="overflow-auto rounded-md border border-slate-700/80">
+            <table className="min-w-full text-left text-sm text-slate-200">
+                <thead className="bg-slate-900/80 text-slate-100">
+                    <tr>
+                        {columns.map((column) => (
+                            <th key={column} className="whitespace-nowrap border-b border-slate-700 px-3 py-2 font-semibold">
+                                {column}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows.map((row, rowIndex) => (
+                        <tr key={rowIndex} className="odd:bg-slate-900/20 even:bg-slate-900/50">
+                            {columns.map((column) => (
+                                <td key={`${rowIndex}-${column}`} className="whitespace-nowrap border-b border-slate-800 px-3 py-2">
+                                    {row[column] === null ? "NULL" : String(row[column])}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
-      )}
-
-      {/* Results table */}
-      {results && results.length > 0 && (
-        <div
-          style={{
-            flex: 1,
-            overflow: "auto",
-            margin: "10px",
-          }}
-        >
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              backgroundColor: "#1e1e1e",
-              color: "#d4d4d4",
-              fontFamily: "Consolas, monospace",
-              fontSize: "13px",
-            }}
-          >
-            <thead>
-              <tr>
-                {Object.keys(results[0]).map((col) => (
-                  <th
-                    key={col}
-                    style={{
-                      padding: "8px 12px",
-                      borderBottom: "2px solid #336791",
-                      textAlign: "left",
-                      backgroundColor: "#252526",
-                    }}
-                  >
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((row, i) => (
-                <tr key={i}>
-                  {Object.values(row).map((val, j) => (
-                    <td
-                      key={j}
-                      style={{
-                        padding: "6px 12px",
-                        borderBottom: "1px solid #333",
-                      }}
-                    >
-                      {val === null ? "NULL" : String(val)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Empty results */}
-      {results && results.length === 0 && (
-        <p style={{ color: "#888", padding: "15px" }}>
-          Query executed successfully. No rows returned.
-        </p>
-      )}
-    
-    </div>
-  )
+    );
 }
 
-export default PostgresEditor
+function PostgresEditor() {
+    const [sql, setSql] = useState(DEFAULT_SQL);
+    const [isRunning, setIsRunning] = useState(false);
+    const [outputRows, setOutputRows] = useState([]);
+    const [error, setError] = useState("");
+    const [previewTables, setPreviewTables] = useState({});
+    const [showTablesAside, setShowTablesAside] = useState(true);
+
+    const loadPreview = async () => {
+        try {
+            const response = await fetch("/api/query/sandbox/preview");
+            const data = await response.json();
+            setPreviewTables(data?.tables || {});
+        } catch {
+            setPreviewTables({});
+        }
+    };
+
+    useEffect(() => {
+        loadPreview();
+    }, []);
+
+    const handleExecute = useCallback(async () => {
+        if (!sql.trim()) {
+            setError("Query cannot be empty");
+            return;
+        }
+
+        setIsRunning(true);
+        setError("");
+        setOutputRows([]);
+
+        try {
+            const response = await fetch("/api/query/sandbox", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ query: sql }),
+            });
+
+            const responseText = await response.text();
+            let data = {};
+
+            if (responseText) {
+                try {
+                    data = JSON.parse(responseText);
+                } catch {
+                    data = { message: responseText };
+                }
+            }
+
+            if (!response.ok) {
+                throw new Error(data?.message || "Failed to execute SQL query");
+            }
+
+            setOutputRows(Array.isArray(data?.rows) ? data.rows : []);
+            await loadPreview();
+        } catch (runError) {
+            setError(runError instanceof Error ? runError.message : "Unknown error while executing query");
+        } finally {
+            setIsRunning(false);
+        }
+    }, [sql]);
+
+    useEffect(() => {
+        const onKeyDown = (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+                event.preventDefault();
+                handleExecute();
+            }
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [handleExecute]);
+
+    return (
+        <section className="min-h-screen bg-[#12141c] text-slate-100">
+            {/* <header className="flex items-center justify-between border-b border-slate-700 px-5 py-4">
+                <h1>Avinash Sharma</h1>
+            </header> */}
+
+            <div className="grid min-h-[calc(100vh-73px)] grid-cols-12">
+                <aside className="col-span-2 border-r border-slate-700 px-4 py-5">
+                    {TABLE_SCHEMA.map((table) => (
+                        <div key={table.name} className="mb-6">
+                            <h2 className="mb-2 text-base font-semibold text-slate-100">{table.name} [-]</h2>
+                            <ul className="space-y-1 border-l border-slate-500 pl-4 text-sm text-cyan-300">
+                                {table.columns.map((column) => (
+                                    <li key={column}>{column}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </aside>
+
+                <main className={`${showTablesAside ? "col-span-6 border-r border-slate-700" : "col-span-10"}`}>
+                    <div className="border-b border-slate-700 px-4 py-3">
+                        <div className="mb-2 flex items-center gap-3">
+                            <span className="font-semibold">Input</span>
+                            <button
+                                onClick={handleExecute}
+                                disabled={isRunning}
+                                type="button"
+                                className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-600"
+                            >
+                                {isRunning ? "Running..." : "Run SQL"}
+                            </button>
+                            <button
+                                onClick={() => setShowTablesAside((prev) => !prev)}
+                                type="button"
+                                className="rounded border border-slate-600 px-4 py-2 text-sm font-semibold transition hover:bg-slate-800"
+                            >
+                                {showTablesAside ? "Hide Tables" : "Show Tables"}
+                            </button>
+                        </div>
+                        <div className="h-[360px] overflow-hidden rounded border border-slate-700">
+                            <Editor
+                                height="100%"
+                                defaultLanguage="sql"
+                                value={sql}
+                                onChange={(value) => setSql(value ?? "")}
+                                theme="vs-dark"
+                                options={{
+                                    minimap: { enabled: false },
+                                    fontSize: 15,
+                                    wordWrap: "on",
+                                    automaticLayout: true,
+                                    quickSuggestions: true,
+                                    suggestOnTriggerCharacters: true,
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="px-4 py-3">
+                        <h3 className="mb-2 text-base font-semibold">Output</h3>
+                        {error ? (
+                            <div className="rounded border border-red-500/30 bg-red-950/40 px-3 py-2 text-sm text-red-300">{error}</div>
+                        ) : (
+                            <DataTable rows={outputRows} />
+                        )}
+                    </div>
+                </main>
+
+                {showTablesAside && <aside className="col-span-4 px-4 py-4">
+                    <h2 className="mb-3 text-xl font-semibold">Available Tables</h2>
+                    <div className="space-y-6">
+                        {Object.entries(previewTables).map(([key, rows]) => (
+                            <div key={key}>
+                                <h3 className="mb-2 text-lg font-semibold text-slate-100">{previewTitleMap[key] || key}</h3>
+                                <DataTable rows={rows} />
+                            </div>
+                        ))}
+                        {Object.keys(previewTables).length === 0 && (
+                            <p className="text-sm text-slate-400">Loading sandbox sample data...</p>
+                        )}
+                    </div>
+                </aside>}
+            </div>
+        </section>
+    );
+}
+
+export default PostgresEditor;

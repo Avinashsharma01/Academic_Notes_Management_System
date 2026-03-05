@@ -96,7 +96,7 @@ const NavigationLinks = ({ showMenu, setShowMenu, user, admin, superAdmin }) => 
                 Events
             </NavLink>
             <NavLink
-                to="/compilers"
+                to="/tools"
                 className={({ isActive }) =>
                     isActive
                         ? "text-white font-semibold bg-white/20 px-4 py-2 rounded-lg transition-colors"

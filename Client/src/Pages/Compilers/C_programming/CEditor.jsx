@@ -1,55 +1,39 @@
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
 
-function JsEditor() {
-    const [code, setCode] = useState(`
-console.log("Hello, JavaScript!");
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const name = "Avinash Sharma";
-console.log("Welcome, " + name + "!");
-`);
+function CEditor() {
+    const DefaultCode = `#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\\n");
+    return 0;
+}`;
+    const [code, setCode] = useState(DefaultCode);
     const [output, setOutput] = useState("");
 
-    const handleRun = () => {
-        // Step 1: Prepare to capture console output
-        const logs = [];
-        const originalLog = console.log;
-        const originalError = console.error;
-
-        // Step 2: Override console.log to capture output
-        console.log = (...args) => {
-            logs.push(
-                args
-                    .map((a) =>
-                        typeof a === "object"
-                            ? JSON.stringify(a, null, 2)
-                            : String(a),
-                    )
-                    .join(" "),
-            );
-        };
-        console.error = (...args) => {
-            logs.push("❌ " + args.map(String).join(" "));
-        };
+    const handleCompile = async () => {
+        setOutput("⏳ Compiling...");
 
         try {
-            // Step 3: Create and run the user's code
-            const fn = new Function(code);
-            fn();
-        } catch (err) {
-            // Step 4: Catch any runtime errors
-            logs.push(`❌ Error: ${err.message}`);
-        } finally {
-            // Step 5: Restore original console (important!)
-            console.log = originalLog;
-            console.error = originalError;
-        }
+            const res = await fetch(`${API_BASE_URL}/compile/c`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code }),
+            });
 
-        // Step 6: Display output
-        setOutput(
-            logs.join("\n") || "No output. Use console.log() to see results.",
-        );
+            if (!res.ok) {
+                throw new Error(`Request failed with status ${res.status}`);
+            }
+
+            const data = await res.json();
+            setOutput(data.output);
+        } catch (err) {
+            setOutput("❌ Could not connect to server: " + err.message);
+        }
     };
+
     const handleClear = () => {
         setOutput("");
     };
@@ -58,15 +42,15 @@ console.log("Welcome, " + name + "!");
         <section
             style={{
                 minHeight: "100vh",
-                background: "linear-gradient(135deg, #111827, #0f172a 40%, #3f3f46)",
+                background: "linear-gradient(135deg, #0f172a, #111827 40%, #052e16)",
                 padding: "20px",
             }}
         >
             <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
                 <header style={{ marginBottom: "14px", color: "#f8fafc" }}>
-                    <h1 style={{ margin: 0, fontSize: "28px" }}>JavaScript Playground</h1>
+                    <h1 style={{ margin: 0, fontSize: "28px" }}>C Compiler</h1>
                     <p style={{ margin: "6px 0 0", color: "#cbd5e1" }}>
-                        Run JavaScript instantly in-browser with captured console output.
+                        Write C code, compile instantly, and inspect output below.
                     </p>
                 </header>
 
@@ -80,7 +64,7 @@ console.log("Welcome, " + name + "!");
                 >
                     <Editor
                         height="58vh"
-                        defaultLanguage="javascript"
+                        defaultLanguage="c"
                         value={code}
                         onChange={(value) => setCode(value ?? "")}
                         theme="vs-dark"
@@ -89,27 +73,29 @@ console.log("Welcome, " + name + "!");
                             fontSize: 16,
                             wordWrap: "on",
                             automaticLayout: true,
+                            suggestOnTriggerCharacters: true,
                             bracketPairColorization: { enabled: true },
-                            quickSuggestions: true,
+                            lineNumbers: "on",
+                            tabSize: 4,
                         }}
                     />
                 </div>
 
                 <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "12px" }}>
                     <button
-                        onClick={handleRun}
+                        onClick={handleCompile}
                         style={{
                             padding: "10px 18px",
-                            backgroundColor: "#facc15",
-                            color: "#111827",
+                            backgroundColor: "#16a34a",
+                            color: "white",
                             border: "none",
                             borderRadius: "8px",
                             cursor: "pointer",
-                            fontWeight: "bold",
                             fontSize: "15px",
+                            fontWeight: 700,
                         }}
                     >
-                        Run
+                        Compile & Run
                     </button>
                     <button
                         onClick={handleClear}
@@ -151,7 +137,7 @@ console.log("Welcome, " + name + "!");
                             fontSize: "14px",
                         }}
                     >
-                        {output || "Output will appear here..."}
+                        {output || "Click 'Compile & Run' to see output here..."}
                     </pre>
                 </div>
             </div>
@@ -159,4 +145,4 @@ console.log("Welcome, " + name + "!");
     );
 }
 
-export default JsEditor;
+export default CEditor;

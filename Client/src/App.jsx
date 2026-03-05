@@ -9,6 +9,12 @@ import NotFound from "./Components/NotFound";
 import CompilersHome from "./Pages/Compilers/CompilersHome";
 import PostgresEditor from "./Pages/Compilers/PostgressCompiler/PostgresEditor";
 import JsEditor from "./Pages/Compilers/JSCompilers/JsEditor";
+import CEditor from "./Pages/Compilers/C_programming/CEditor";
+import CppEditor from "./Pages/Compilers/Cpp_Compiler/CppEditor";
+import JavaEditor from "./Pages/Compilers/Java_Compiler/JavaEditor";
+import PythonEditor from "./Pages/Compilers/Python_Compiler/PythonEditor";
+import HtmlCssPlayground from "./Pages/Compilers/HTML_CSS_Playground/HtmlCssPlayground";
+import GitPracticeLab from "./Pages/Tools/Basic Learning Tools/Git_Practice_Lab/GitPracticeLab";
 
 // Lazy load components
 const Home = lazy(() => import("./Pages/Home"));
@@ -142,9 +148,15 @@ function App() {
                     </Route>
 
                     {/* Tools Sections Start from here */}
-                    <Route path="/compilers" element={<CompilersHome />} />
+                    <Route path="/tools" element={<CompilersHome />} />
                     <Route path="/compilers/postgres" element={<PostgresEditor />} />
                     <Route path="/compilers/javascript" element={<JsEditor />} />
+                    <Route path="/compilers/c" element={<CEditor />} />
+                    <Route path="/compilers/cpp" element={<CppEditor />} />
+                    <Route path="/compilers/java" element={<JavaEditor />} />
+                    <Route path="/compilers/python" element={<PythonEditor />} />
+                    <Route path="/compilers/html-css" element={<HtmlCssPlayground />} />
+                    <Route path="/practice/git" element={<GitPracticeLab />} />
                 </Routes>
             </Suspense>
             <Footer />

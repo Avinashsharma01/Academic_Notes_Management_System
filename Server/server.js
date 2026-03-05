@@ -3,7 +3,6 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import cookieParser from "cookie-parser";
-import { Pool } from "pg";
 import ConnectTODB from "./Database/db.js";
 import authRoutes from "./Routes/authRoutes.js";
 import noteRoutes from "./Routes/noteRoutes.js";
@@ -13,8 +12,11 @@ import superAdminRoutes from "./Routes/SuperAdminRoute.js";
 import subscribeRoutes from "./Routes/SubscribeRoute.js";
 import academicRoutes from "./Routes/AcademicRoutes.js";
 import AppError from "./utils/AppError.js";
-import catchAsync from "./utils/catchAsync.js";
-
+import postgresCompilerRoutes from "./Compilers/PostGres/PostgresCompilier.js";
+import cCompilerRoutes from "./Compilers/C_Programming/ServerForC.js";
+import cppCompilerRoutes from "./Compilers/CPP_Programing/ServerForCpp.js";
+import javaCompilerRoutes from "./Compilers/Java/ServerForJava.js";
+import pythonCompilerRoutes from "./Compilers/Python_Compiler/ServerForPython.js";
 dotenv.config();
 
 const app = express();
@@ -32,39 +34,8 @@ app.use(
     })
 );
 
-const pool = new Pool({
-    connectionString: process.env.POSTGRES_URI,
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT ? Number(process.env.POSTGRES_PORT) : undefined,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    ssl: process.env.POSTGRES_SSL === "true" ? { rejectUnauthorized: false } : undefined,
-});
 
-app.post("/api/query", catchAsync(async (req, res) => {
-    const { query } = req.body;
 
-    if (!query || !query.trim()) {
-        throw new AppError("Empty query", 400);
-    }
-
-    const rawResult = await pool.query(query);
-    const result = Array.isArray(rawResult)
-        ? rawResult[rawResult.length - 1]
-        : rawResult;
-
-    const rows = Array.isArray(result?.rows) ? result.rows : [];
-    const fields = Array.isArray(result?.fields)
-        ? result.fields.map((field) => field.name)
-        : [];
-
-    res.json({
-        rows,
-        rowCount: typeof result?.rowCount === "number" ? result.rowCount : rows.length,
-        fields,
-    });
-}));
 
 
 // Auth Routes
@@ -90,6 +61,21 @@ app.use("/api/subscribe", subscribeRoutes);
 
 // Academic data routes (sessions, courses, branches, semesters, subjects)
 app.use("/api/academic", academicRoutes);
+
+// SQL compiler routes (regular + sandbox)
+app.use("/api/query", postgresCompilerRoutes);
+
+// C Programming compiler routes
+app.use("/api/compile/", cCompilerRoutes);
+
+// C++ Programming compiler routes
+app.use("/api/compile/", cppCompilerRoutes);
+
+// Java Programming compiler routes
+app.use("/api/compile/", javaCompilerRoutes);
+
+// Python Programming compiler routes
+app.use("/api/compile/", pythonCompilerRoutes);
 
 app.get("/user", (req, res) => {
   res.render("UserEmailVerify");

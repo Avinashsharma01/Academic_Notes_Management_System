@@ -1,6 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 
 const coreCodingTools = [
@@ -64,7 +62,7 @@ const coreCodingTools = [
     name: "Git Practice Lab",
     type: "Dev Tool",
     level: "Beginner to Intermediate",
-    path: "/compilers/git",
+    path: "/practice/git",
     description:
       "Learn Git commands, branching, merging, and conflict resolution safely.",
   },
@@ -100,7 +98,7 @@ const coreCodingTools = [
     description:
       "Visualize sorting, searching, and data structures to understand concepts faster.",
   },
-]
+];
 
 const advancedLearningTools = [
   {
@@ -143,52 +141,82 @@ const advancedLearningTools = [
     description:
       "Track your score history, weak areas, and weekly learning progress.",
   },
-]
+];
 
-const renderToolGrid = (tools) => {
+const accentStyles = [
+  {
+    badge: "bg-blue-100 text-blue-700",
+    button: "bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-300",
+    border: "border-t-blue-500",
+  },
+  {
+    badge: "bg-green-100 text-green-700",
+    button: "bg-green-600 hover:bg-green-700 focus-visible:ring-green-300",
+    border: "border-t-green-500",
+  },
+  {
+    badge: "bg-purple-100 text-purple-700",
+    button: "bg-purple-600 hover:bg-purple-700 focus-visible:ring-purple-300",
+    border: "border-t-purple-500",
+  },
+  {
+    badge: "bg-red-100 text-red-700",
+    button: "bg-red-600 hover:bg-red-700 focus-visible:ring-red-300",
+    border: "border-t-red-500",
+  },
+];
 
-    const navigate = useNavigate()
+const renderToolGrid = (tools, onOpenTool) => {
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-      {tools.map((tool) => (
+      {tools.map((tool, index) => {
+        const accent = accentStyles[index % accentStyles.length];
+
+        return (
         <article
           key={tool.name}
-          className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          className={`rounded-xl border border-gray-200 border-t-4 ${accent.border} bg-white p-5 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
         >
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold text-slate-800">{tool.name}</h2>
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+            <h2 className="text-lg font-semibold text-gray-900">{tool.name}</h2>
+            <span className={`rounded-full px-3 py-1 text-xs font-medium ${accent.badge}`}>
               {tool.type}
             </span>
           </div>
 
-          <p className="mb-4 text-sm leading-6 text-slate-600">{tool.description}</p>
+          <p className="mb-4 text-sm leading-6 text-gray-600">{tool.description}</p>
 
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
               {tool.level}
             </span>
             <button
-                onClick={() => navigate(tool.path)}
+                onClick={() => onOpenTool(tool.path)}
               type="button"
-              className="rounded-md bg-slate-900 px-3 py-2 text-xs font-semibold text-white transition hover:bg-slate-700"
+              className={`rounded-md px-3 py-2 text-xs font-semibold text-white transition focus-visible:outline-hidden focus-visible:ring-2 ${accent.button}`}
             >
               Open Tool
             </button>
           </div>
         </article>
-      ))}
+      )})}
     </div>
-  )
-}
+  );
+};
 
 const CompilersHome = () => {
+  const navigate = useNavigate();
+
+  const handleOpenTool = (path) => {
+    navigate(path);
+  };
+
   return (
-    <section className="min-h-screen w-full bg-slate-50 px-4 py-10 sm:px-6 lg:px-10">
+    <section className="min-h-screen w-full bg-linear-to-br from-gray-50 to-white px-4 py-10 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">Student Tools Hub</h1>
-          <p className="mt-2 max-w-3xl text-sm text-slate-600 sm:text-base">
+        <header className="mb-8 rounded-2xl bg-white p-6 shadow-md sm:p-8 flex flex-col justify-center items-center">
+          <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">Student Tools Hub</h1>
+          <p className="mt-2 max-w-4xl text-sm text-gray-600 sm:text-base">
             Access compilers, editors, and productivity tools to practice programming and
             improve your workflow.
           </p>
@@ -197,27 +225,27 @@ const CompilersHome = () => {
         <div className="space-y-10">
           <section>
             <div className="mb-4 flex items-end justify-between gap-3">
-              <h2 className="text-2xl font-bold text-slate-900">Core Coding Tools</h2>
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <h2 className="text-2xl font-bold text-gray-900">Core Coding Tools</h2>
+              <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                 {coreCodingTools.length} tools
               </span>
             </div>
-            {renderToolGrid(coreCodingTools)}
+            {renderToolGrid(coreCodingTools, handleOpenTool)}
           </section>
 
           <section>
             <div className="mb-4 flex items-end justify-between gap-3">
-              <h2 className="text-2xl font-bold text-slate-900">Advanced Learning Tools</h2>
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <h2 className="text-2xl font-bold text-gray-900">Advanced Learning Tools</h2>
+              <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                 {advancedLearningTools.length} tools
               </span>
             </div>
-            {renderToolGrid(advancedLearningTools)}
+            {renderToolGrid(advancedLearningTools, handleOpenTool)}
           </section>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default CompilersHome
+export default CompilersHome;
