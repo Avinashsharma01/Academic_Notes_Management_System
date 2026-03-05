@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "http://localhost:5000/api",
-    // baseURL: "https://fz5nw02t-5000.inc1.devtunnels.ms/api",
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials: true, // ✅ Cookies are sent automatically with every request
     headers: {
         "Content-Type": "application/json",

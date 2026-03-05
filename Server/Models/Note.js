@@ -5,6 +5,7 @@ const noteSchema = new mongoose.Schema(
         title: { type: String, required: true },
         description: { type: String },
         fileUrl: { type: String, required: true }, // URL of the uploaded file
+        cloudinaryId: { type: String, required: true },
         uploadedBy: {
             type: mongoose.Schema.Types.ObjectId,
             refPath: 'uploaderModel', // Dynamic reference based on the uploaderModel field
@@ -23,6 +24,8 @@ const noteSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
+noteSchema.index({ title: "text", description: "text", subject: "text" });
 
 const Note = mongoose.model("Note", noteSchema);
 export default Note;

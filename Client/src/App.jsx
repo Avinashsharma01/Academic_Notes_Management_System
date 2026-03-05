@@ -6,6 +6,9 @@ import ProtectedAdminRoute from "./Config/ProtectedAdminRoute";
 import ProtectedSuperAdminRoute from "./Config/ProtectedSuperAdminRoute";
 import Footer from "./Components/Footer";
 import NotFound from "./Components/NotFound";
+import CompilersHome from "./Pages/Compilers/CompilersHome";
+import PostgresEditor from "./Pages/Compilers/PostgressCompiler/PostgresEditor";
+import JsEditor from "./Pages/Compilers/JSCompilers/JsEditor";
 
 // Lazy load components
 const Home = lazy(() => import("./Pages/Home"));
@@ -74,7 +77,7 @@ function App() {
                         path="/events"
                         element={<Events event={sampleEvent} />}
                     />
-
+                    
                     {/* SuperAdmin public route */}
                     <Route path="/superadmin/login" element={<SuperAdminLogin />} />
 
@@ -137,6 +140,11 @@ function App() {
                             element={<AdminProfile />}
                         />
                     </Route>
+
+                    {/* Tools Sections Start from here */}
+                    <Route path="/compilers" element={<CompilersHome />} />
+                    <Route path="/compilers/postgres" element={<PostgresEditor />} />
+                    <Route path="/compilers/javascript" element={<JsEditor />} />
                 </Routes>
             </Suspense>
             <Footer />

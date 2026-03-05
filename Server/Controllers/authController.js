@@ -2,201 +2,180 @@ import User from "../Models/UserModel.js";
 import Admin from "../Models/AdminModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { sendVerificationEmail } from "../utils/UserEmailVerification.js"
+import { sendVerificationEmail } from "../utils/UserEmailVerification.js";
+import AppError from "../utils/AppError.js";
+import catchAsync from "../utils/catchAsync.js";
+
 // User Signup
-export const registerUser = async (req, res) => {
-    try {
-        const { name, course, branch, enrollment, email, password, role } = req.body;
+export const registerUser = catchAsync(async (req, res) => {
+    const { name, course, branch, enrollment, email, password, role } = req.body;
 
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: "User already exists" });
-
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create user
-        const newUser = new User({ name, course, branch, enrollment, email, password: hashedPassword, role });
-        await newUser.save();
-
-        // send email 
-        await sendVerificationEmail(email, newUser._id)
-
-        res.status(201).json({
-            message:
-                "Registration successful! Please check your email for verification.",
-        });
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        throw new AppError("User already exists", 400);
     }
-};
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+        name,
+        course,
+        branch,
+        enrollment,
+        email,
+        password: hashedPassword,
+        role,
+    });
+
+    await newUser.save();
+    await sendVerificationEmail(email, newUser._id);
+
+    res.status(201).json({
+        message: "Registration successful! Please check your email for verification.",
+    });
+});
 
 // User Login
-export const loginUser = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+export const loginUser = catchAsync(async (req, res) => {
+    const { email, password } = req.body;
 
-        // Check if user exists
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: "Invalid email or password" });
-
-        if (!user.isVerified) {
-            return res.status(404).json({ message: "user not found !" })
-        }
-
-        // Compare password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
-
-        // Generate JWT Token
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-            expiresIn: "1d",
-        });
-
-        // Set JWT as cookie
-        res.cookie("authToken", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // secure in production
-            sameSite: 'strict',
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
-        });
-
-        res.status(200).json({
-            user: {
-                id: user._id,
-                name: user.name,
-                course: user.course,
-                branch: user.branch,
-                enrollment: user.enrollment,
-                email: user.email,
-                role: user.role
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new AppError("Invalid email or password", 400);
     }
-};
+
+    if (!user.isVerified) {
+        throw new AppError("User not verified", 403);
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        throw new AppError("Invalid email or password", 400);
+    }
+
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+    });
+
+    res.cookie("authToken", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+        user: {
+            id: user._id,
+            name: user.name,
+            course: user.course,
+            branch: user.branch,
+            enrollment: user.enrollment,
+            email: user.email,
+            role: user.role,
+        },
+    });
+});
 
 // fetch the logged user
-export const authUser = async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select("-password"); // Exclude password
-        if (!user) return res.status(404).json({ message: "User not found" });
-
-        res.status(200).json({ user });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+export const authUser = catchAsync(async (req, res) => {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+        throw new AppError("User not found", 404);
     }
-}
+
+    res.status(200).json({ user });
+});
 
 
 
 // ✅ Update User Profile (Name & Profile Picture)
-export const updateUserProfile = async (req, res) => {
-    try {
-        const { name } = req.body;
-        let profilePic = req.user.profilePic; // Keep the existing pic if not updated
+export const updateUserProfile = catchAsync(async (req, res) => {
+    const { name } = req.body;
+    let profilePic = req.user.profilePic;
 
-        // If a new image is uploaded, update profilePic URL
-        if (req.file) {
-            profilePic = req.file.path; // Cloudinary URL from multer
-        }
-
-        // Update user info
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user.id,
-            { name, profilePic },
-            { new: true, select: "-password" }
-        );
-
-        res.status(200).json({ user: updatedUser });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Failed to update profile" });
+    if (req.file) {
+        profilePic = req.file.path;
     }
-}
+
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user.id,
+        { name, profilePic },
+        { new: true, select: "-password" }
+    );
+
+    res.status(200).json({ user: updatedUser });
+});
 
 
 // this is used to verify the email address
-export const verifyUserEmail = async (req, res) => {
-    try {
-        const { token } = req.params;
+export const verifyUserEmail = catchAsync(async (req, res) => {
+    const { token } = req.params;
 
-        if (!token) {
-            return res.status(400).json({ message: "Token is required" });
-        }
-
-        // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-
-        if (!user) return res.status(404).json({ message: "User not found!" });
-
-        if (user.isVerified)
-            return res.status(400).json({ message: "Email already verified!" });
-
-        // Mark user as verified
-        user.isVerified = true;
-        await user.save();
-
-        res.status(200).render('UserEmailVerify')
-    } catch (error) {
-        res.status(401).json({ message: "Invalid or expired token!" });
+    if (!token) {
+        throw new AppError("Token is required", 400);
     }
-};
+
+    let decoded;
+    try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+        throw new AppError("Invalid or expired token!", 401);
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+        throw new AppError("User not found!", 404);
+    }
+
+    if (user.isVerified) {
+        throw new AppError("Email already verified!", 400);
+    }
+
+    user.isVerified = true;
+    await user.save();
+
+    res.status(200).render("UserEmailVerify");
+});
 
 // Logout user
-export const logoutUser = async (req, res) => {
-    try {
-        // Clear the authentication cookie
-        res.cookie('authToken', '', {
-            httpOnly: true,
-            expires: new Date(0), // Expire immediately
-            sameSite: 'strict',
-            secure: process.env.NODE_ENV === 'production'
-        });
+export const logoutUser = catchAsync(async (req, res) => {
+    res.cookie("authToken", "", {
+        httpOnly: true,
+        expires: new Date(0),
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+    });
 
-        res.status(200).json({ message: "Logged out successfully" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
-    }
-};
+    res.status(200).json({ message: "Logged out successfully" });
+});
 
 
 
 // Fetch all users
-export const getAllUsers = async (req, res) => {
-    try {
-        // Check if the requesting user is an admin
-        if (req.user.role !== 'admin') {
-            return res.status(403).json({ message: "Access denied. Admin privileges required." });
-        }
-
-        const admin = await Admin.findById(req.user.id).select("course");
-        if (!admin) {
-            return res.status(404).json({ message: "Admin not found." });
-        }
-
-        if (!admin.course) {
-            return res.status(200).json({ users: [], count: 0 });
-        }
-
-        const escapedCourse = admin.course.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-        // Fetch only users matching admin's assigned course
-        const users = await User.find({
-            course: { $regex: `^${escapedCourse}$`, $options: "i" },
-        }).select("-password");
-
-        res.status(200).json({
-            users,
-            count: users.length
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error while fetching users." });
+export const getAllUsers = catchAsync(async (req, res) => {
+    if (req.user.role !== "admin") {
+        throw new AppError("Access denied. Admin privileges required.", 403);
     }
-};
+
+    const admin = await Admin.findById(req.user.id).select("course");
+    if (!admin) {
+        throw new AppError("Admin not found.", 404);
+    }
+
+    if (!admin.course) {
+        return res.status(200).json({ users: [], count: 0 });
+    }
+
+    const escapedCourse = admin.course.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const users = await User.find({
+        course: { $regex: `^${escapedCourse}$`, $options: "i" },
+    }).select("-password");
+
+    res.status(200).json({
+        users,
+        count: users.length,
+    });
+});
