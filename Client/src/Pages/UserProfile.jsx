@@ -7,6 +7,10 @@ import {
     FaUser,
     FaEnvelope,
     FaUserTag,
+    FaBuilding,
+    FaIdCard,
+    FaCheckCircle,
+    FaTimesCircle,
     FaCalendarAlt,
     FaCamera,
     FaPencilAlt,
@@ -242,6 +246,80 @@ const UserProfile = () => {
                                         </div>
 
                                         <div className="flex items-center">
+                                            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">
+                                                <FaBuilding />
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Course
+                                                </p>
+                                                <p className="text-gray-800 font-medium">
+                                                    {profile.course || "Not Specified"}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center">
+                                            <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 mr-4">
+                                                <FaBuilding />
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Branch
+                                                </p>
+                                                <p className="text-gray-800 font-medium">
+                                                    {profile.branch || "Not Specified"}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center">
+                                            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 mr-4">
+                                                <FaIdCard />
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Enrollment
+                                                </p>
+                                                <p className="text-gray-800 font-medium">
+                                                    {profile.enrollment || "Not Available"}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center">
+                                            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mr-4">
+                                                {profile.isVerified ? (
+                                                    <FaCheckCircle />
+                                                ) : (
+                                                    <FaTimesCircle />
+                                                )}
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Verification Status
+                                                </p>
+                                                <p className="text-gray-800 font-medium">
+                                                    {profile.isVerified ? "Verified" : "Not Verified"}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center">
+                                            <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 mr-4">
+                                                <FaUserTag />
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-500 text-sm">
+                                                    Auth Provider
+                                                </p>
+                                                <p className="text-gray-800 font-medium capitalize">
+                                                    {profile.authProvider || "local"}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center">
                                             <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-4">
                                                 <FaCalendarAlt />
                                             </div>
@@ -250,16 +328,18 @@ const UserProfile = () => {
                                                     Member Since
                                                 </p>
                                                 <p className="text-gray-800 font-medium">
-                                                    {new Date(
-                                                        profile.createdAt
-                                                    ).toLocaleDateString(
-                                                        undefined,
-                                                        {
-                                                            year: "numeric",
-                                                            month: "long",
-                                                            day: "numeric",
-                                                        }
-                                                    )}
+                                                    {profile.createdAt
+                                                        ? new Date(
+                                                            profile.createdAt
+                                                        ).toLocaleDateString(
+                                                            undefined,
+                                                            {
+                                                                year: "numeric",
+                                                                month: "long",
+                                                                day: "numeric",
+                                                            }
+                                                        )
+                                                        : "Not Available"}
                                                 </p>
                                             </div>
                                         </div>

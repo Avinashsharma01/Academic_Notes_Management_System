@@ -14,13 +14,27 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [authVerified, setAuthVerified] = useState(false);
 
+    const clearAuthState = () => {
+        setUser(null);
+        setAdmin(null);
+        setSuperAdmin(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("admin");
+        localStorage.removeItem("superAdmin");
+    };
+
     // Check authentication status on mount via cookie
     useEffect(() => {
         const checkAuthStatus = async () => {
+            const authProbeConfig = { skipAuthHandler: true };
+
             try {
                 // Try superadmin auth first
                 try {
-                    const saResponse = await API.get("/superadmin/profile");
+                    const saResponse = await API.get(
+                        "/superadmin/profile",
+                        authProbeConfig
+                    );
                     if (saResponse.data && saResponse.data.superAdmin) {
                         const saData = saResponse.data.superAdmin;
                         setSuperAdmin(saData);
@@ -39,7 +53,10 @@ export const AuthProvider = ({ children }) => {
 
                 // Try admin auth
                 try {
-                    const adminResponse = await API.get("/auth/admin/me");
+                    const adminResponse = await API.get(
+                        "/auth/admin/me",
+                        authProbeConfig
+                    );
                     if (adminResponse.data && adminResponse.data.admin) {
                         const adminData = adminResponse.data.admin;
                         setAdmin(adminData);
@@ -58,7 +75,10 @@ export const AuthProvider = ({ children }) => {
 
                 // Try user auth
                 try {
-                    const userResponse = await API.get("/auth/me");
+                    const userResponse = await API.get(
+                        "/auth/me",
+                        authProbeConfig
+                    );
                     if (userResponse.data && userResponse.data.user) {
                         const userData = userResponse.data.user;
                         setUser(userData);
@@ -75,30 +95,67 @@ export const AuthProvider = ({ children }) => {
                     // User auth also failed
                 }
 
-                // No valid session — check localStorage fallback
-                const storedSuperAdmin = localStorage.getItem("superAdmin");
-                const storedAdmin = localStorage.getItem("admin");
-                const storedUser = localStorage.getItem("user");
-
-                if (storedSuperAdmin) {
-                    setSuperAdmin(JSON.parse(storedSuperAdmin));
-                } else if (storedAdmin) {
-                    setAdmin(JSON.parse(storedAdmin));
-                } else if (storedUser) {
-                    setUser(JSON.parse(storedUser));
-                }
-
+                // No valid session
+                clearAuthState();
                 setAuthVerified(true);
             } catch (error) {
                 console.error("Auth check error:", error);
+                clearAuthState();
                 setAuthVerified(true);
             } finally {
                 setLoading(false);
             }
         };
 
+        const handleUnauthorized = () => {
+            clearAuthState();
+            setAuthVerified(true);
+            setLoading(false);
+        };
+
+        window.addEventListener("auth:unauthorized", handleUnauthorized);
+
         checkAuthStatus();
+
+        return () => {
+            window.removeEventListener("auth:unauthorized", handleUnauthorized);
+        };
     }, []);
+
+    // Periodically validate active session so expired tokens log out idle users too.
+    useEffect(() => {
+        const hasActiveAuth = user || admin || superAdmin;
+        if (!hasActiveAuth) return;
+
+        const authProbeConfig = { skipAuthHandler: true };
+
+        const validateCurrentSession = async () => {
+            try {
+                if (superAdmin) {
+                    await API.get("/superadmin/profile", authProbeConfig);
+                    return;
+                }
+
+                if (admin) {
+                    await API.get("/auth/admin/me", authProbeConfig);
+                    return;
+                }
+
+                if (user) {
+                    await API.get("/auth/me", authProbeConfig);
+                }
+            } catch (error) {
+                clearAuthState();
+                setAuthVerified(true);
+            }
+        };
+
+        const intervalId = window.setInterval(validateCurrentSession, 15000);
+
+        return () => {
+            window.clearInterval(intervalId);
+        };
+    }, [user, admin, superAdmin]);
 
     // Login for regular users
     const login = async (credentials) => {
@@ -180,12 +237,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error("Logout API call failed:", error);
         } finally {
-            setUser(null);
-            setAdmin(null);
-            setSuperAdmin(null);
-            localStorage.removeItem("user");
-            localStorage.removeItem("admin");
-            localStorage.removeItem("superAdmin");
+            clearAuthState();
         }
     };
 
@@ -196,12 +248,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error("Admin logout API call failed:", error);
         } finally {
-            setAdmin(null);
-            setUser(null);
-            setSuperAdmin(null);
-            localStorage.removeItem("admin");
-            localStorage.removeItem("user");
-            localStorage.removeItem("superAdmin");
+            clearAuthState();
         }
     };
 
@@ -212,12 +259,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error("SuperAdmin logout API call failed:", error);
         } finally {
-            setSuperAdmin(null);
-            setAdmin(null);
-            setUser(null);
-            localStorage.removeItem("superAdmin");
-            localStorage.removeItem("admin");
-            localStorage.removeItem("user");
+            clearAuthState();
         }
     };
 

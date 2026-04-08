@@ -17,13 +17,8 @@ const ProtectedUserRoute = () => {
             );
         }
 
-        // Check localStorage as fallback
-        const Luser = localStorage.getItem("user");
-        const Ladmin = localStorage.getItem("admin");
-        const LsuperAdmin = localStorage.getItem("superAdmin");
-
-        // Allow access if user, admin, or superadmin is authenticated (via context or localStorage)
-        return user || admin || superAdmin || Luser || Ladmin || LsuperAdmin ? (
+        // Allow access only when auth context has a verified active session
+        return user || admin || superAdmin ? (
             <Outlet />
         ) : (
             <Navigate to="/login" replace />

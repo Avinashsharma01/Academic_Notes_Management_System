@@ -50,8 +50,8 @@ const NotesList = () => {
         const fetchNotes = async () => {
             setLoading(true);
             try {
-                // Check if we're authenticated via context or localStorage
-                const isAuthenticated = user || admin || localStorage.getItem("user") || localStorage.getItem("admin");
+                // Check if we're authenticated via verified auth context
+                const isAuthenticated = user || admin;
 
                 if (!isAuthenticated) {
                     console.error("No authentication detected");

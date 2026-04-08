@@ -131,11 +131,11 @@ const SuperAdminDashboard = () => {
         }
     };
 
-    // Logout
-    const handleLogout = async () => {
-        await superAdminLogout();
-        navigate("/superadmin/login");
-    };
+    // // Logout
+    // const handleLogout = async () => {
+    //     await superAdminLogout();
+    //     navigate("/superadmin/login");
+    // };
 
     // Filter + Paginate
     const currentData = activeTab === "users" ? users : admins;
@@ -180,13 +180,13 @@ const SuperAdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                    <button
+                    {/* <button
                         onClick={handleLogout}
                         className="flex items-center gap-2 px-4 py-2 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30 transition-all"
                     >
                         <FaSignOutAlt />
                         Logout
-                    </button>
+                    </button> */}
                 </div>
             </div>
 

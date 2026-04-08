@@ -97,7 +97,7 @@ const ProfileDropdown = ({
                             <div>
                                 <button
                                     onClick={() => {
-                                        navigate("/admin/admindashboard");
+                                        navigate("/superadmin/dashboard");
                                         setShowProfile(false);
                                     }}
                                     className="flex w-full items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"

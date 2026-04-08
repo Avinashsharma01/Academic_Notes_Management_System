@@ -18,6 +18,8 @@ import {
     FaSearch,
     FaTrash,
     FaBookOpen,
+    FaCheckCircle,
+    FaTimesCircle,
 } from "react-icons/fa";
 
 const AdminProfile = () => {
@@ -38,8 +40,12 @@ const AdminProfile = () => {
         phone: admin?.phone || "Not Available",
         address: admin?.address || "Not Available",
         role: admin?.role || "Admin",
+        course: admin?.course || "Not Available",
         department: admin?.department || "Not Available",
-        adminId: admin?._id || "Loading...",
+        college: admin?.college || "Not Available",
+        designation: admin?.designation || "Not Available",
+        isVerified: typeof admin?.isVerified === "boolean" ? admin.isVerified : null,
+        adminId: admin?._id || admin?.id || "Loading...",
         joinDate: admin?.createdAt
             ? new Date(admin.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -72,8 +78,16 @@ const AdminProfile = () => {
                         phone: freshAdminData.phone || "Not Available",
                         address: freshAdminData.address || "Not Available",
                         role: freshAdminData.role || "Admin",
+                        course: freshAdminData.course || "Not Available",
                         department:
                             freshAdminData.department || "Not Available",
+                        college: freshAdminData.college || "Not Available",
+                        designation:
+                            freshAdminData.designation || "Not Available",
+                        isVerified:
+                            typeof freshAdminData.isVerified === "boolean"
+                                ? freshAdminData.isVerified
+                                : null,
                         adminId: freshAdminData._id || "Not Available",
                         joinDate: freshAdminData.createdAt
                             ? new Date(
@@ -280,6 +294,20 @@ const AdminProfile = () => {
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div className="flex items-start gap-3">
+                                    <div className="bg-cyan-100 p-3 rounded-lg">
+                                        <FaBookOpen className="text-cyan-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-500">
+                                            Course
+                                        </p>
+                                        <p className="font-medium text-gray-800">
+                                            {adminData.course}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
                                     <div className="bg-blue-100 p-3 rounded-lg">
                                         <FaBuilding className="text-blue-600" />
                                     </div>
@@ -289,6 +317,34 @@ const AdminProfile = () => {
                                         </p>
                                         <p className="font-medium text-gray-800">
                                             {adminData.department}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
+                                    <div className="bg-indigo-100 p-3 rounded-lg">
+                                        <FaBuilding className="text-indigo-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-500">
+                                            College
+                                        </p>
+                                        <p className="font-medium text-gray-800">
+                                            {adminData.college}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
+                                    <div className="bg-emerald-100 p-3 rounded-lg">
+                                        <FaUserGraduate className="text-emerald-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-500">
+                                            Designation
+                                        </p>
+                                        <p className="font-medium text-gray-800">
+                                            {adminData.designation}
                                         </p>
                                     </div>
                                 </div>
@@ -331,6 +387,28 @@ const AdminProfile = () => {
                                         </p>
                                         <p className="font-medium text-gray-800">
                                             {adminData.lastLogin}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
+                                    <div className="bg-teal-100 p-3 rounded-lg">
+                                        {adminData.isVerified ? (
+                                            <FaCheckCircle className="text-teal-600" />
+                                        ) : (
+                                            <FaTimesCircle className="text-teal-600" />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-500">
+                                            Verification Status
+                                        </p>
+                                        <p className="font-medium text-gray-800">
+                                            {adminData.isVerified === null
+                                                ? "Not Available"
+                                                : adminData.isVerified
+                                                    ? "Verified"
+                                                    : "Not Verified"}
                                         </p>
                                     </div>
                                 </div>

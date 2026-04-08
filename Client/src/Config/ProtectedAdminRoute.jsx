@@ -14,11 +14,8 @@ const ProtectedAdminRoute = () => {
         );
     }
 
-    // Check localStorage as fallback
-    const Ladmin = localStorage.getItem("admin");
-
-    // Only allow access if admin is authenticated (via context or localStorage)
-    return admin || Ladmin ? <Outlet /> : <Navigate to="/adminLogin" replace />;
+    // Only allow access if admin is authenticated via verified context
+    return admin ? <Outlet /> : <Navigate to="/adminLogin" replace />;
 };
 
 export default ProtectedAdminRoute;
