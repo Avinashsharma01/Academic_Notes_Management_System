@@ -17,12 +17,13 @@ import {
 } from "../Controllers/SuperAdminController.js";
 import { getAllFeedbacks, deleteFeedback } from "../Controllers/feedbackController.js";
 import { authenticateSuperAdmin } from "../Middleware/SuperAdminMiddleware.js";
+import { loginRateLimiter } from "../Middleware/RateLimitter.js";
 
 const router = express.Router();
 
 // Public routes
 router.post("/register", registerSuperAdmin);
-router.post("/login", loginSuperAdmin);
+router.post("/login", loginRateLimiter, loginSuperAdmin);
 router.get("/logout", logoutSuperAdmin);
 router.get("/verify/:token", verifySuperAdminEmail);
 router.post("/resend-verification", resendVerificationEmail);

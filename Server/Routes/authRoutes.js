@@ -4,13 +4,14 @@ import { registerAdmin, loginAdmin, verifyAdminEmail, authAdmin } from "../Contr
 import { socialLogin } from "../Controllers/socialAuthController.js";
 import { authenticateUser, authorizeAdmin } from "../Middleware/authMiddleware.js";
 import upload from "../Middleware/multerMiddlewareForProFilePic.js";
+import { loginRateLimiter } from "../Middleware/RateLimitter.js";
 const router = express.Router();
 
 // User Signup
 router.post("/signup", registerUser);
 
 // User Login
-router.post("/login", loginUser);
+router.post("/login", loginRateLimiter, loginUser);
 
 // User Logout
 router.post("/logout", logoutUser);
@@ -37,7 +38,7 @@ router.get("/verify/user/:token", verifyUserEmail);
 router.post("/signupAdmin", registerAdmin);
 
 // User Login
-router.post("/loginAdmin", loginAdmin);
+router.post("/loginAdmin", loginRateLimiter, loginAdmin);
 
 //verify admin email
 router.get("/verify/admin/:token", verifyAdminEmail);

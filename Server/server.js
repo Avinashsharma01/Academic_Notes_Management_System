@@ -34,10 +34,6 @@ app.use(
     })
 );
 
-
-
-
-
 // Auth Routes
 app.use("/api/auth", authRoutes);
 

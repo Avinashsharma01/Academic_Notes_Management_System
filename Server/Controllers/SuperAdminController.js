@@ -47,14 +47,14 @@ export const loginSuperAdmin = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
         const token = jwt.sign({ id: superAdmin._id, role: superAdmin.role }, process.env.JWT_SECRET, {
-            expiresIn: "1d",
+            expiresIn: "1m", // Test expiry: 1 minute
         });
 
         res.cookie("SuperauthToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 60 * 1000, // Match 1 minute token expiry
         }).status(200).json({
             message: "Login successful",
             superAdmin: {

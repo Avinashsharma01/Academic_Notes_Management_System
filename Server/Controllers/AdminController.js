@@ -93,7 +93,7 @@ export const loginAdmin = async (req, res) => {
 
         // Generate JWT Token
         const token = jwt.sign({ id: admin._id, role: admin.role }, process.env.JWT_SECRET, {
-            expiresIn: "1d",
+            expiresIn: "1m", // Test expiry: 1 minute
         });
 
         // Set JWT as cookie
@@ -101,7 +101,7 @@ export const loginAdmin = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // secure in production
             sameSite: 'strict',
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
+            maxAge: 60 * 1000, // Match 1 minute token expiry
         });
 
         res.status(200).json({
