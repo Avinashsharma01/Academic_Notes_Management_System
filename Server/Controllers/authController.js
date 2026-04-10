@@ -55,17 +55,18 @@ export const loginUser = catchAsync(async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-        // expiresIn: "1d",
-        expiresIn: "1m", // Token expires in 1 minute for testing purposes  
+        expiresIn: "1d",
+
+        // expiresIn: "1m", // Token expires in 1 minute for testing purposes  
     });
 
     res.cookie("authToken", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 60 * 1000, // Match the 1 minute token expiry used above
+        // maxAge: 60 * 1000, // Match the 1 minute token expiry used above
 
-        // maxAge : 24 * 60 * 60 * 1000, // 1 day
+        maxAge : 24 * 60 * 60 * 1000, // 1 day
     });
 
     res.status(200).json({

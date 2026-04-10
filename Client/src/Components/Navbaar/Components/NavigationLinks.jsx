@@ -36,6 +36,20 @@ const NavigationLinks = ({ showMenu, setShowMenu, user, admin, superAdmin }) => 
                 </NavLink>
             )}
 
+            {(user || admin || superAdmin) && (
+                <NavLink
+                    to="/assistant"
+                    className={({ isActive }) =>
+                        isActive
+                            ? "text-white font-semibold bg-white/20 px-4 py-2 rounded-lg transition-colors"
+                            : "text-gray-200 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors"
+                    }
+                    onClick={() => setShowMenu(false)}
+                >
+                    Assistant
+                </NavLink>
+            )}
+
             <NavLink
                 to="/about"
                 className={({ isActive }) =>

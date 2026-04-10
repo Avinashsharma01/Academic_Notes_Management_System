@@ -10,3 +10,14 @@ export const loginRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+export const chatbotRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  message: {
+    status: "fail",
+    message: "Too many chatbot requests from this IP. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});

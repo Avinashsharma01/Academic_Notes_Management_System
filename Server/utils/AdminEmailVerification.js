@@ -22,8 +22,9 @@ export const sendVerificationEmail = async (userEmail, userId) => {
             expiresIn: "1h",
         });
 
-        // Create verification link
-        const verificationLink = `http://localhost:5000/api/auth/verify/admin/${token}`;
+        // Create verification link based on deploy environment (Docker/local/prod)
+        const backendPublicUrl = process.env.BACKEND_PUBLIC_URL || `http://localhost:${process.env.PORT || 8080}`;
+        const verificationLink = `${backendPublicUrl}/api/auth/verify/admin/${token}`;
 
         // Email options
         const mailOptions = {

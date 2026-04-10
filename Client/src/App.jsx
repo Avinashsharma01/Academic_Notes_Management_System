@@ -42,6 +42,10 @@ const UserProfile = lazy(() => import("./Pages/UserProfile"));
 const AdminProfile = lazy(() => import("./Pages/AdminPages/AdminProfile"));
 const Events = lazy(() => import("./Pages/Events"));
 const AllUser = lazy(() => import("./Pages/AdminPages/AllUsers"));
+const Assistant = lazy(() => import("./Pages/Assistant"));
+const Terms = lazy(() => import("./Pages/Terms"));
+const Privacy = lazy(() => import("./Pages/Privacy"));
+const Support = lazy(() => import("./Pages/Support"));
 
 // SuperAdmin pages
 const SuperAdminLogin = lazy(() => import("./Pages/SuperAdminPages/SuperAdminLogin"));
@@ -79,6 +83,10 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/service" element={<Services />} />
                     <Route path="/feedback" element={<Feedback />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/privacy-policy" element={<Privacy />} />
+                    <Route path="/support" element={<Support />} />
                     <Route
                         path="/events"
                         element={<Events event={sampleEvent} />}
@@ -105,6 +113,9 @@ function App() {
                     </Route>
                     <Route element={<ProtectedUserRoute />}>
                         <Route path="/notes" element={<NotesList />} />
+                    </Route>
+                    <Route element={<ProtectedUserRoute />}>
+                        <Route path="/assistant" element={<Assistant />} />
                     </Route>
 
                     {/* Protected Admin Routes */}

@@ -104,10 +104,7 @@ const Contact = () => {
                                             Email
                                         </h3>
                                         <p className="text-gray-300">
-                                            support@collegenoteshub.com
-                                        </p>
-                                        <p className="text-gray-300">
-                                            info@collegenoteshub.com
+                                            Avinashsharma31384@gmail.com
                                         </p>
                                     </div>
                                 </div>
@@ -121,10 +118,7 @@ const Contact = () => {
                                             Phone
                                         </h3>
                                         <p className="text-gray-300">
-                                            +1 (555) 123-4567
-                                        </p>
-                                        <p className="text-gray-300">
-                                            +1 (555) 987-6543
+                                            +91 6201693634
                                         </p>
                                     </div>
                                 </div>
@@ -138,11 +132,7 @@ const Contact = () => {
                                             Address
                                         </h3>
                                         <p className="text-gray-300">
-                                            College Notes Hub Campus
-                                            <br />
-                                            123 Education Avenue
-                                            <br />
-                                            Learning District, ED 12345
+                                            Meerut Uttar Pradesh, India
                                         </p>
                                     </div>
                                 </div>

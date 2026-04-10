@@ -11,6 +11,7 @@ import ContactRoutes from "./Routes/ContactRoute.js";
 import superAdminRoutes from "./Routes/SuperAdminRoute.js";
 import subscribeRoutes from "./Routes/SubscribeRoute.js";
 import academicRoutes from "./Routes/AcademicRoutes.js";
+import chatbotRoutes from "./Routes/chatbotRoutes.js";
 import AppError from "./utils/AppError.js";
 import postgresCompilerRoutes from "./Compilers/PostGres/PostgresCompilier.js";
 import cCompilerRoutes from "./Compilers/C_Programming/ServerForC.js";
@@ -57,6 +58,9 @@ app.use("/api/subscribe", subscribeRoutes);
 
 // Academic data routes (sessions, courses, branches, semesters, subjects)
 app.use("/api/academic", academicRoutes);
+
+// Chatbot assistant route
+app.use("/api/chatbot", chatbotRoutes);
 
 // SQL compiler routes (regular + sandbox)
 app.use("/api/query", postgresCompilerRoutes);

@@ -62,6 +62,10 @@ typings/
 
 # dotenv environment variables file
 .env
+Client/.env.docker
+Server/.env.docker
+*.env.docker
+!*.env.docker.example
 
 # next.js build output
 .next
