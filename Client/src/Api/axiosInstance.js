@@ -5,6 +5,7 @@ const API = axios.create({
     withCredentials: true, // ✅ Cookies are sent automatically with every request
     headers: {
         "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
     },
 });
 
