@@ -22,6 +22,16 @@ export const authenticateSuperAdmin = (req, res, next) => {
         if (req.cookies.SuperauthToken) {
             res.cookie('SuperauthToken', '', {
                 httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/",
+                expires: new Date(0)
+            });
+            res.cookie('SuperauthToken', '', {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/api/superadmin",
                 expires: new Date(0)
             });
         }

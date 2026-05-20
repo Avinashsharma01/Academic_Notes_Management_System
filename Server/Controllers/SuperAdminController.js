@@ -53,8 +53,9 @@ export const loginSuperAdmin = async (req, res) => {
 
         res.cookie("SuperauthToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            secure: true, // Must be true for cross-site cookies
+            sameSite: "none", // Must be "none" for cross-site requests
+            path: "/",
             // maxAge: 60 * 1000, // Match 1 minute token expiry
             maxAge: 24 * 60 * 60 * 1000, // Match 1 day token expiry
         }).status(200).json({
@@ -75,7 +76,17 @@ export const loginSuperAdmin = async (req, res) => {
 // SuperAdmin Logout
 export const logoutSuperAdmin = async (req, res) => {
     try {
-        res.clearCookie("SuperauthToken").status(200).json({ message: "Logout successful" });
+        res.clearCookie("SuperauthToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/",
+        }).clearCookie("SuperauthToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/api/superadmin",
+        }).status(200).json({ message: "Logout successful" });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }

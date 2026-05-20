@@ -69,8 +69,9 @@ export const socialLogin = async (req, res) => {
         // Set JWT as httpOnly cookie (same as regular login)
         res.cookie("authToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            secure: true, // Must be true for cross-site cookies
+            sameSite: "none", // Must be "none" for cross-site requests
+            path: "/",
             maxAge: 24 * 60 * 60 * 1000, // 1 day
         });
 

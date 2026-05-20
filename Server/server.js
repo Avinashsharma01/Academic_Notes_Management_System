@@ -28,11 +28,11 @@ app.use(express.static(path.join(path.resolve(), "public")));
 app.set("view engine", "ejs");
 
 app.use(
-    cors({
-        origin: process.env.FRONTEND_URL,
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        credentials: true,
-    })
+  cors({
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
 );
 
 // Auth Routes
@@ -115,5 +115,5 @@ if (!port) {
 
 app.listen(port, () => {
   ConnectTODB();
-    console.log(`Server is listen on port ${port}`);
+  console.log(`Server is listen on port ${port}`);
 });

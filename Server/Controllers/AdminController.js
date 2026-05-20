@@ -100,8 +100,9 @@ export const loginAdmin = async (req, res) => {
         // Set JWT as cookie
         res.cookie("authToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // secure in production
-            sameSite: 'strict',
+            secure: true, // Must be true for cross-site cookies
+            sameSite: "none", // Must be "none" for cross-site requests
+            path: "/",
             // maxAge: 60 * 1000, // Match 1 minute token expiry
             maxAge: 24 * 60 * 60 * 1000, // Match 1 day token expiry
 
@@ -128,7 +129,18 @@ export const loginAdmin = async (req, res) => {
 export const logoutAdmin = async (req, res) => {
     try {
         // Clear the cookie
-        res.clearCookie("authToken");
+        res.clearCookie("authToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/",
+        });
+        res.clearCookie("authToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/api/auth",
+        });
 
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {

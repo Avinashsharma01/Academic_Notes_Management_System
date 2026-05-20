@@ -62,11 +62,12 @@ export const loginUser = catchAsync(async (req, res) => {
 
     res.cookie("authToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true, // Must be true for cross-site cookies
+        sameSite: "none", // Must be "none" for cross-site requests
+        path: "/",
         // maxAge: 60 * 1000, // Match the 1 minute token expiry used above
 
-        maxAge : 24 * 60 * 60 * 1000, // 1 day
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
     res.status(200).json({
@@ -145,11 +146,17 @@ export const verifyUserEmail = catchAsync(async (req, res) => {
 
 // Logout user
 export const logoutUser = catchAsync(async (req, res) => {
-    res.cookie("authToken", "", {
+    res.clearCookie("authToken", {
         httpOnly: true,
-        expires: new Date(0),
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: "none",
+        path: "/",
+    });
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/api/auth",
     });
 
     res.status(200).json({ message: "Logged out successfully" });

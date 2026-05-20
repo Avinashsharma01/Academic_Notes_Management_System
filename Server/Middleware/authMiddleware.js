@@ -26,12 +26,32 @@ export const authenticateUser = (req, res, next) => {
         if (req.cookies.authToken) {
             res.cookie('authToken', '', {
                 httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/",
+                expires: new Date(0)
+            });
+            res.cookie('authToken', '', {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/api/auth",
                 expires: new Date(0)
             });
         }
         if (req.cookies.SuperauthToken) {
             res.cookie('SuperauthToken', '', {
                 httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/",
+                expires: new Date(0)
+            });
+            res.cookie('SuperauthToken', '', {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/api/superadmin",
                 expires: new Date(0)
             });
         }
