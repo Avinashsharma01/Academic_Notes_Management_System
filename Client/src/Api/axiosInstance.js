@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: "https://academic-server-jnsw.onrender.com/api",
     withCredentials: true, // ✅ Cookies are sent automatically with every request
     headers: {
         "Content-Type": "application/json",
